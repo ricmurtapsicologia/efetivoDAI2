@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta de Militares por Órgãos - DAI/2</title>
     <style>
-        * {
+       * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -68,6 +68,17 @@ body {
     width: 100%;
     height: auto; /* Deixa o canvas responsivo */
     max-height: 150px; /* Limita a altura do canvas para evitar que fique grande demais */
+}
+
+.block .numbers {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.block .numbers p {
+    margin: 5px 0;
+    color: #333;
 }
 
 /* Tooltip styling */
@@ -140,6 +151,15 @@ body {
         width: 100%; /* Blocos ocupam 100% da largura da tela */
         height: auto; /* Ajusta a altura ao conteúdo */
         margin-bottom: 20px;
+    }
+
+    .block .numbers {
+        display: block; /* Garante que os números estejam sempre visíveis em dispositivos móveis */
+        font-size: 16px;
+    }
+
+    .block .numbers p {
+        margin: 5px 0;
     }
 }
 
