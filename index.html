@@ -81,6 +81,21 @@
             font-weight: bold;
         }
 
+        /* Gráfico DAI/2 */
+        .chart-dai {
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-dai h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         /* Modal styling */
         .modal {
             display: none;
@@ -103,8 +118,8 @@
             max-width: 500px;
             width: 100%;
             text-align: center;
-            max-height: 80%; /* Limitar a altura máxima para evitar overflow */
-            overflow-y: auto; /* Adicionar rolagem vertical, se necessário */
+            max-height: 80%;
+            overflow-y: auto;
         }
 
         .modal-content h4 {
@@ -179,6 +194,12 @@
 <body>
 
     <div class="container">
+
+        <!-- Gráfico de barras para DAI/2 -->
+        <div class="chart-dai">
+            <h3>DAI/2 - Totais Gerais</h3>
+            <canvas id="chart-dai2"></canvas>
+        </div>
 
         <!-- Row 1 -->
         <div class="row">
@@ -366,6 +387,12 @@
             }
 
             // Exemplo de dados - Substitua com dados reais
+            const totalPrevisto = 157 + 2; // 157 + 2 (coordenador e adjunto)
+            const totalExistente = 104 + 2; // 104 + 2 (coordenador e adjunto)
+            const totalClaro = totalPrevisto - totalExistente;
+
+            createBarChart('chart-dai2', ['Previsto', 'Existente', 'Claro'], [totalPrevisto, totalExistente, totalClaro]);
+
             createChart('chart-afas', 6, 2, 4);
             createChart('chart-cedec', 11, 5, 6);
             createChart('chart-almg', 2, 2, 0);
@@ -429,4 +456,5 @@
 </body>
 
 </html>
+
 
