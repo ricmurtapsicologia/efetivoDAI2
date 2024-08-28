@@ -6,330 +6,344 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta de Militares por Órgãos - DAI/2</title>
     <style>
-       * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden; /* Evita rolagem horizontal */
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
 
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    overflow: hidden; /* Evita overflow que pode causar deslocamento */
-}
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            overflow: hidden;
+        }
 
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    width: 100%;
-}
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            width: 100%;
+        }
 
-.block {
-    background-color: #ffffff;
-    width: 30%;
-    padding: 20px;
-    border-radius: 8px;
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    height: auto; /* Permite que o bloco se ajuste ao conteúdo */
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px; /* Garante espaçamento entre os blocos */
-}
+        .block {
+            background-color: #ffffff;
+            width: 30%;
+            padding: 20px;
+            border-radius: 8px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            height: auto;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-.block:hover {
-    transform: scale(1.05);
-}
+        .block:hover {
+            transform: scale(1.05);
+        }
 
-.block h3 {
-    margin: 0;
-    font-size: 18px;
-    color: #333;
-    text-align: center;
-}
+        .block h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+        }
 
-.block canvas {
-    margin-top: 10px;
-    width: 100%;
-    height: auto; /* Deixa o canvas responsivo */
-    max-height: 150px; /* Limita a altura do canvas para evitar que fique grande demais */
-}
+        .block canvas {
+            margin-top: 10px;
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+        }
 
-.block .numbers {
-    text-align: center;
-    font-size: 14px;
-    margin-top: 10px;
-}
+        .block .numbers {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
 
-.block .numbers p {
-    margin: 5px 0;
-    color: #333;
-}
+        .block .numbers p {
+            margin: 5px 0;
+            color: #333;
+        }
 
-/* Tooltip styling */
-.block:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
-}
+        /* Tooltip styling */
+        .block:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
 
-.tooltip {
-    visibility: hidden;
-    opacity: 0;
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    transition: opacity 0.3s;
-    pointer-events: none;
-}
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
 
-/* Modal styling */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-}
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
 
-.modal-content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-}
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
 
-.modal-content h4 {
-    margin-top: 0;
-}
+        .modal-content h4 {
+            margin-top: 0;
+        }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-/* Responsividade: Pequenos dispositivos (celulares em modo retrato) */
-@media (max-width: 576px) {
-    .block {
-        width: 100%; /* Blocos ocupam 100% da largura da tela */
-        height: auto; /* Ajusta a altura ao conteúdo */
-        margin-bottom: 20px;
-    }
+        /* Gráfico DAI/2 */
+        .chart-dai {
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-    .block .numbers {
-        display: block; /* Garante que os números estejam sempre visíveis em dispositivos móveis */
-        font-size: 16px;
-    }
+        .chart-dai h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    .block .numbers p {
-        margin: 5px 0;
-    }
-}
+        /* Responsividade: Pequenos dispositivos (celulares em modo retrato) */
+        @media (max-width: 576px) {
+            .block {
+                width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+            }
 
-/* Responsividade: Dispositivos médios (tablets) */
-@media (min-width: 577px) and (max-width: 768px) {
-    .block {
-        width: 48%; /* Blocos ocupam 48% da largura da tela, dois por linha */
-        height: auto; /* Ajusta a altura ao conteúdo */
-        margin-bottom: 20px;
-    }
-}
+            .block .numbers {
+                display: block;
+                font-size: 16px;
+            }
 
-/* Responsividade: Dispositivos grandes (tablets em paisagem e laptops) */
-@media (min-width: 769px) and (max-width: 992px) {
-    .block {
-        width: 48%; /* Blocos ocupam 48% da largura da tela, dois por linha */
-        height: auto; /* Ajusta a altura ao conteúdo */
-        margin-bottom: 20px;
-    }
-}
+            .block .numbers p {
+                margin: 5px 0;
+            }
 
-/* Responsividade: Dispositivos extra grandes (desktops) */
-@media (min-width: 993px) {
-    .block {
-        width: 30%; /* Blocos ocupam 30% da largura da tela, três por linha */
-        height: auto; /* Ajusta a altura ao conteúdo */
-        margin-bottom: 20px;
-    }
+            .block .tooltip {
+                visibility: hidden;
+            }
+        }
 
-    .block h3 {
-        font-size: 20px;
-    }
-}
+        /* Responsividade: Dispositivos médios (tablets) */
+        @media (min-width: 577px) and (max-width: 768px) {
+            .block {
+                width: 48%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+        }
 
+        /* Responsividade: Dispositivos grandes (tablets em paisagem e laptops) */
+        @media (min-width: 769px) and (max-width: 992px) {
+            .block {
+                width: 48%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Responsividade: Dispositivos extra grandes (desktops) */
+        @media (min-width: 993px) {
+            .block {
+                width: 30%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+
+            .block h3 {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container">
+
+        <!-- Gráfico de barras para DAI/2 -->
+        <div class="chart-dai">
+            <h3>DAI/2 - Totais</h3>
+            <canvas id="chart-dai2"></canvas>
+        </div>
+
         <!-- Row 1 -->
         <div class="row">
-            <div class="block" data-previsto="6" onclick="showModal('AFAS')">
+            <div class="block" data-previsto="6" data-existente="2" onclick="showModal('AFAS')">
                 <h3>AFAS</h3>
                 <canvas id="chart-afas"></canvas>
-                <div class="tooltip">Previsto: 6</div>
+                <div class="tooltip">Existente: 2</div>
             </div>
 
-            <div class="block" data-previsto="11" onclick="showModal('CEDEC')">
+            <div class="block" data-previsto="11" data-existente="5" onclick="showModal('CEDEC')">
                 <h3>CEDEC</h3>
                 <canvas id="chart-cedec"></canvas>
-                <div class="tooltip">Previsto: 11</div>
+                <div class="tooltip">Existente: 5</div>
             </div>
 
-            <div class="block" data-previsto="2" onclick="showModal('ALMG')">
+            <div class="block" data-previsto="2" data-existente="2" onclick="showModal('ALMG')">
                 <h3>ALMG</h3>
                 <canvas id="chart-almg"></canvas>
-                <div class="tooltip">Previsto: 2</div>
+                <div class="tooltip">Existente: 2</div>
             </div>
         </div>
 
         <!-- Row 2 -->
         <div class="row">
-            <div class="block" data-previsto="17" onclick="showModal('CTPM')">
+            <div class="block" data-previsto="17" data-existente="15" onclick="showModal('CTPM')">
                 <h3>CTPM</h3>
                 <canvas id="chart-ctpm"></canvas>
-                <div class="tooltip">Previsto: 17</div>
+                <div class="tooltip">Existente: 15</div>
             </div>
 
-            <div class="block" data-previsto="15" onclick="showModal('GMG')">
+            <div class="block" data-previsto="15" data-existente="12" onclick="showModal('GMG')">
                 <h3>GMG</h3>
                 <canvas id="chart-gmg"></canvas>
-                <div class="tooltip">Previsto: 15</div>
+                <div class="tooltip">Existente: 12</div>
             </div>
 
-            <div class="block" data-previsto="7" onclick="showModal('Intendência')">
+            <div class="block" data-previsto="7" data-existente="5" onclick="showModal('Intendência')">
                 <h3>Intendência</h3>
                 <canvas id="chart-intendencia"></canvas>
-                <div class="tooltip">Previsto: 7</div>
+                <div class="tooltip">Existente: 5</div>
             </div>
         </div>
 
         <!-- Row 3 -->
         <div class="row">
-            <div class="block" data-previsto="7" onclick="showModal('MPMG')">
+            <div class="block" data-previsto="7" data-existente="7" onclick="showModal('MPMG')">
                 <h3>MPMG</h3>
                 <canvas id="chart-mpmg"></canvas>
-                <div class="tooltip">Previsto: 7</div>
+                <div class="tooltip">Existente: 7</div>
             </div>
 
-            <div class="block" data-previsto="2" onclick="showModal('SENASP')">
+            <div class="block" data-previsto="2" data-existente="2" onclick="showModal('SENASP')">
                 <h3>SENASP</h3>
                 <canvas id="chart-senasp"></canvas>
-                <div class="tooltip">Previsto: 2</div>
+                <div class="tooltip">Existente: 2</div>
             </div>
 
-            <div class="block" data-previsto="6" onclick="showModal('OGE')">
+            <div class="block" data-previsto="6" data-existente="5" onclick="showModal('OGE')">
                 <h3>OGE</h3>
                 <canvas id="chart-oge"></canvas>
-                <div class="tooltip">Previsto: 6</div>
+                <div class="tooltip">Existente: 5</div>
             </div>
         </div>
 
         <!-- Row 4 -->
         <div class="row">
-            <div class="block" data-previsto="7" onclick="showModal('Fundação SALVAR')">
+            <div class="block" data-previsto="7" data-existente="5" onclick="showModal('Fundação SALVAR')">
                 <h3>Fundação SALVAR</h3>
                 <canvas id="chart-salvar"></canvas>
-                <div class="tooltip">Previsto: 7</div>
+                <div class="tooltip">Existente: 5</div>
             </div>
 
-            <div class="block" data-previsto="1" onclick="showModal('SEE')">
+            <div class="block" data-previsto="1" data-existente="1" onclick="showModal('SEE')">
                 <h3>SEE</h3>
                 <canvas id="chart-see"></canvas>
-                <div class="tooltip">Previsto: 1</div>
+                <div class="tooltip">Existente: 1</div>
             </div>
 
-            <div class="block" data-previsto="3" onclick="showModal('Secretaria Parlamentar')">
+            <div class="block" data-previsto="3" data-existente="2" onclick="showModal('Secretaria Parlamentar')">
                 <h3>Secretaria Parlamentar</h3>
                 <canvas id="chart-secretaria-parlamentar"></canvas>
-                <div class="tooltip">Previsto: 3</div>
+                <div class="tooltip">Existente: 2</div>
             </div>
         </div>
 
         <!-- Row 5 -->
         <div class="row">
-            <div class="block" data-previsto="3" onclick="showModal('SEJUSP')">
+            <div class="block" data-previsto="3" data-existente="3" onclick="showModal('SEJUSP')">
                 <h3>SEJUSP</h3>
                 <canvas id="chart-sejusp"></canvas>
-                <div class="tooltip">Previsto: 3</div>
+                <div class="tooltip">Existente: 3</div>
             </div>
 
-            <div class="block" data-previsto="2" onclick="showModal('SES')">
+            <div class="block" data-previsto="2" data-existente="2" onclick="showModal('SES')">
                 <h3>SES</h3>
                 <canvas id="chart-ses"></canvas>
-                <div class="tooltip">Previsto: 2</div>
+                <div class="tooltip">Existente: 2</div>
             </div>
 
-            <div class="block" data-previsto="9" onclick="showModal('TJMG')">
+            <div class="block" data-previsto="9" data-existente="7" onclick="showModal('TJMG')">
                 <h3>TJMG</h3>
                 <canvas id="chart-tjmg"></canvas>
-                <div class="tooltip">Previsto: 9</div>
+                <div class="tooltip">Existente: 7</div>
             </div>
         </div>
 
         <!-- Row 6 -->
         <div class="row">
-            <div class="block" data-previsto="9" onclick="showModal('TJMMG')">
+            <div class="block" data-previsto="9" data-existente="9" onclick="showModal('TJMMG')">
                 <h3>TJMMG</h3>
                 <canvas id="chart-tjmmg"></canvas>
-                <div class="tooltip">Previsto: 9</div>
+                <div class="tooltip">Existente: 9</div>
             </div>
 
-            <div class="block" data-previsto="47" onclick="showModal('ECIM')">
+            <div class="block" data-previsto="47" data-existente="22" onclick="showModal('ECIM')">
                 <h3>ECIM</h3>
                 <canvas id="chart-ecim"></canvas>
-                <div class="tooltip">Previsto: 47</div>
+                <div class="tooltip">Existente: 22</div>
             </div>
-
-            <div class="block block-fixed">
-                <h3>Coordenação DAI/2</h3>
-                <p>Major Richelmy Murta Pinto - Coordenador</p>
-                <p>Capitão Jeferson - Adjunto da Coordenação</p>
-                <canvas id="chart-total-dai2"></canvas>
-                <div class="tooltip">Previsto: 157, Existente: 104, Claro: 53</div>
-                <!-- Tooltip com os totais -->
-            </div>
-
         </div>
-
 
         <!-- Modal -->
         <div id="modal" class="modal">
@@ -365,8 +379,40 @@ body {
                     }
                 });
             }
+
+            function createBarChart(canvasId, labels, data) {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Quantidade',
+                            data: data,
+                            backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
         
-            // Example data - replace this with actual data
+            // Exemplo de dados - Substitua com dados reais
+            createBarChart('chart-dai2', ['Previsto', 'Existente', 'Claro'], [157, 104, 53]);
+
             createChart('chart-afas', 6, 2, 4);
             createChart('chart-cedec', 11, 5, 6);
             createChart('chart-almg', 2, 2, 0);
@@ -389,7 +435,7 @@ body {
                 const modal = document.getElementById("modal");
                 const militaresList = document.getElementById("militares-list");
         
-                // Example data - replace with actual data
+                // Exemplo de dados - Substitua com dados reais
                 const data = {
                     'AFAS': ['1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704', 'Sd Larissa Elias Diana Vieira - (31) 99816-2524'],
                     'CEDEC': ['1º Ten Douglas Constantino Fernandes - (31) 98576-2386', '2º Ten Rogério Silva de Paula - (31) 98769-8364', '3º Sgt Luiz Ricardo Vago Lima - (31) 99835-4229', '3º Sgt Felipe Vaz de Sá - (31) 99086-3250', '3º Sgt Deivison Queiroz de Souza - (31) 98305-7477'],
@@ -431,9 +477,3 @@ body {
 
 </html>
 
-
-
-
-</html>
-
-</html>
