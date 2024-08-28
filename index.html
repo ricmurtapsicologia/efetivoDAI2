@@ -50,6 +50,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .block:hover {
@@ -60,7 +61,6 @@
             margin: 0;
             font-size: 18px;
             color: #333;
-            text-align: center;
         }
 
         .block canvas {
@@ -71,36 +71,14 @@
         }
 
         .block .numbers {
-            text-align: center;
-            font-size: 14px;
+            font-size: 16px;
+            color: #333;
             margin-top: 10px;
         }
 
         .block .numbers p {
             margin: 5px 0;
-            color: #333;
-        }
-
-        /* Tooltip styling */
-        .block:hover .tooltip {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .tooltip {
-            visibility: hidden;
-            opacity: 0;
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            transition: opacity 0.3s;
-            pointer-events: none;
+            font-weight: bold;
         }
 
         /* Modal styling */
@@ -125,6 +103,8 @@
             max-width: 500px;
             width: 100%;
             text-align: center;
+            max-height: 80%; /* Limitar a altura máxima para evitar overflow */
+            overflow-y: auto; /* Adicionar rolagem vertical, se necessário */
         }
 
         .modal-content h4 {
@@ -145,21 +125,6 @@
             cursor: pointer;
         }
 
-        /* Gráfico DAI/2 */
-        .chart-dai {
-            width: 100%;
-            margin-bottom: 20px;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .chart-dai h3 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
         /* Responsividade: Pequenos dispositivos (celulares em modo retrato) */
         @media (max-width: 576px) {
             .block {
@@ -169,16 +134,12 @@
             }
 
             .block .numbers {
-                display: block;
                 font-size: 16px;
             }
 
-            .block .numbers p {
-                margin: 5px 0;
-            }
-
-            .block .tooltip {
-                visibility: hidden;
+            .modal-content {
+                width: 90%;
+                max-width: 100%;
             }
         }
 
@@ -219,30 +180,24 @@
 
     <div class="container">
 
-        <!-- Gráfico de barras para DAI/2 -->
-        <div class="chart-dai">
-            <h3>DAI/2 - Totais</h3>
-            <canvas id="chart-dai2"></canvas>
-        </div>
-
         <!-- Row 1 -->
         <div class="row">
             <div class="block" data-previsto="6" data-existente="2" onclick="showModal('AFAS')">
                 <h3>AFAS</h3>
                 <canvas id="chart-afas"></canvas>
-                <div class="tooltip">Existente: 2</div>
+                <div class="numbers">Existente: 2</div>
             </div>
 
             <div class="block" data-previsto="11" data-existente="5" onclick="showModal('CEDEC')">
                 <h3>CEDEC</h3>
                 <canvas id="chart-cedec"></canvas>
-                <div class="tooltip">Existente: 5</div>
+                <div class="numbers">Existente: 5</div>
             </div>
 
             <div class="block" data-previsto="2" data-existente="2" onclick="showModal('ALMG')">
                 <h3>ALMG</h3>
                 <canvas id="chart-almg"></canvas>
-                <div class="tooltip">Existente: 2</div>
+                <div class="numbers">Existente: 2</div>
             </div>
         </div>
 
@@ -251,19 +206,19 @@
             <div class="block" data-previsto="17" data-existente="15" onclick="showModal('CTPM')">
                 <h3>CTPM</h3>
                 <canvas id="chart-ctpm"></canvas>
-                <div class="tooltip">Existente: 15</div>
+                <div class="numbers">Existente: 15</div>
             </div>
 
             <div class="block" data-previsto="15" data-existente="12" onclick="showModal('GMG')">
                 <h3>GMG</h3>
                 <canvas id="chart-gmg"></canvas>
-                <div class="tooltip">Existente: 12</div>
+                <div class="numbers">Existente: 12</div>
             </div>
 
             <div class="block" data-previsto="7" data-existente="5" onclick="showModal('Intendência')">
                 <h3>Intendência</h3>
                 <canvas id="chart-intendencia"></canvas>
-                <div class="tooltip">Existente: 5</div>
+                <div class="numbers">Existente: 5</div>
             </div>
         </div>
 
@@ -272,19 +227,19 @@
             <div class="block" data-previsto="7" data-existente="7" onclick="showModal('MPMG')">
                 <h3>MPMG</h3>
                 <canvas id="chart-mpmg"></canvas>
-                <div class="tooltip">Existente: 7</div>
+                <div class="numbers">Existente: 7</div>
             </div>
 
             <div class="block" data-previsto="2" data-existente="2" onclick="showModal('SENASP')">
                 <h3>SENASP</h3>
                 <canvas id="chart-senasp"></canvas>
-                <div class="tooltip">Existente: 2</div>
+                <div class="numbers">Existente: 2</div>
             </div>
 
             <div class="block" data-previsto="6" data-existente="5" onclick="showModal('OGE')">
                 <h3>OGE</h3>
                 <canvas id="chart-oge"></canvas>
-                <div class="tooltip">Existente: 5</div>
+                <div class="numbers">Existente: 5</div>
             </div>
         </div>
 
@@ -293,19 +248,19 @@
             <div class="block" data-previsto="7" data-existente="5" onclick="showModal('Fundação SALVAR')">
                 <h3>Fundação SALVAR</h3>
                 <canvas id="chart-salvar"></canvas>
-                <div class="tooltip">Existente: 5</div>
+                <div class="numbers">Existente: 5</div>
             </div>
 
             <div class="block" data-previsto="1" data-existente="1" onclick="showModal('SEE')">
                 <h3>SEE</h3>
                 <canvas id="chart-see"></canvas>
-                <div class="tooltip">Existente: 1</div>
+                <div class="numbers">Existente: 1</div>
             </div>
 
             <div class="block" data-previsto="3" data-existente="2" onclick="showModal('Secretaria Parlamentar')">
                 <h3>Secretaria Parlamentar</h3>
                 <canvas id="chart-secretaria-parlamentar"></canvas>
-                <div class="tooltip">Existente: 2</div>
+                <div class="numbers">Existente: 2</div>
             </div>
         </div>
 
@@ -314,19 +269,19 @@
             <div class="block" data-previsto="3" data-existente="3" onclick="showModal('SEJUSP')">
                 <h3>SEJUSP</h3>
                 <canvas id="chart-sejusp"></canvas>
-                <div class="tooltip">Existente: 3</div>
+                <div class="numbers">Existente: 3</div>
             </div>
 
             <div class="block" data-previsto="2" data-existente="2" onclick="showModal('SES')">
                 <h3>SES</h3>
                 <canvas id="chart-ses"></canvas>
-                <div class="tooltip">Existente: 2</div>
+                <div class="numbers">Existente: 2</div>
             </div>
 
             <div class="block" data-previsto="9" data-existente="7" onclick="showModal('TJMG')">
                 <h3>TJMG</h3>
                 <canvas id="chart-tjmg"></canvas>
-                <div class="tooltip">Existente: 7</div>
+                <div class="numbers">Existente: 7</div>
             </div>
         </div>
 
@@ -335,13 +290,13 @@
             <div class="block" data-previsto="9" data-existente="9" onclick="showModal('TJMMG')">
                 <h3>TJMMG</h3>
                 <canvas id="chart-tjmmg"></canvas>
-                <div class="tooltip">Existente: 9</div>
+                <div class="numbers">Existente: 9</div>
             </div>
 
             <div class="block" data-previsto="47" data-existente="22" onclick="showModal('ECIM')">
                 <h3>ECIM</h3>
                 <canvas id="chart-ecim"></canvas>
-                <div class="tooltip">Existente: 22</div>
+                <div class="numbers">Existente: 22</div>
             </div>
         </div>
 
@@ -409,10 +364,8 @@
                     }
                 });
             }
-        
-            // Exemplo de dados - Substitua com dados reais
-            createBarChart('chart-dai2', ['Previsto', 'Existente', 'Claro'], [157, 104, 53]);
 
+            // Exemplo de dados - Substitua com dados reais
             createChart('chart-afas', 6, 2, 4);
             createChart('chart-cedec', 11, 5, 6);
             createChart('chart-almg', 2, 2, 0);
@@ -430,11 +383,11 @@
             createChart('chart-tjmg', 9, 7, 2);
             createChart('chart-tjmmg', 9, 9, 0);
             createChart('chart-ecim', 47, 22, 25);
-        
+
             function showModal(orgao) {
                 const modal = document.getElementById("modal");
                 const militaresList = document.getElementById("militares-list");
-        
+
                 // Exemplo de dados - Substitua com dados reais
                 const data = {
                     'AFAS': ['1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704', 'Sd Larissa Elias Diana Vieira - (31) 99816-2524'],
@@ -455,17 +408,17 @@
                     'TJMMG': ['Sub Ten CARLOS RODRIGUES GOMES - (31) 98854-4380', '2º Sgt JOSAINE THAIS DO CARMO - (31) 98788-1588', '1º Sgt RINALDO CEZAR FONTES CRUZ - (31) 99469-2218', '2º Sgt THIAGO BRUNO DE ALBUQUERQUE MORAIS - (31) 99137-8635', '2º Sgt GERNANDO PACHECO ALCÂNTARA TORRES - (31) 99203-8691', '3º Sgt LUCÉLIA MOREIRA SANTOS - (31) 9998-40225', '2º Sgt GUSTAVO DUARTE OLIVEIRA - (31) 97243-7139', 'Cb ALEXANDRE POLIDORO - (31) 98890-7567', 'Cb GIOVANNI TADEU B. DOS SANTOS - (31) 99318-7722'],
                     'ECIM': ['Cap Robson Leopoldino dos Reis - (31) 99711-8778', '2º Ten Edmar Daltro Coutinho Júnior - (31) 99363-0606', '2º Ten Hebert do Carmo Nonato - (31) 99612-4403', '2º Ten Rogério Rocha Gomes - (31) 99665-0193', '2º Ten Marcelo Cardoso da Silva - (31) 98546-1811', '2º Ten Renato Maia da Silva - (32) 98852-8883', '2º Ten Fernando César Cardoso - (32) 98834-7941', '2º Ten José Edson Alves da Costa - (35) 99972-2204', '1º Sgt Valtecir de Moraes - (34) 99995-8814', '2º Sgt Edwaldo Elias Nunes - (31) 98567-2633', '1º Sgt Célio Alves Evangelista - (31) 98889-6464', '1º Sgt Luiz Fernandes de Oliveira - (31) 99686-4949', '1º Sgt Alessandro Eduardo de Souza Rafael - (35) 98817-7012', '1º Sgt Nivaldo de Oliveira - (31) 99847-0346', 'Cb Flávio César Nogueira - (31) 99183-8897', '1º Sgt Paulo Sérgio dos Santos - (35) 99970-2806', 'Sub Ten Helton Luiz Dias de Sá - (32) 98867-9481', '2º Ten Baltazar Conceição da Silva - (31) 99307-4549', '1º Sgt Cosme Sebastião Costa - (31) 99859-7100', '1º Sgt José Ronaldo Ferrarezi - (32) 99167-1868', '2º Ten Adailton Rogério da Cruz - (35) 98424-3270', '1º Sgt Eduardo Luiz Trindade - (32) 98423-5803']
                 };
-        
+
                 militaresList.innerHTML = data[orgao].map(militar => `<p>${militar}</p>`).join('');
                 modal.style.display = "flex";
             }
-        
+
             function closeModal() {
                 const modal = document.getElementById("modal");
                 modal.style.display = "none";
             }
-        
-            window.onclick = function(event) {
+
+            window.onclick = function (event) {
                 const modal = document.getElementById("modal");
                 if (event.target === modal) {
                     modal.style.display = "none";
