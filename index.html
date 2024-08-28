@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Militares por Órgãos - DAI/2</title>
+    <title>Distribuição de Efetivo da DAI/2 Órgãos Externos</title>
     <style>
         * {
             margin: 0;
@@ -14,7 +14,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #e0e0e0;
+            color: #333;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -25,6 +26,32 @@
             margin: 20px auto;
             padding: 20px;
             overflow: hidden;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #4a4a4a;
+        }
+
+        .general-data {
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 18px;
+            color: #444;
+        }
+
+        .general-data p {
+            margin: 10px 0;
+            font-weight: bold;
         }
 
         .row {
@@ -51,15 +78,17 @@
             align-items: center;
             margin-bottom: 20px;
             text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
         }
 
         .block:hover {
             transform: scale(1.05);
+            background-color: #f0f0f0;
         }
 
         .block h3 {
             margin: 0;
-            font-size: 18px;
+            font-size: 20px;
             color: #333;
         }
 
@@ -71,54 +100,12 @@
         }
 
         .block .numbers {
-            font-size: 16px;
-            color: #333;
+            font-size: 18px;
+            color: #555;
             margin-top: 10px;
-        }
-
-        .block .numbers p {
-            margin: 5px 0;
             font-weight: bold;
         }
 
-        /* Seção de Dados Gerais */
-        .general-data {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .general-data h3 {
-            margin-bottom: 10px;
-            font-size: 22px;
-            color: #333;
-        }
-
-        .general-data p {
-            font-size: 18px;
-            margin: 5px 0;
-            color: #555;
-        }
-
-        /* Gráfico DAI/2 */
-        .chart-dai {
-            width: 100%;
-            margin-bottom: 20px;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .chart-dai h3 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        /* Modal styling */
         .modal {
             display: none;
             position: fixed;
@@ -146,6 +133,7 @@
 
         .modal-content h4 {
             margin-top: 0;
+            color: #333;
         }
 
         .close {
@@ -162,7 +150,6 @@
             cursor: pointer;
         }
 
-        /* Responsividade: Pequenos dispositivos (celulares em modo retrato) */
         @media (max-width: 576px) {
             .block {
                 width: 100%;
@@ -180,7 +167,6 @@
             }
         }
 
-        /* Responsividade: Dispositivos médios (tablets) */
         @media (min-width: 577px) and (max-width: 768px) {
             .block {
                 width: 48%;
@@ -189,7 +175,6 @@
             }
         }
 
-        /* Responsividade: Dispositivos grandes (tablets em paisagem e laptops) */
         @media (min-width: 769px) and (max-width: 992px) {
             .block {
                 width: 48%;
@@ -198,7 +183,6 @@
             }
         }
 
-        /* Responsividade: Dispositivos extra grandes (desktops) */
         @media (min-width: 993px) {
             .block {
                 width: 30%;
@@ -217,18 +201,14 @@
 
     <div class="container">
 
+        <!-- Título da Página -->
+        <div class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</div>
+
         <!-- Seção de Dados Gerais -->
         <div class="general-data">
-            <h3>Dados Gerais - DAI/2</h3>
             <p>Total Previsto: 159</p>
             <p>Total Existente: 106</p>
             <p>Total Claro: 53</p>
-        </div>
-
-        <!-- Gráfico de barras para DAI/2 -->
-        <div class="chart-dai">
-            <h3>Gráfico de Totais Gerais</h3>
-            <canvas id="chart-dai2"></canvas>
         </div>
 
         <!-- Row 1 -->
@@ -386,43 +366,7 @@
                 });
             }
 
-            function createBarChart(canvasId, labels, data) {
-                const ctx = document.getElementById(canvasId).getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Quantidade',
-                            data: data,
-                            backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            }
-
             // Exemplo de dados - Substitua com dados reais
-            const totalPrevisto = 159; // Inclui o coordenador e o adjunto
-            const totalExistente = 106; // Inclui o coordenador e o adjunto
-            const totalClaro = totalPrevisto - totalExistente;
-
-            createBarChart('chart-dai2', ['Previsto', 'Existente', 'Claro'], [totalPrevisto, totalExistente, totalClaro]);
-
             createChart('chart-afas', 6, 2, 4);
             createChart('chart-cedec', 11, 5, 6);
             createChart('chart-almg', 2, 2, 0);
