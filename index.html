@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Distribuição de Efetivo da DAI/2 Órgãos Externos</title>
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribuição de Efetivo da DAI/2 Órgãos Externos</title>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -193,160 +194,167 @@
                 font-size: 20px;
             }
         }
-  </style>
+    </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="title">
-      Distribuição de Efetivo da DAI/2 Órgãos Externos
-    </div>
-    <div class="general-data">
-      <p>Total Previsto: 155</p>
-      <p>Total Existente: 111</p>
-      <p>Total Claro: 44</p>
-    </div>
-    <div class="row">
-      <div class="block" data-previsto="6" data-existente="2" onclick="showModal('AFAS')">
-        <h3>AFAS</h3>
-        <canvas id="chart-afas"></canvas>
-        <div class="numbers">
-          Existente: 2
+    <div class="container">
+        <div class="title">
+            Distribuição de Efetivo da DAI/2 Órgãos Externos
         </div>
-      </div>
-      <div class="block" data-previsto="11" data-existente="5" onclick="showModal('CEDEC')">
-        <h3>CEDEC</h3>
-        <canvas id="chart-cedec"></canvas>
-        <div class="numbers">
-          Existente: 5
+        <div class="general-data">
+            <p>Total Previsto: 155</p>
+            <p>Total Existente: 111</p>
+            <p>Total Claro: 44</p>
         </div>
-      </div>
-      <div class="block" data-previsto="2" data-existente="2" onclick="showModal('ALMG')">
-        <h3>ALMG</h3>
-        <canvas id="chart-almg"></canvas>
-        <div class="numbers">
-          Existente: 2
+        <div class="row">
+            <div class="block" data-previsto="6" data-existente="2" onclick="showModal('AFAS')">
+                <h3>AFAS</h3>
+                <canvas id="chart-afas"></canvas>
+                <div class="numbers">
+                    Existente: 1
+                </div>
+            </div>
+            <div class="block" data-previsto="11" data-existente="5" onclick="showModal('CEDEC')">
+                <h3>CEDEC</h3>
+                <canvas id="chart-cedec"></canvas>
+                <div class="numbers">
+                    Existente: 5
+                </div>
+            </div>
+            <div class="block" data-previsto="2" data-existente="2" onclick="showModal('ALMG')">
+                <h3>ALMG</h3>
+                <canvas id="chart-almg"></canvas>
+                <div class="numbers">
+                    Existente: 2
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="block" data-previsto="17" data-existente="15" onclick="showModal('CTPM')">
-        <h3>CTPM</h3>
-        <canvas id="chart-ctpm"></canvas>
-        <div class="numbers">
-          Existente: 15
+        <div class="row">
+            <div class="block" data-previsto="17" data-existente="15" onclick="showModal('CTPM')">
+                <h3>CTPM</h3>
+                <canvas id="chart-ctpm"></canvas>
+                <div class="numbers">
+                    Existente: 15
+                </div>
+            </div>
+            <div class="block" data-previsto="15" data-existente="12" onclick="showModal('GMG')">
+                <h3>GMG</h3>
+                <canvas id="chart-gmg"></canvas>
+                <div class="numbers">
+                    Existente: 12
+                </div>
+            </div>
+            <div class="block" data-previsto="7" data-existente="5" onclick="showModal('Intendência')">
+                <h3>Intendência</h3>
+                <canvas id="chart-intendencia"></canvas>
+                <div class="numbers">
+                    Existente: 5
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="block" data-previsto="15" data-existente="12" onclick="showModal('GMG')">
-        <h3>GMG</h3>
-        <canvas id="chart-gmg"></canvas>
-        <div class="numbers">
-          Existente: 12
+        <div class="row">
+            <div class="block" data-previsto="7" data-existente="7" onclick="showModal('MPMG')">
+                <h3>MPMG</h3>
+                <canvas id="chart-mpmg"></canvas>
+                <div class="numbers">
+                    Existente: 7
+                </div>
+            </div>
+            <div class="block" data-previsto="2" data-existente="2" onclick="showModal('SENASP')">
+                <h3>SENASP</h3>
+                <canvas id="chart-senasp"></canvas>
+                <div class="numbers">
+                    Existente: 2
+                </div>
+            </div>
+            <div class="block" data-previsto="6" data-existente="5" onclick="showModal('OGE')">
+                <h3>OGE</h3>
+                <canvas id="chart-oge"></canvas>
+                <div class="numbers">
+                    Existente: 5
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="block" data-previsto="7" data-existente="5" onclick="showModal('Intendência')">
-        <h3>Intendência</h3>
-        <canvas id="chart-intendencia"></canvas>
-        <div class="numbers">
-          Existente: 5
+        <div class="row">
+            <div class="block" data-previsto="7" data-existente="5" onclick="showModal('Fundação SALVAR')">
+                <h3>Fundação SALVAR</h3>
+                <canvas id="chart-salvar"></canvas>
+                <div class="numbers">
+                    Existente: 6
+                </div>
+            </div>
+            <div class="block" data-previsto="1" data-existente="1" onclick="showModal('SEE')">
+                <h3>SEE</h3>
+                <canvas id="chart-see"></canvas>
+                <div class="numbers">
+                    Existente: 1
+                </div>
+            </div>
+            <div class="block" data-previsto="3" data-existente="2" onclick="showModal('Secretaria Parlamentar')">
+                <h3>Secretaria Parlamentar</h3>
+                <canvas id="chart-secretaria-parlamentar"></canvas>
+                <div class="numbers">
+                    Existente: 3
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="block" data-previsto="7" data-existente="7" onclick="showModal('MPMG')">
-        <h3>MPMG</h3>
-        <canvas id="chart-mpmg"></canvas>
-        <div class="numbers">
-          Existente: 7
+        <div class="row">
+            <div class="block" data-previsto="3" data-existente="3" onclick="showModal('SEJUSP')">
+                <h3>SEJUSP</h3>
+                <canvas id="chart-sejusp"></canvas>
+                <div class="numbers">
+                    Existente: 3
+                </div>
+            </div>
+            <div class="block" data-previsto="2" data-existente="2" onclick="showModal('SES')">
+                <h3>SES</h3>
+                <canvas id="chart-ses"></canvas>
+                <div class="numbers">
+                    Existente: 2
+                </div>
+            </div>
+            <div class="block" data-previsto="9" data-existente="7" onclick="showModal('TJMG')">
+                <h3>TJMG</h3>
+                <canvas id="chart-tjmg"></canvas>
+                <div class="numbers">
+                    Existente: 7
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="block" data-previsto="2" data-existente="2" onclick="showModal('SENASP')">
-        <h3>SENASP</h3>
-        <canvas id="chart-senasp"></canvas>
-        <div class="numbers">
-          Existente: 2
+        <div class="row">
+            <div class="block" data-previsto="9" data-existente="9" onclick="showModal('TJMMG')">
+                <h3>TJMMG</h3>
+                <canvas id="chart-tjmmg"></canvas>
+                <div class="numbers">
+                    Existente: 9
+                </div>
+            </div>
+            <div class="block" data-previsto="47" data-existente="22" onclick="showModal('ECIM')">
+                <h3>ECIM</h3>
+                <canvas id="chart-ecim"></canvas>
+                <div class="numbers">
+                    Existente: 24
+                </div>
+            </div>
+            <!-- Bloco de CORDENAÇÃO DAI/2 -->
+            <div class="block" data-previsto="2" data-existente="1" onclick="showModal('CORDENAÇÃO DAI/2')">
+                <h3>CORDENAÇÃO DAI/2</h3>
+                <canvas id="chart-coordenacao-dai2"></canvas>
+                <div class="numbers">
+                    Existente: 1
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="block" data-previsto="6" data-existente="5" onclick="showModal('OGE')">
-        <h3>OGE</h3>
-        <canvas id="chart-oge"></canvas>
-        <div class="numbers">
-          Existente: 5
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">×</span>
+                <h4>Relação de Militares</h4>
+                <div id="militares-list"></div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="block" data-previsto="7" data-existente="5" onclick="showModal('Fundação SALVAR')">
-        <h3>Fundação SALVAR</h3>
-        <canvas id="chart-salvar"></canvas>
-        <div class="numbers">
-          Existente: 5
-        </div>
-      </div>
-      <div class="block" data-previsto="1" data-existente="1" onclick="showModal('SEE')">
-        <h3>SEE</h3>
-        <canvas id="chart-see"></canvas>
-        <div class="numbers">
-          Existente: 1
-        </div>
-      </div>
-      <div class="block" data-previsto="3" data-existente="2" onclick="showModal('Secretaria Parlamentar')">
-        <h3>Secretaria Parlamentar</h3>
-        <canvas id="chart-secretaria-parlamentar"></canvas>
-        <div class="numbers">
-          Existente: 2
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="block" data-previsto="3" data-existente="3" onclick="showModal('SEJUSP')">
-        <h3>SEJUSP</h3>
-        <canvas id="chart-sejusp"></canvas>
-        <div class="numbers">
-          Existente: 3
-        </div>
-      </div>
-      <div class="block" data-previsto="2" data-existente="2" onclick="showModal('SES')">
-        <h3>SES</h3>
-        <canvas id="chart-ses"></canvas>
-        <div class="numbers">
-          Existente: 2
-        </div>
-      </div>
-      <div class="block" data-previsto="9" data-existente="7" onclick="showModal('TJMG')">
-        <h3>TJMG</h3>
-        <canvas id="chart-tjmg"></canvas>
-        <div class="numbers">
-          Existente: 7
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="block" data-previsto="9" data-existente="9" onclick="showModal('TJMMG')">
-        <h3>TJMMG</h3>
-        <canvas id="chart-tjmmg"></canvas>
-        <div class="numbers">
-          Existente: 9
-        </div>
-      </div>
-      <div class="block" data-previsto="47" data-existente="22" onclick="showModal('ECIM')">
-        <h3>ECIM</h3>
-        <canvas id="chart-ecim"></canvas>
-        <div class="numbers">
-          Existente: 22
-        </div>
-      </div>
-    </div>
-    <div id="modal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal()">×</span>
-        <h4>Relação de Militares</h4>
-        <div id="militares-list"></div>
-      </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
-    <script>
-
-
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
             function createChart(canvasId, previsto, existente, claro) {
                 const ctx = document.getElementById(canvasId).getContext('2d');
                 new Chart(ctx, {
@@ -397,26 +405,26 @@
                 const militaresList = document.getElementById("militares-list");
 
                 // Exemplo de dados - Substitua com dados reais
-               const data = {
-    'AFAS': ['1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704'],
-    'CEDEC': ['1º Ten Douglas Constantino Fernandes - (31) 98576-2386', '2º Ten Rogério Silva de Paula - (31) 98769-8364', '3º Sgt Luiz Ricardo Vago Lima - (31) 99835-4229', '3º Sgt Felipe Vaz de Sá - (31) 99086-3250', '3º Sgt Deivison Queiroz de Souza - (31) 98305-7477'],
-    'ALMG': ['Ten Cel Cléia Gonçalves Mota - (31) 98527-7579', '2º Sgt Pedro Henrique Garcia Pinto - (31) 99791-7322'],
-    'CTPM': ['Sub Ten Márcio de Assis - (31) 97230-0866', 'Subten Marcos Rodrigues das Dores - (31) 99890-3446', '2º Sgt Adilson Alves de Souza - (31) 99744-7210', '1º Sgt Dionísio Rosa Dias - (31) 98733-9992', '2º Sgt Emerson Alexandre Pereira De Mello - (31) 99971-4985', '2º Sgt Angelo Rodrigo Siqueira - (31) 99618-1447', '2º Sgt Ismael Camilo dos Santos - (31) 98885-9318', '2º Sgt Alisson Alves Amorim - (31) 99208-1458', '3º Sgt Reginaldo Reis Bazílio - (31) 99233-0573', 'Sub Ten Geraldo Doroterio Ferreira - (31) 98859-5559', '1º Sgt Wanderson Moreira Luiz - (31) 98503-2098', '2º Sgt Kleiris Marcus H. do Nascimento - (31) 99141-1913', '2º Sgt William Reis de Miranda - (31) 98645-4580', '2º Sgt Pérsio Soares de Carvalho - (31) 98978-5139', 'Sub Ten Davidson dos Santos da Rocha - (31) 98687-2095'],
-    'GMG': ['Maj Wenderson Duarte MARCELINO - (31) 98876-3781', 'Cap ADRIANE Cristina da Silva - (31) 98873-1095', '2º Ten GUILHERME de Castro Quírico - (32) 98813-3965', 'Sub Ten WAGNER Luiz Gonçalves - (31) 98746-1155', '1º Sgt WEMBLEY Jorge Martins - (31) 98689-5100', '1º Sgt GIOVANNI Batista Bento - (31) 98837-7293', '2º Sgt BRUNO Eustáquio de Souza Gomes - (31) 98638-9798', '2º Sgt Heyder Alves CANGUSSU - (31) 97338-1542', '2º Sgt João Flávio ALVES - (31) 99220-9377', '3º Sgt Olivaldo Reis BISPO - (31) 98827-9057', '2º Sgt André Fillipe RAINON Ferreira de Carvalho - (31) 99070-7005', '3º Sgt Arthur Luiz VINHAL Nunes Souza - (31) 99922-8931'],
-    'Intendência': ['1º Sgt JAYME ARAUJO DOS SANTOS FILHO - (31) 99247-0193', '1º Sgt CARLOS ANTÔNIO FERREIRA SANTANA - (31) 98809-6982', '1º Sgt EDSON SILVA FILHO - (31) 98664-4113', '1º Sgt GILSON RIBEIRO DA SILVA - (31) 97592-5018', 'Cb LUCAS BARBOSA AGUIAR - (31) 98481-8314'],
-    'MPMG': ['Cap Sandro Henrique Bragio - (31) 99619-7004', 'Cap Paulo Henrique Camargos Firme - (31) 98876-1423', '1º Ten Rafael Bruno Rocha - (31) 98787-1355', '1º Ten Julio Cesar Ferreira dos Santos - (31) 99521-4155', '2º Ten Samuel Márcio da Luz - (31) 97508-4950', '2º Sgt Thiago Faria de Araujo - (31) 99211-3577', '3º Sgt João Paulo Vieira COTTA - (31) 99570-5544'],
-    'SENASP': ['3º Sgt EMÍLIA TAINÁ COUTO VIANA E SOUSA - (31) 98343-6808', '3º Sgt ANDRE FERREIRA DE OLIVEIRA - (38) 99816-3930'],
-    'OGE': ['Maj WENDELL HOOVER GONÇALVES DE REZENDE - (31) 98527-5260', 'Cap CARLOS ALBERTO FERREIRA DA SILVA - (31) 99473-1072', '2º Sgt JULIO CESAR ALVES FONSECA - (31) 98765-7876', '2º Sgt SUZANA DE SOUZA BRAGA - (31) 99180-6378', 'Cb VINÍCIUS DA COSTA GOMES - (31) 99644-2415'],
-    'Fundação SALVAR': ['Maj Fellipe Augusto Maciel de Faria Mota Oliveira - (31) 8726-0898', '1º Ten Sandro Aloísio Matilde Junior - (31) 98525-1319', '3º Sgt Glauber Miguel Gonçalves - (31) 98451-6417', 'Sd Jessica Rojas Silva - (31) 99172-4692', 'Sd Jediael Jhonata do Amaral Tadini - (31) 98679-3368', 'Sd Thais Firmato Fortes - (31) 97101-2689'],
-    'SEE': ['Maj Andiara Beatriz Ribeiro Miranda - (31) 97153-9897'],
-    'Secretaria Parlamentar': ['1º Ten Andresa Vicente Amante - (31) 99127-9068', 'Cb Cristiano Lages Wardil - (31) 99392-0732', 'Cb Lúcio Marcos Oliveira Hortêncio - (31) 97175-4554'],
-    'SEJUSP': ['Maj Leandro de Oliveira Pereira - (31) 98709-3033', 'Cb Gefte da Silva Lemos - (31) 99343-8377', 'Ten Cel Peterson José Paiva Monteiro - (31) 98709-2550'],
-    'SES': ['Maj Sílvia Amélia de Souza Paula - (31) 99122-5100', '2º Ten Aline de Barros Souza Silveira - (31) 97167-7886'],
-    'TJMG': ['Maj Marcus Vinícius Siqueira Flores - (31) 98659-5707', '1º Ten Carlos Eduardo de Oliveira - (31) 98600-2512', 'Sub Ten Fernando Eustáquio dos Santos - (31) 98801-1710', '1º Sgt José Zito da Silva Filho - (31) 98781-7435', '1º Sgt Fernando Iglésias Gonçalves - (31) 99871-2536', '1º Sgt Jovane Jonatas Passos - (31) 98861-2326', 'Sd Igor Cláver Coelho de Resende - (31) 97530-8845'],
-    'TJMMG': ['Sub Ten CARLOS RODRIGUES GOMES - (31) 98854-4380', '2º Sgt JOSAINE THAIS DO CARMO - (31) 98788-1588', '1º Sgt RINALDO CEZAR FONTES CRUZ - (31) 99469-2218', '2º Sgt THIAGO BRUNO DE ALBUQUERQUE MORAIS - (31) 99137-8635', '2º Sgt GERNANDO PACHECO ALCÂNTARA TORRES - (31) 99203-8691', '3º Sgt LUCÉLIA MOREIRA SANTOS - (31) 9998-40225', '2º Sgt GUSTAVO DUARTE OLIVEIRA - (31) 97243-7139', 'Cb ALEXANDRE POLIDORO - (31) 98890-7567', 'Cb GIOVANNI TADEU B. DOS SANTOS - (31) 99318-7722'],
-    'ECIM': ['Cap Robson Leopoldino dos Reis - (31) 99711-8778', '2º Ten Edmar Daltro Coutinho Júnior - (31) 99363-0606', '2º Ten Hebert do Carmo Nonato - (31) 99612-4403', '2º Ten Marcelo Cardoso da Silva - (31) 98546-1811', '2º Ten Renato Maia da Silva - (32) 98852-8883', '2º Ten Fernando César Cardoso - (32) 98834-7941', '2º Ten José Edson Alves da Costa - (35) 99972-2204', '1º Sgt Valtecir de Moraes - (34) 99995-8814', '2º Sgt Edwaldo Elias Nunes - (31) 98567-2633', '1º Sgt Célio Alves Evangelista - (31) 98889-6464', '1º Sgt Luiz Fernandes de Oliveira - (31) 99686-4949', '1º Sgt Alessandro Eduardo de Souza Rafael - (35) 98817-7012', '1º Sgt Nivaldo de Oliveira - (31) 99847-0346', '1º Sgt Edson Alves da Silva - (31) 8538-5249', '1º Sgt Paulo Sérgio dos Santos - (35) 99970-2806', 'Sub Ten Helton Luiz Dias de Sá - (32) 98867-9481', '1º Sgt Cosme Sebastião Costa - (31) 99859-7100', '1º Sgt José Ronaldo Ferrarezi - (32) 99167-1868', '2º Ten Adailton Rogério da Cruz - (35) 98424-3270', '1º Sgt Eduardo Luiz Trindade - (32) 98423-5803', '1º Sgt Denisson Diane da Silva - (32) 9934-1026', '1º Sgt Heraldo de Campos Prado Júnior - (35) 99946-6032', 'Sub Ten Márcio Edson Guimarães - (32) 98856-2957', '1º Sgt Paulo Henrique de Oliveira - (31) 98979-0807'],
-    'CORDENAÇÃO DAI/2': ['Maj Richelmy Murta Pinto - (35) 98464-0729', 'Sd Larissa Elias Diana Vieira - (31) 99816-2524']
-    };
+                const data = {
+                    'AFAS': ['1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704'],
+                    'CEDEC': ['1º Ten Douglas Constantino Fernandes - (31) 98576-2386', '2º Ten Rogério Silva de Paula - (31) 98769-8364', '3º Sgt Luiz Ricardo Vago Lima - (31) 99835-4229', '3º Sgt Felipe Vaz de Sá - (31) 99086-3250', '3º Sgt Deivison Queiroz de Souza - (31) 98305-7477'],
+                    'ALMG': ['Ten Cel Cléia Gonçalves Mota - (31) 98527-7579', '2º Sgt Pedro Henrique Garcia Pinto - (31) 99791-7322'],
+                    'CTPM': ['Sub Ten Márcio de Assis - (31) 97230-0866', 'Subten Marcos Rodrigues das Dores - (31) 99890-3446', '2º Sgt Adilson Alves de Souza - (31) 99744-7210', '1º Sgt Dionísio Rosa Dias - (31) 98733-9992', '2º Sgt Emerson Alexandre Pereira De Mello - (31) 99971-4985', '2º Sgt Angelo Rodrigo Siqueira - (31) 99618-1447', '2º Sgt Ismael Camilo dos Santos - (31) 98885-9318', '2º Sgt Alisson Alves Amorim - (31) 99208-1458', '3º Sgt Reginaldo Reis Bazílio - (31) 99233-0573', 'Sub Ten Geraldo Doroterio Ferreira - (31) 98859-5559', '1º Sgt Wanderson Moreira Luiz - (31) 98503-2098', '2º Sgt Kleiris Marcus H. do Nascimento - (31) 99141-1913', '2º Sgt William Reis de Miranda - (31) 98645-4580', '2º Sgt Pérsio Soares de Carvalho - (31) 98978-5139', 'Sub Ten Davidson dos Santos da Rocha - (31) 98687-2095'],
+                    'GMG': ['Maj Wenderson Duarte MARCELINO - (31) 98876-3781', 'Cap ADRIANE Cristina da Silva - (31) 98873-1095', '2º Ten GUILHERME de Castro Quírico - (32) 98813-3965', 'Sub Ten WAGNER Luiz Gonçalves - (31) 98746-1155', '1º Sgt WEMBLEY Jorge Martins - (31) 98689-5100', '1º Sgt GIOVANNI Batista Bento - (31) 98837-7293', '2º Sgt BRUNO Eustáquio de Souza Gomes - (31) 98638-9798', '2º Sgt Heyder Alves CANGUSSU - (31) 97338-1542', '2º Sgt João Flávio ALVES - (31) 99220-9377', '3º Sgt Olivaldo Reis BISPO - (31) 98827-9057', '2º Sgt André Fillipe RAINON Ferreira de Carvalho - (31) 99070-7005', '3º Sgt Arthur Luiz VINHAL Nunes Souza - (31) 99922-8931'],
+                    'Intendência': ['1º Sgt JAYME ARAUJO DOS SANTOS FILHO - (31) 99247-0193', '1º Sgt CARLOS ANTÔNIO FERREIRA SANTANA - (31) 98809-6982', '1º Sgt EDSON SILVA FILHO - (31) 98664-4113', '1º Sgt GILSON RIBEIRO DA SILVA - (31) 97592-5018', 'Cb LUCAS BARBOSA AGUIAR - (31) 98481-8314'],
+                    'MPMG': ['Cap Sandro Henrique Bragio - (31) 99619-7004', 'Cap Paulo Henrique Camargos Firme - (31) 98876-1423', '1º Ten Rafael Bruno Rocha - (31) 98787-1355', '1º Ten Julio Cesar Ferreira dos Santos - (31) 99521-4155', '2º Ten Samuel Márcio da Luz - (31) 97508-4950', '2º Sgt Thiago Faria de Araujo - (31) 99211-3577', '3º Sgt João Paulo Vieira COTTA - (31) 99570-5544'],
+                    'SENASP': ['3º Sgt EMÍLIA TAINÁ COUTO VIANA E SOUSA - (31) 98343-6808', '3º Sgt ANDRE FERREIRA DE OLIVEIRA - (38) 99816-3930'],
+                    'OGE': ['Maj WENDELL HOOVER GONÇALVES DE REZENDE - (31) 98527-5260', 'Cap CARLOS ALBERTO FERREIRA DA SILVA - (31) 99473-1072', '2º Sgt JULIO CESAR ALVES FONSECA - (31) 98765-7876', '2º Sgt SUZANA DE SOUZA BRAGA - (31) 99180-6378', 'Cb VINÍCIUS DA COSTA GOMES - (31) 99644-2415'],
+                    'Fundação SALVAR': ['Maj Fellipe Augusto Maciel de Faria Mota Oliveira - (31) 8726-0898', '1º Ten Sandro Aloísio Matilde Junior - (31) 98525-1319', '3º Sgt Glauber Miguel Gonçalves - (31) 98451-6417', 'Sd Jessica Rojas Silva - (31) 99172-4692', 'Sd Jediael Jhonata do Amaral Tadini - (31) 98679-3368', 'Sd Thais Firmato Fortes - (31) 97101-2689'],
+                    'SEE': ['Maj Andiara Beatriz Ribeiro Miranda - (31) 97153-9897'],
+                    'Secretaria Parlamentar': ['1º Ten Andresa Vicente Amante - (31) 99127-9068', 'Cb Cristiano Lages Wardil - (31) 99392-0732', 'Cb Lúcio Marcos Oliveira Hortêncio - (31) 97175-4554'],
+                    'SEJUSP': ['Maj Leandro de Oliveira Pereira - (31) 98709-3033', 'Cb Gefte da Silva Lemos - (31) 99343-8377', 'Ten Cel Peterson José Paiva Monteiro - (31) 98709-2550'],
+                    'SES': ['Maj Sílvia Amélia de Souza Paula - (31) 99122-5100', '2º Ten Aline de Barros Souza Silveira - (31) 97167-7886'],
+                    'TJMG': ['Maj Marcus Vinícius Siqueira Flores - (31) 98659-5707', '1º Ten Carlos Eduardo de Oliveira - (31) 98600-2512', 'Sub Ten Fernando Eustáquio dos Santos - (31) 98801-1710', '1º Sgt José Zito da Silva Filho - (31) 98781-7435', '1º Sgt Fernando Iglésias Gonçalves - (31) 99871-2536', '1º Sgt Jovane Jonatas Passos - (31) 98861-2326', 'Sd Igor Cláver Coelho de Resende - (31) 97530-8845'],
+                    'TJMMG': ['Sub Ten CARLOS RODRIGUES GOMES - (31) 98854-4380', '2º Sgt JOSAINE THAIS DO CARMO - (31) 98788-1588', '1º Sgt RINALDO CEZAR FONTES CRUZ - (31) 99469-2218', '2º Sgt THIAGO BRUNO DE ALBUQUERQUE MORAIS - (31) 99137-8635', '2º Sgt GERNANDO PACHECO ALCÂNTARA TORRES - (31) 99203-8691', '3º Sgt LUCÉLIA MOREIRA SANTOS - (31) 9998-40225', '2º Sgt GUSTAVO DUARTE OLIVEIRA - (31) 97243-7139', 'Cb ALEXANDRE POLIDORO - (31) 98890-7567', 'Cb GIOVANNI TADEU B. DOS SANTOS - (31) 99318-7722'],
+                    'ECIM': ['Cap Robson Leopoldino dos Reis - (31) 99711-8778', '2º Ten Edmar Daltro Coutinho Júnior - (31) 99363-0606', '2º Ten Hebert do Carmo Nonato - (31) 99612-4403', '2º Ten Marcelo Cardoso da Silva - (31) 98546-1811', '2º Ten Renato Maia da Silva - (32) 98852-8883', '2º Ten Fernando César Cardoso - (32) 98834-7941', '2º Ten José Edson Alves da Costa - (35) 99972-2204', '1º Sgt Valtecir de Moraes - (34) 99995-8814', '2º Sgt Edwaldo Elias Nunes - (31) 98567-2633', '1º Sgt Célio Alves Evangelista - (31) 98889-6464', '1º Sgt Luiz Fernandes de Oliveira - (31) 99686-4949', '1º Sgt Alessandro Eduardo de Souza Rafael - (35) 98817-7012', '1º Sgt Nivaldo de Oliveira - (31) 99847-0346', '1º Sgt Edson Alves da Silva - (31) 8538-5249', '1º Sgt Paulo Sérgio dos Santos - (35) 99970-2806', 'Sub Ten Helton Luiz Dias de Sá - (32) 98867-9481', '1º Sgt Cosme Sebastião Costa - (31) 99859-7100', '1º Sgt José Ronaldo Ferrarezi - (32) 99167-1868', '2º Ten Adailton Rogério da Cruz - (35) 98424-3270', '1º Sgt Eduardo Luiz Trindade - (32) 98423-5803', '1º Sgt Denisson Diane da Silva - (32) 9934-1026', '1º Sgt Heraldo de Campos Prado Júnior - (35) 99946-6032', 'Sub Ten Márcio Edson Guimarães - (32) 98856-2957', '1º Sgt Paulo Henrique de Oliveira - (31) 98979-0807'],
+                    'CORDENAÇÃO DAI/2': ['Maj Richelmy Murta Pinto - (35) 98464-0729', 'Sd Larissa Elias Diana Vieira - (31) 99816-2524']
+                };
 
 
                 militaresList.innerHTML = data[orgao].map(militar => `<p>${militar}</p>`).join('');
@@ -428,13 +436,14 @@
                 modal.style.display = "none";
             }
 
-            window.onclick = function (event) {
+            window.onclick = function(event) {
                 const modal = document.getElementById("modal");
                 if (event.target === modal) {
                     modal.style.display = "none";
                 }
             }
-    </script>
-  </div>
+        </script>
+    </div>
 </body>
+
 </html>
