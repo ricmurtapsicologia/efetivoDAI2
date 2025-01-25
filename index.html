@@ -402,8 +402,7 @@
             function showModal(orgao) {
                 const modal = document.getElementById("modal");
                 const militaresList = document.getElementById("militares-list");
-
-                // Exemplo de dados - Substitua com dados reais
+                <script>
                 const data = {
     'AFAS': [
         '1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704'
@@ -549,51 +548,33 @@
 };
 
 
-                militaresList.innerHTML = data[orgao].map(militar => `<p>${militar}</p>`).join('');
-                modal.style.display = "flex";
-            }
+               function searchMilitary() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultDiv = document.getElementById('searchResult');
+            let found = false;
 
-            function closeModal() {
-                const modal = document.getElementById("modal");
-                modal.style.display = "none";
-            }
+            resultDiv.innerHTML = '';
 
-            window.onclick = function(event) {
-                const modal = document.getElementById("modal");
-                if (event.target === modal) {
-                    modal.style.display = "none";
+            for (const [orgao, militares] of Object.entries(data)) {
+                for (const militar of militares) {
+                    if (militar.toLowerCase().includes(query)) {
+                        found = true;
+                        const [posto, nome, telefone] = militar.split(' - ');
+                        resultDiv.innerHTML += `
+                            <p><strong>Posto/Graduação:</strong> ${posto || 'Não informado'}</p>
+                            <p><strong>Nome:</strong> ${nome || 'Não informado'}</p>
+                            <p><strong>Telefone:</strong> ${telefone || 'Não informado'}</p>
+                            <p><strong>Órgão Externo:</strong> ${orgao}</p>
+                            <hr style="border: 1px solid #ddd;">
+                        `;
+                    }
                 }
             }
-function searchMilitary() {
-    const query = document.getElementById('searchInput').value.trim().toLowerCase();
-    const resultDiv = document.getElementById('searchResult');
-    let found = false;
 
-    resultDiv.innerHTML = ''; // Limpa os resultados anteriores
-
-    for (const [orgao, militares] of Object.entries(data)) {
-        for (const militar of militares) {
-            if (militar.toLowerCase().includes(query)) {
-                found = true;
-                const [posto, nome, telefone] = militar.split(' - ');
-                resultDiv.innerHTML += `
-                    <p><strong>Posto/Graduação:</strong> ${posto}</p>
-                    <p><strong>Nome:</strong> ${nome}</p>
-                    <p><strong>Telefone:</strong> ${telefone}</p>
-                    <p><strong>Órgão Externo:</strong> ${orgao}</p>
-                    <hr style="border: 1px solid #ddd;">
-                `;
+            if (!found) {
+                resultDiv.innerHTML = '<p style="color: red;">Nenhum militar encontrado.</p>';
             }
         }
-    }
-
-    if (!found) {
-        resultDiv.innerHTML = '<p style="color: red;">Nenhum militar encontrado.</p>';
-    }
-}
-
-        </script>
-    </div>
+    </script>
 </body>
-
 </html>
