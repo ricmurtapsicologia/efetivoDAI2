@@ -5,7 +5,189 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Distribuição de Efetivo da DAI/2 Órgãos Externos</title>
-    <link rel="stylesheet" href="style.css">
+   <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 32px;
+        font-weight: bold;
+        color: #212529;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 10px;
+    }
+
+    .general-data {
+        background-color: #f1f3f5;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        font-size: 18px;
+        color: #495057;
+    }
+
+    .general-data p {
+        margin: 10px 0;
+        font-weight: 600;
+        color: #212529;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .block {
+        background-color: #ffffff;
+        width: 32%;
+        padding: 20px;
+        border-radius: 12px;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .block:hover {
+        transform: scale(1.03);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        background-color: #f8f9fa;
+    }
+
+    .block h3 {
+        margin: 0;
+        font-size: 22px;
+        color: #495057;
+        font-weight: 600;
+    }
+
+    .block canvas {
+        margin-top: 10px;
+        width: 100%;
+        height: auto;
+        max-height: 150px;
+    }
+
+    .block .numbers {
+        font-size: 18px;
+        color: #6c757d;
+        margin-top: 10px;
+        font-weight: 500;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        max-height: 80%;
+        overflow-y: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-content h4 {
+        margin-top: 0;
+        color: #212529;
+        font-weight: 600;
+    }
+
+    .close {
+        color: #6c757d;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #212529;
+        text-decoration: none;
+    }
+
+    @media (max-width: 576px) {
+        .block {
+            width: 100%;
+        }
+
+        .modal-content {
+            width: 100%;
+        }
+    }
+
+    @media (min-width: 577px) and (max-width: 768px) {
+        .block {
+            width: 48%;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 992px) {
+        .block {
+            width: 48%;
+        }
+    }
+
+    @media (min-width: 993px) {
+        .block {
+            width: 30%;
+        }
+
+        .block h3 {
+            font-size: 20px;
+        }
+    }
+</style>
+
 </head>
 
 <body>
@@ -18,6 +200,12 @@
             <p>Total Existente: 111</p>
             <p>Total Claro: 44</p>
         </div>
+<div style="margin-top: 20px;">
+            <input type="text" id="searchInput" placeholder="Pesquisar militar..." style="width: 80%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            <button onclick="searchMilitary()" style="padding: 10px 20px; border-radius: 8px; border: none; background-color: #4caf50; color: white; cursor: pointer;">Pesquisar</button>
+        </div>
+        <div id="searchResult" style="margin-top: 20px; font-size: 18px; color: #333;"></div>
+        <!-- Modal -->
         <div class="row">
             <div class="block" data-previsto="6" data-existente="2" onclick="showModal('AFAS')">
                 <h3>AFAS</h3>
@@ -360,7 +548,8 @@
     ]
 };
 
-militaresList.innerHTML = data[orgao].map(militar => `<p>${militar}</p>`).join('');
+
+                militaresList.innerHTML = data[orgao].map(militar => `<p>${militar}</p>`).join('');
                 modal.style.display = "flex";
             }
 
@@ -375,6 +564,34 @@ militaresList.innerHTML = data[orgao].map(militar => `<p>${militar}</p>`).join('
                     modal.style.display = "none";
                 }
             }
+function searchMilitary() {
+    const query = document.getElementById('searchInput').value.trim().toLowerCase();
+    const resultDiv = document.getElementById('searchResult');
+    let found = false;
+
+    resultDiv.innerHTML = ''; // Limpa os resultados anteriores
+
+    for (const [orgao, militares] of Object.entries(data)) {
+        for (const militar of militares) {
+            if (militar.toLowerCase().includes(query)) {
+                found = true;
+                const [posto, nome, telefone] = militar.split(' - ');
+                resultDiv.innerHTML += `
+                    <p><strong>Posto/Graduação:</strong> ${posto}</p>
+                    <p><strong>Nome:</strong> ${nome}</p>
+                    <p><strong>Telefone:</strong> ${telefone}</p>
+                    <p><strong>Órgão Externo:</strong> ${orgao}</p>
+                    <hr style="border: 1px solid #ddd;">
+                `;
+            }
+        }
+    }
+
+    if (!found) {
+        resultDiv.innerHTML = '<p style="color: red;">Nenhum militar encontrado.</p>';
+    }
+}
+
         </script>
     </div>
 </body>
