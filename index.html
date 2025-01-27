@@ -374,11 +374,57 @@
 };
 
 
-       // Atualiza a lista de militares no modal
-militaresList.innerHTML = data[orgao]
-    .map(militar => `<p>${militar}</p>`)
-    .join('');
-modal.style.display = "flex";
+     function createChart(canvasId, previsto, existente, claro) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Previsto', 'Existente', 'Claro'],
+            datasets: [{
+                data: [previsto, existente, claro],
+                backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true, // Mantém a proporção entre largura e altura
+            aspectRatio: 1, // Define uma proporção 1:1 para gráficos
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+function showModal(orgao, data) {
+    const modal = document.getElementById("modal");
+    const militaresList = document.getElementById("militares-list");
+
+    // Atualiza a lista de militares no modal
+    if (data[orgao] && Array.isArray(data[orgao])) {
+        militaresList.innerHTML = data[orgao]
+            .map(militar => {
+                // Valida o formato dos dados antes de dividir
+                if (militar.includes(' - ')) {
+                    const [posto, nome, telefone] = militar.split(' - ');
+                    return `
+                        <p><strong>Posto/Graduação:</strong> ${posto}</p>
+                        <p><strong>Nome:</strong> ${nome}</p>
+                        <p><strong>Telefone:</strong> ${telefone}</p>`;
+                } else {
+                    return `<p style="color: red;">Erro no formato dos dados: ${militar}</p>`;
+                }
+            })
+            .join('<hr style="border: 1px solid #ddd;">');
+    } else {
+        militaresList.innerHTML = '<p style="color: red;">Dados do órgão não encontrados.</p>';
+    }
+
+    modal.style.display = "flex";
+}
 
 function closeModal() {
     const modal = document.getElementById("modal");
@@ -392,7 +438,7 @@ window.onclick = function (event) {
     }
 };
 
-function searchMilitary() {
+function searchMilitary(data) {
     const query = document.getElementById('searchInput').value.trim().toLowerCase();
     const resultDiv = document.getElementById('searchResult');
     let found = false;
@@ -400,7 +446,7 @@ function searchMilitary() {
     resultDiv.innerHTML = ''; // Limpa os resultados anteriores
 
     for (const [orgao, militares] of Object.entries(data)) {
-        for (const militar of militares) {
+        militares.forEach(militar => {
             if (militar.toLowerCase().includes(query)) {
                 found = true;
 
@@ -418,10 +464,15 @@ function searchMilitary() {
                     resultDiv.innerHTML += `<p style="color: red;">Erro no formato dos dados: ${militar}</p>`;
                 }
             }
-        }
+        });
     }
 
     if (!found) {
         resultDiv.innerHTML = '<p style="color: red;">Nenhum militar encontrado.</p>';
     }
 }
+</script>
+    </div>
+</body>
+</html>
+
