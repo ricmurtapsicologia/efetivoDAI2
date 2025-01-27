@@ -89,12 +89,12 @@ body {
 
 .block canvas {
     margin-top: 10px;
-    width: 100%; /* O canvas preenche 100% do bloco */
+    width: 100%; /* Mantém a responsividade */
+    max-width: 300px; /* Limita a largura máxima */
     height: auto;
-    max-width: 300px; /* Largura máxima do gráfico */
-    max-height: 300px; /* Altura máxima do gráfico */
-    display: block; /* Centraliza o canvas dentro do bloco */
-    margin: 0 auto; /* Centraliza o canvas horizontalmente */
+    max-height: 300px; /* Limita a altura máxima */
+    display: block; /* Garante que o canvas se comporte como bloco */
+    margin: 0 auto; /* Centraliza o canvas */
 }
 
 .block .numbers {
