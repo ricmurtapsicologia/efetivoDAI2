@@ -91,7 +91,7 @@ body {
     margin-top: 10px;
     width: 100%; /* Mantém a responsividade */
     max-width: 300px; /* Limita a largura máxima */
-    height: auto;
+    height: auto; /* Altura automática para manter a proporção */
     max-height: 300px; /* Limita a altura máxima */
     display: block; /* Garante que o canvas se comporte como bloco */
     margin: 0 auto; /* Centraliza o canvas */
@@ -114,6 +114,7 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
+    display: flex; /* Garante centralização */
     justify-content: center;
     align-items: center;
 }
