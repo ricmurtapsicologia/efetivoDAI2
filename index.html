@@ -26,10 +26,15 @@
             <p>Total Claro: 44</p>
         </div>
         <div style="margin-top: 20px;">
-            <input type="text" id="searchInput" placeholder="Pesquisar militar..." style="width: 80%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
-            <button onclick="searchMilitary(data)" style="padding: 10px 20px; border-radius: 8px; border: none; background-color: #4caf50; color: white; cursor: pointer;">Pesquisar</button>
+            <input type="text" id="searchInput" placeholder="Pesquisar militar..." 
+                   style="width: 80%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            <button onclick="searchMilitary()" 
+                    style="padding: 10px 20px; border-radius: 8px; border: none; background-color: #4caf50; color: white; cursor: pointer;">
+                Pesquisar
+            </button>
         </div>
         <div id="searchResult" style="margin-top: 20px; font-size: 18px; color: #333;"></div>
+
 
         <!-- Container de blocos -->
         <div class="row">
@@ -373,21 +378,6 @@ function showModal(orgao, data) {
         'Cb Giovanni Tadeu B. dos Santos - (31) 99318-7722'
     ]
 };
-militaresList.innerHTML = data[orgao].map(militar => `<p>${militar}</p>`).join('');
-                modal.style.display = "flex";
-            }
-
-            function closeModal() {
-                const modal = document.getElementById("modal");
-                modal.style.display = "none";
-            }
-
-            window.onclick = function(event) {
-                const modal = document.getElementById("modal");
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                }
-            }
 function searchMilitary() {
     const query = document.getElementById('searchInput').value.trim().toLowerCase();
     const resultDiv = document.getElementById('searchResult');
@@ -396,7 +386,7 @@ function searchMilitary() {
     resultDiv.innerHTML = ''; // Limpa os resultados anteriores
 
     for (const [orgao, militares] of Object.entries(data)) {
-        for (const militar of militares) {
+        militares.forEach(militar => {
             if (militar.toLowerCase().includes(query)) {
                 found = true;
                 const [posto, nome, telefone] = militar.split(' - ');
@@ -408,7 +398,7 @@ function searchMilitary() {
                     <hr style="border: 1px solid #ddd;">
                 `;
             }
-        }
+        });
     }
 
     if (!found) {
