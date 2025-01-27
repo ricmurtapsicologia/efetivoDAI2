@@ -8,10 +8,8 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f8f9fa;
     color: #333;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 .container {
@@ -54,12 +52,13 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    gap: 20px; /* Espaço uniforme entre os blocos */
     margin-bottom: 20px;
 }
 
 .block {
     background-color: #ffffff;
-    width: 32%;
+    width: calc(33.333% - 20px); /* Ajusta automaticamente a largura com gap */
     padding: 20px;
     border-radius: 12px;
     position: relative;
@@ -70,7 +69,6 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin-bottom: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
@@ -89,12 +87,10 @@ body {
 
 .block canvas {
     margin-top: 10px;
-    width: 100%; /* Mantém a responsividade */
-    max-width: 300px; /* Limita a largura máxima */
-    height: auto; /* Altura automática para manter a proporção */
-    max-height: 300px; /* Limita a altura máxima */
-    display: block; /* Garante que o canvas se comporte como bloco */
-    margin: 0 auto; /* Centraliza o canvas */
+    width: 100%; /* Responsividade completa */
+    max-width: 250px; /* Tamanho máximo do canvas */
+    height: auto;
+    aspect-ratio: 1; /* Mantém a proporção 1:1 */
 }
 
 .block .numbers {
@@ -107,14 +103,13 @@ body {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
-    display: flex; /* Garante centralização */
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -139,16 +134,18 @@ body {
 
 .close {
     color: #6c757d;
-    float: right;
     font-size: 28px;
     font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .close:hover,
 .close:focus {
     color: #212529;
-    text-decoration: none;
 }
 
 @media (max-width: 576px) {
@@ -175,7 +172,7 @@ body {
 
 @media (min-width: 993px) {
     .block {
-        width: 30%;
+        width: calc(33.333% - 20px); /* Inclui gap no cálculo */
     }
 
     .block h3 {
