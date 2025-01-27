@@ -25,12 +25,13 @@
             <p>Total Existente: 111</p>
             <p>Total Claro: 44</p>
         </div>
-<div style="margin-top: 20px;">
+        <div style="margin-top: 20px;">
             <input type="text" id="searchInput" placeholder="Pesquisar militar..." style="width: 80%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
-            <button onclick="searchMilitary()" style="padding: 10px 20px; border-radius: 8px; border: none; background-color: #4caf50; color: white; cursor: pointer;">Pesquisar</button>
+            <button onclick="searchMilitary(data)" style="padding: 10px 20px; border-radius: 8px; border: none; background-color: #4caf50; color: white; cursor: pointer;">Pesquisar</button>
         </div>
         <div id="searchResult" style="margin-top: 20px; font-size: 18px; color: #333;"></div>
-        <!-- Modal -->
+
+        <!-- Container de blocos -->
         <div class="row">
             <div class="block" data-previsto="6" data-existente="2" onclick="showModal('AFAS')">
                 <h3>AFAS</h3>
@@ -170,66 +171,66 @@
                 </div>
             </div>
         </div>
-        <div id="modal" class="modal">
+          <div id="modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">×</span>
                 <h4>Relação de Militares</h4>
                 <div id="militares-list"></div>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            function createChart(canvasId, previsto, existente, claro) {
-                const ctx = document.getElementById(canvasId).getContext('2d');
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Previsto', 'Existente', 'Claro'],
-                        datasets: [{
-                            data: [previsto, existente, claro],
-                            backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        }
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function createChart(canvasId, previsto, existente, claro) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Previsto', 'Existente', 'Claro'],
+                datasets: [{
+                    data: [previsto, existente, claro],
+                    backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true, // Mantém proporção entre largura e altura
+                plugins: {
+                    legend: {
+                        display: false
                     }
-                });
+                }
             }
+        });
+    }
+             const charts = [
+        { id: 'chart-afas', previsto: 6, existente: 1, claro: 5 },
+        { id: 'chart-cedec', previsto: 10, existente: 5, claro: 5 },
+        { id: 'chart-almg', previsto: 2, existente: 2, claro: 0 },
+        { id: 'chart-ctpm', previsto: 17, existente: 15, claro: 2 },
+        { id: 'chart-gmg', previsto: 15, existente: 12, claro: 3 },
+        { id: 'chart-intendencia', previsto: 7, existente: 5, claro: 2 },
+        { id: 'chart-mpmg', previsto: 7, existente: 7, claro: 0 },
+        { id: 'chart-senasp', previsto: 2, existente: 2, claro: 0 },
+        { id: 'chart-oge', previsto: 6, existente: 5, claro: 1 },
+        { id: 'chart-salvar', previsto: 7, existente: 6, claro: 1 },
+        { id: 'chart-see', previsto: 1, existente: 1, claro: 0 },
+        { id: 'chart-secretaria-parlamentar', previsto: 3, existente: 3, claro: 0 },
+        { id: 'chart-sejusp', previsto: 3, existente: 3, claro: 0 },
+        { id: 'chart-ses', previsto: 2, existente: 2, claro: 0 },
+        { id: 'chart-tjmg', previsto: 9, existente: 7, claro: 2 },
+        { id: 'chart-tjmmg', previsto: 9, existente: 9, claro: 0 },
+        { id: 'chart-ecim', previsto: 47, existente: 24, claro: 23 },
+        { id: 'chart-coordenacao-dai2', previsto: 2, existente: 1, claro: 1 }
+    ];
 
-            // Exemplo de dados - Substitua com dados reais
-            createChart('chart-afas', 6, 1, 5);
-            createChart('chart-cedec', 10, 5, 5);
-            createChart('chart-almg', 2, 2, 0);
-            createChart('chart-ctpm', 17, 15, 2);
-            createChart('chart-gmg', 15, 12, 3);
-            createChart('chart-intendencia', 7, 5, 2);
-            createChart('chart-mpmg', 7, 7, 0);
-            createChart('chart-senasp', 2, 2, 0);
-            createChart('chart-oge', 6, 5, 1);
-            createChart('chart-salvar', 7, 6, 1);
-            createChart('chart-see', 1, 1, 0);
-            createChart('chart-secretaria-parlamentar', 3, 3, 0);
-            createChart('chart-sejusp', 3, 3, 0);
-            createChart('chart-ses', 2, 2, 0);
-            createChart('chart-tjmg', 9, 7, 2);
-            createChart('chart-tjmmg', 9, 9, 0);
-            createChart('chart-ecim', 47, 24, 23);
-            createChart('chart-coordenacao-dai2', 2, 1, 1);
+function showModal(orgao, data) {
+    const modal = document.getElementById("modal");
+    const militaresList = document.getElementById("militares-list");
 
-
-            function showModal(orgao) {
-                const modal = document.getElementById("modal");
-                const militaresList = document.getElementById("militares-list");
-
-                // Exemplo de dados - Substitua com dados reais
-                const data = {
+    // Dados de exemplo - Substitua pelos dados reais
+    const data = {
     'AFAS': [
         '1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704'
     ],
@@ -372,107 +373,106 @@
         'Cb Giovanni Tadeu B. dos Santos - (31) 99318-7722'
     ]
 };
-
-
-     function createChart(canvasId, previsto, existente, claro) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Previsto', 'Existente', 'Claro'],
-            datasets: [{
-                data: [previsto, existente, claro],
-                backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true, // Mantém a proporção entre largura e altura
-            aspectRatio: 1, // Define uma proporção 1:1 para gráficos
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        }
-    });
-}
-
-function showModal(orgao, data) {
-    const modal = document.getElementById("modal");
-    const militaresList = document.getElementById("militares-list");
-
-    // Atualiza a lista de militares no modal
-    if (data[orgao] && Array.isArray(data[orgao])) {
-        militaresList.innerHTML = data[orgao]
-            .map(militar => {
-                // Valida o formato dos dados antes de dividir
-                if (militar.includes(' - ')) {
-                    const [posto, nome, telefone] = militar.split(' - ');
-                    return `
-                        <p><strong>Posto/Graduação:</strong> ${posto}</p>
-                        <p><strong>Nome:</strong> ${nome}</p>
-                        <p><strong>Telefone:</strong> ${telefone}</p>`;
-                } else {
-                    return `<p style="color: red;">Erro no formato dos dados: ${militar}</p>`;
-                }
-            })
-            .join('<hr style="border: 1px solid #ddd;">');
-    } else {
-        militaresList.innerHTML = '<p style="color: red;">Dados do órgão não encontrados.</p>';
-    }
-
-    modal.style.display = "flex";
-}
-
-function closeModal() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "none";
-}
-
-window.onclick = function (event) {
-    const modal = document.getElementById("modal");
-    if (event.target === modal) {
-        modal.style.display = "none";
-    }
-};
-
-function searchMilitary(data) {
-    const query = document.getElementById('searchInput').value.trim().toLowerCase();
-    const resultDiv = document.getElementById('searchResult');
-    let found = false;
-
-    resultDiv.innerHTML = ''; // Limpa os resultados anteriores
-
-    for (const [orgao, militares] of Object.entries(data)) {
-        militares.forEach(militar => {
-            if (militar.toLowerCase().includes(query)) {
-                found = true;
-
-                // Valida o formato dos dados antes de dividir
-                if (militar.includes(' - ')) {
-                    const [posto, nome, telefone] = militar.split(' - ');
-                    resultDiv.innerHTML += `
-                        <p><strong>Posto/Graduação:</strong> ${posto}</p>
-                        <p><strong>Nome:</strong> ${nome}</p>
-                        <p><strong>Telefone:</strong> ${telefone}</p>
-                        <p><strong>Órgão Externo:</strong> ${orgao}</p>
-                        <hr style="border: 1px solid #ddd;">
-                    `;
-                } else {
-                    resultDiv.innerHTML += `<p style="color: red;">Erro no formato dos dados: ${militar}</p>`;
+<script>
+    function createChart(canvasId, previsto, existente, claro) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Previsto', 'Existente', 'Claro'],
+                datasets: [{
+                    data: [previsto, existente, claro],
+                    backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true, // Mantém a proporção entre largura e altura
+                aspectRatio: 1, // Define uma proporção 1:1 para gráficos
+                plugins: {
+                    legend: {
+                        display: false
+                    }
                 }
             }
         });
     }
 
-    if (!found) {
-        resultDiv.innerHTML = '<p style="color: red;">Nenhum militar encontrado.</p>';
+    function showModal(orgao, data) {
+        const modal = document.getElementById("modal");
+        const militaresList = document.getElementById("militares-list");
+
+        // Atualiza a lista de militares no modal
+        if (data[orgao] && Array.isArray(data[orgao])) {
+            militaresList.innerHTML = data[orgao]
+                .map(militar => {
+                    // Valida o formato dos dados antes de dividir
+                    if (militar.includes(' - ')) {
+                        const [posto, nome, telefone] = militar.split(' - ');
+                        return `
+                            <p><strong>Posto/Graduação:</strong> ${posto}</p>
+                            <p><strong>Nome:</strong> ${nome}</p>
+                            <p><strong>Telefone:</strong> ${telefone}</p>`;
+                    } else {
+                        return `<p style="color: red;">Erro no formato dos dados: ${militar}</p>`;
+                    }
+                })
+                .join('<hr style="border: 1px solid #ddd;">');
+        } else {
+            militaresList.innerHTML = '<p style="color: red;">Dados do órgão não encontrados.</p>';
+        }
+
+        modal.style.display = "flex";
     }
-}
+
+    function closeModal() {
+        const modal = document.getElementById("modal");
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        const modal = document.getElementById("modal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    function searchMilitary(data) {
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        const resultDiv = document.getElementById('searchResult');
+        let found = false;
+
+        resultDiv.innerHTML = ''; // Limpa os resultados anteriores
+
+        for (const [orgao, militares] of Object.entries(data)) {
+            militares.forEach(militar => {
+                if (militar.toLowerCase().includes(query)) {
+                    found = true;
+
+                    // Valida o formato dos dados antes de dividir
+                    if (militar.includes(' - ')) {
+                        const [posto, nome, telefone] = militar.split(' - ');
+                        resultDiv.innerHTML += `
+                            <p><strong>Posto/Graduação:</strong> ${posto}</p>
+                            <p><strong>Nome:</strong> ${nome}</p>
+                            <p><strong>Telefone:</strong> ${telefone}</p>
+                            <p><strong>Órgão Externo:</strong> ${orgao}</p>
+                            <hr style="border: 1px solid #ddd;">
+                        `;
+                    } else {
+                        resultDiv.innerHTML += `<p style="color: red;">Erro no formato dos dados: ${militar}</p>`;
+                    }
+                }
+            });
+        }
+
+        if (!found) {
+            resultDiv.innerHTML = '<p style="color: red;">Nenhum militar encontrado.</p>';
+        }
+    }
 </script>
-    </div>
+</div>
 </body>
 </html>
 
