@@ -2,629 +2,599 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Distribuição de Efetivo DAI/2</title>
-    <meta property="og:title" content="Distribuição de Efetivo DAI/2" />
-    <meta property="og:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
-    <meta property="og:image" content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg" />
-    <meta property="og:url" content="https://ricmurtapsicologia.github.io/RELACAO-DAI-2/" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Distribuição de Efetivo DAI/2" />
-    <meta name="twitter:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
-    <meta name="twitter:image" content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .title {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 32px;
-            font-weight: bold;
-            color: #212529;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 10px;
-        }
-
-        .general-data {
-            background-color: #f1f3f5;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            font-size: 18px;
-            color: #495057;
-        }
-
-        .general-data p {
-            margin: 10px 0;
-            font-weight: 600;
-            color: #212529;
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .block {
-            background-color: #ffffff;
-            width: 32%;
-            padding: 20px;
-            border-radius: 12px;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .block:hover {
-            transform: scale(1.03);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            background-color: #f8f9fa;
-        }
-
-        .block h3 {
-            margin: 0;
-            font-size: 22px;
-            color: #495057;
-            font-weight: 600;
-        }
-
-        .block canvas {
-            margin-top: 10px;
-            width: 100%;
-            height: auto;
-            max-height: 150px;
-        }
-
-        .block .numbers {
-            font-size: 18px;
-            color: #6c757d;
-            margin-top: 10px;
-            font-weight: 500;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            max-height: 80%;
-            overflow-y: auto;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-content h4 {
-            margin-top: 0;
-            color: #212529;
-            font-weight: 600;
-        }
-
-        .close {
-            color: #6c757d;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #212529;
-            text-decoration: none;
-        }
-
-        @media (max-width: 576px) {
-            .block {
-                width: 100%;
-            }
-
-            .modal-content {
-                width: 100%;
-            }
-        }
-
-        @media (min-width: 577px) and (max-width: 768px) {
-            .block {
-                width: 48%;
-            }
-        }
-
-        @media (min-width: 769px) and (max-width: 992px) {
-            .block {
-                width: 48%;
-            }
-        }
-
-        @media (min-width: 993px) {
-            .block {
-                width: 30%;
-            }
-
-            .block h3 {
-                font-size: 20px;
-            }
-        }
-
-        .banner {
-            background-image: url('https://i.pinimg.com/736x/09/78/66/097866594a7e8ab75de193f52d0acae0.jpg');
-            height: 300px;
-            background-size: cover;
-            background-position: center;
-        }
-    </style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Distribuição de Efetivo DAI/2</title>
+	<meta property="og:title" content="Distribuição de Efetivo DAI/2" />
+	<meta property="og:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
+	<meta property="og:image" content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg" />
+	<meta property="og:url" content="https://ricmurtapsicologia.github.io/RELACAO-DAI-2/" />
+	<meta property="og:type" content="website" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Distribuição de Efetivo DAI/2" />
+	<meta name="twitter:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
+	<meta name="twitter:image" content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg" />
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<style>
+		html {
+		    scroll-behavior: smooth;
+		}
+		* {
+		    margin: 0;
+		    padding: 0;
+		    box-sizing: border-box;
+		}
+		body {
+		    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		    background-color: #f8f9fa;
+		    color: #333;
+		    line-height: 1.6;
+		    overflow-x: hidden;
+		}
+		.container {
+		    max-width: 1200px;
+		    margin: 20px auto;
+		    padding: 20px;
+		    background-color: #ffffff;
+		    border-radius: 12px;
+		    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+		}
+		.title {
+		    text-align: center;
+		    margin-bottom: 20px;
+		    font-size: 32px;
+		    font-weight: bold;
+		    color: #212529;
+		    border-bottom: 2px solid #e0e0e0;
+		    padding-bottom: 10px;
+		}
+		.general-data {
+		    background-color: #f1f3f5;
+		    padding: 20px;
+		    border-radius: 12px;
+		    margin-bottom: 30px;
+		    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+		    text-align: center;
+		    font-size: 18px;
+		    color: #495057;
+		}
+		.general-data p {
+		    margin: 10px 0;
+		    font-weight: 600;
+		    color: #212529;
+		}
+		.row {
+		    display: flex;
+		    flex-wrap: wrap;
+		    justify-content: space-between;
+		    margin-bottom: 20px;
+		}
+		.block {
+		    background-color: #ffffff;
+		    width: 32%;
+		    padding: 20px;
+		    border-radius: 12px;
+		    position:relative;
+		    cursor: pointer;
+		    transition: transform 0.3s ease, box-shadow 0.3s ease;
+		    display: flex;
+		    flex-direction: column;
+		    justify-content: center;
+		    align-items: center;
+		    text-align: center;
+		    margin-bottom: 20px;
+		    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+		}
+		.block:hover {
+		    transform: scale(1.03);
+		    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+		    background-color: #f8f9fa;
+		}
+		.block h3 {
+		    margin: 0;
+		    font-size: 22px;
+		    color: #495057;
+		    font-weight: 600;
+		}
+		.block canvas {
+		    margin-top: 10px;
+		    width: 100%;
+		    height: auto;
+		    max-height: 150px;
+		}
+		.block .numbers {
+		    font-size: 18px;
+		    color: #6c757d;
+		    margin-top: 10px;
+		    font-weight: 500;
+		}
+		.modal {
+		    display: none;
+		    position: fixed;
+		    z-index: 1;
+		    left: 0;
+		    top: 0;
+		    width: 100%;
+		    height: 100%;
+		    overflow: auto;
+		    background-color: rgba(0, 0, 0, 0.5);
+		    justify-content: center;
+		    align-items: center;
+		}
+		.modal-content {
+		    background-color: #ffffff;
+		    padding: 20px;
+		    border-radius: 12px;
+		    max-width: 500px;
+		    width: 90%;
+		    text-align: center;
+		    max-height: 80%;
+		    overflow-y: auto;
+		    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		}
+		.modal-content h4 {
+		    margin-top: 0;
+		    color: #212529;
+		    font-weight: 600;
+		}
+		.close {
+		    color: #6c757d;
+		    float: right;
+		    font-size: 28px;
+		    font-weight: bold;
+		    cursor: pointer;
+		}
+		.close:hover,
+		.close:focus {
+		    color: #212529;
+		    text-decoration: none;
+		}
+		@media (max-width: 576px) {
+		    .block {
+		        width: 100%;
+		    }
+		    .modal-content {
+		        width: 100%;
+		    }
+		}
+		@media (min-width: 577px) and (max-width: 768px) {
+		    .block {
+		        width: 48%;
+		    }
+		}
+		@media (min-width: 769px) and (max-width: 992px) {
+		    .block {
+		        width: 48%;
+		    }
+		}
+		@media (min-width: 993px) {
+		    .block {
+		        width: 30%;
+		    }
+		    .block h3 {
+		        font-size: 20px;
+		    }
+		}
+		.banner {
+		    background-image: url('https://i.pinimg.com/736x/09/78/66/097866594a7e8ab75de193f52d0acae0.jpg');
+		    height: 300px;
+		    background-size: cover;
+		    background-position: center;
+		}
+		html {
+		    scroll-behavior: smooth;
+		}
+	</style>
 </head>
 
 <body>
-    <div class="banner"></div>
-    <div class="container">
-        <div class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</div>
-        <div class="general-data">
-            <p>Total Previsto: 155</p>
-            <p>Total Existente: 111</p>
-            <p>Total Claro: 44</p>
-        </div>
-        <div style="margin-top: 20px;">
-            <input type="text" id="searchInput" placeholder="Pesquisar militar por nome ou posto..."
-                   style="width: 80%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
-            <button onclick="searchMilitary()"
-                    style="padding: 10px 20px; border-radius: 8px; border: none; background-color: #4caf50; color: white; cursor: pointer;">
-                Pesquisar
-            </button>
-        </div>
-    </div>
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">×</span>
-            <h4>Relação de Militares</h4>
-            <div id="militares-list"></div>
-        </div>
-    </div>
-    <script>
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-        }
-
-        function searchMilitary() {
-            // Implementar a lógica de pesquisa
-        }
-    </script>
+	<div class="banner"></div>
+	<div class="container">
+		<div class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</div>
+		<div class="general-data">
+			<p>Total Previsto: 155</p>
+			<p>Total Existente: 111</p>
+			<p>Total Claro: 44</p>
+		</div>
+		<div style="margin-top: 20px;">
+			<input type="text" id="searchInput" placeholder="Pesquisar militar por nome ou posto..." style="width: 80%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+			<button onclick="searchMilitary()" style="padding: 10px 20px; border-radius: 8px; border:none; background-color: #4caf50; color: white; cursor: pointer;"> Pesquisar </button>
+		</div>
+	</div>
+	<div id="modal" class="modal">
+		<div class="modal-content">
+			<span class="close" onclick="closeModal()">×</span>
+			<h4>Relação de Militares</h4>
+			<div id="militares-list"></div>
+		</div>
+	</div>
+	<script>
+		function closeModal() {
+		    document.getElementById('modal').style.display = 'none';
+		}
+		
+		function searchMilitary() {
+		    // Implementar a lógica de pesquisa
+		}
+	</script>
 </body>
+
 </html>
-
-
-        <!-- Resultado da Pesquisa -->
-        <div id="searchResult" style="margin-top: 20px; font-size: 18px; color: #333;"></div>
-        <!-- Blocos dos Órgãos Externos -->
-        <div class="row">
-            <div class="block" onclick="showModal('AFAS')">
-                <h3>AFAS</h3>
-                <canvas id="chart-afas"></canvas>
-                <div class="numbers">Existente: 1</div>
-            </div>
-            <div class="block" onclick="showModal('ALMG')">
-                <h3>ALMG</h3>
-                <canvas id="chart-almg"></canvas>
-                <div class="numbers">Existente: 2</div>
-            </div>
-            <div class="block" onclick="showModal('CEDEC')">
-                <h3>CEDEC</h3>
-                <canvas id="chart-cedec"></canvas>
-                <div class="numbers">Existente: 7</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="block" onclick="showModal('COORDENAÇÃO DAI/2')">
-                <h3>COORDENAÇÃO DAI/2</h3>
-                <canvas id="chart-coordenacao-dai2"></canvas>
-                <div class="numbers">Existente: 1</div>
-            </div>
-            <div class="block" onclick="showModal('CTPM')">
-                <h3>CTPM</h3>
-                <canvas id="chart-ctpm"></canvas>
-                <div class="numbers">Existente: 13</div>
-            </div>
-            <div class="block" onclick="showModal('ECIM')">
-                <h3>ECIM</h3>
-                <canvas id="chart-ecim"></canvas>
-                <div class="numbers">Existente: 26</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="block" onclick="showModal('Fundação SALVAR')">
-                <h3>Fundação SALVAR</h3>
-                <canvas id="chart-salvar"></canvas>
-                <div class="numbers">Existente: 6</div>
-            </div>
-            <div class="block" onclick="showModal('GMG')">
-                <h3>GMG</h3>
-                <canvas id="chart-gmg"></canvas>
-                <div class="numbers">Existente: 9</div>
-            </div>
-            <div class="block" onclick="showModal('Intendência')">
-                <h3>Intendência</h3>
-                <canvas id="chart-intendencia"></canvas>
-                <div class="numbers">Existente: 6</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="block" onclick="showModal('MPMG')">
-                <h3>MPMG</h3>
-                <canvas id="chart-mpmg"></canvas>
-                <div class="numbers">Existente: 7</div>
-            </div>
-            <div class="block" onclick="showModal('OGE')">
-                <h3>OGE</h3>
-                <canvas id="chart-oge"></canvas>
-                <div class="numbers">Existente: 5</div>
-            </div>
-            <div class="block" onclick="showModal('Secretaria Parlamentar')">
-                <h3>Secretaria Parlamentar</h3>
-                <canvas id="chart-secretaria-parlamentar"></canvas>
-                <div class="numbers">Existente: 3</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="block" onclick="showModal('SEE')">
-                <h3>SEE</h3>
-                <canvas id="chart-see"></canvas>
-                <div class="numbers">Existente: 1</div>
-            </div>
-            <div class="block" onclick="showModal('SEJUSP')">
-                <h3>SEJUSP</h3>
-                <canvas id="chart-sejusp"></canvas>
-                <div class="numbers">Existente: 3</div>
-            </div>
-            <div class="block" onclick="showModal('SENASP')">
-                <h3>SENASP</h3>
-                <canvas id="chart-senasp"></canvas>
-                <div class="numbers">Existente: 2</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="block" onclick="showModal('SES')">
-                <h3>SES</h3>
-                <canvas id="chart-ses"></canvas>
-                <div class="numbers">Existente: 2</div>
-            </div>
-            <div class="block" onclick="showModal('TJMG')">
-                <h3>TJMG</h3>
-                <canvas id="chart-tjmg"></canvas>
-                <div class="numbers">Existente: 7</div>
-            </div>
-            <div class="block" onclick="showModal('TJMMG')">
-                <h3>TJMMG</h3>
-                <canvas id="chart-tjmmg"></canvas>
-                <div class="numbers">Existente: 9</div>
-            </div>
-        </div>
-    </div>
-
+<!-- Resultado da Pesquisa -->
+<div id="searchResult" style="margin-top: 20px; font-size: 18px; color: #333;"></div>
+<!-- Blocos dos Órgãos Externos -->
+<div class="row">
+	<div class="block" onclick="showModal('AFAS')">
+		<h3>AFAS</h3>
+		<canvas id="chart-afas"></canvas>
+		<div class="numbers">Existente: 1</div>
+	</div>
+	<div class="block" onclick="showModal('ALMG')">
+		<h3>ALMG</h3>
+		<canvas id="chart-almg"></canvas>
+		<div class="numbers">Existente: 2</div>
+	</div>
+	<div class="block" onclick="showModal('CEDEC')">
+		<h3>CEDEC</h3>
+		<canvas id="chart-cedec"></canvas>
+		<div class="numbers">Existente: 7</div>
+	</div>
+</div>
+<div class="row">
+	<div class="block" onclick="showModal('COORDENAÇÃO DAI/2')">
+		<h3>COORDENAÇÃO DAI/2</h3>
+		<canvas id="chart-coordenacao-dai2"></canvas>
+		<div class="numbers">Existente: 1</div>
+	</div>
+	<div class="block" onclick="showModal('CTPM')">
+		<h3>CTPM</h3>
+		<canvas id="chart-ctpm"></canvas>
+		<div class="numbers">Existente: 13</div>
+	</div>
+	<div class="block" onclick="showModal('ECIM')">
+		<h3>ECIM</h3>
+		<canvas id="chart-ecim"></canvas>
+		<div class="numbers">Existente: 26</div>
+	</div>
+</div>
+<div class="row">
+	<div class="block" onclick="showModal('Fundação SALVAR')">
+		<h3>Fundação SALVAR</h3>
+		<canvas id="chart-salvar"></canvas>
+		<div class="numbers">Existente: 6</div>
+	</div>
+	<div class="block" onclick="showModal('GMG')">
+		<h3>GMG</h3>
+		<canvas id="chart-gmg"></canvas>
+		<div class="numbers">Existente: 9</div>
+	</div>
+	<div class="block" onclick="showModal('Intendência')">
+		<h3>Intendência</h3>
+		<canvas id="chart-intendencia"></canvas>
+		<div class="numbers">Existente: 6</div>
+	</div>
+</div>
+<div class="row">
+	<div class="block" onclick="showModal('MPMG')">
+		<h3>MPMG</h3>
+		<canvas id="chart-mpmg"></canvas>
+		<div class="numbers">Existente: 7</div>
+	</div>
+	<div class="block" onclick="showModal('OGE')">
+		<h3>OGE</h3>
+		<canvas id="chart-oge"></canvas>
+		<div class="numbers">Existente: 5</div>
+	</div>
+	<div class="block" onclick="showModal('Secretaria Parlamentar')">
+		<h3>Secretaria Parlamentar</h3>
+		<canvas id="chart-secretaria-parlamentar"></canvas>
+		<div class="numbers">Existente: 3</div>
+	</div>
+</div>
+<div class="row">
+	<div class="block" onclick="showModal('SEE')">
+		<h3>SEE</h3>
+		<canvas id="chart-see"></canvas>
+		<div class="numbers">Existente: 1</div>
+	</div>
+	<div class="block" onclick="showModal('SEJUSP')">
+		<h3>SEJUSP</h3>
+		<canvas id="chart-sejusp"></canvas>
+		<div class="numbers">Existente: 3</div>
+	</div>
+	<div class="block" onclick="showModal('SENASP')">
+		<h3>SENASP</h3>
+		<canvas id="chart-senasp"></canvas>
+		<div class="numbers">Existente: 2</div>
+	</div>
+</div>
+<div class="row">
+	<div class="block" onclick="showModal('SES')">
+		<h3>SES</h3>
+		<canvas id="chart-ses"></canvas>
+		<div class="numbers">Existente: 2</div>
+	</div>
+	<div class="block" onclick="showModal('TJMG')">
+		<h3>TJMG</h3>
+		<canvas id="chart-tjmg"></canvas>
+		<div class="numbers">Existente: 7</div>
+	</div>
+	<div class="block" onclick="showModal('TJMMG')">
+		<h3>TJMMG</h3>
+		<canvas id="chart-tjmmg"></canvas>
+		<div class="numbers">Existente: 9</div>
+	</div>
+</div>
+</div>
 <script>
-    // Dados dos militares organizados por órgão externo
-    const data = {
-        'AFAS': [
-            '1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704'
-        ],
-        'ALMG': [
-            'Ten Cel Cléia Gonçalves Mota - (31) 98527-7579',
-            '2º Sgt Pedro Henrique Garcia Pinto - (31) 99791-7322'
-        ],
-        'CEDEC': [
-            'Ten Cel Wenderson Duarte Marcelino - (31) 98876-3781',
-            'Maj Mardell da Silva Alves - (31) 98525-1628',
-            '1º Ten Douglas Constantino Fernandes - (31) 98576-2386',
-            '2º Ten Rogério Silva de Paula - (31) 98769-8364',
-            '3º Sgt Luiz Ricardo Vago Lima - (31) 99835-4229',
-            '3º Sgt Felipe Vaz de Sá - (31) 99086-3250',
-            '3º Sgt Deivison Queiroz de Souza - (31) 98305-7477'
-        ],
-        'COORDENAÇÃO DAI/2': [
-            'Maj Richelmy Murta Pinto - (35) 98464-0729',
-            'Sd Larissa Elias Diana Vieira - (31) 99816-2524'
-        ],
-        'CTPM': [
-            'Sub Ten Davidson dos Santos da Rocha - (31) 98687-2095',
-            'Subten Marcos Rodrigues das Dores - (31) 99890-3446',
-            '1º Sgt Dionísio Rosa Dias - (31) 98733-9992',
-            '1º Sgt Wanderson Moreira Luiz - (31) 98503-2098',
-            '2º Sgt Adilson Alves de Souza - (31) 99744-7210',
-            '2º Sgt Emerson Alexandre Pereira de Mello - (31) 99971-4985',
-            '2º Sgt Ângelo Rodrigo Siqueira - (31) 99618-1447',
-            '2º Sgt Ismael Camilo dos Santos - (31) 98885-9318',
-            '2º Sgt Alisson Alves Amorim - (31) 99208-1458',
-            '2º Sgt Kleiris Marcus H. do Nascimento - (31) 99141-1913',
-            '2º Sgt William Reis de Miranda - (31) 98645-4580',
-            '2º Sgt Pérsio Soares de Carvalho - (31) 98978-5139',
-            '3º Sgt Reginaldo Reis Bazílio - (31) 99233-0573',
-            '2º Sgt Geraldo Doroteiro Ferreira - (31) 99689-0234'
-        ],
-        'ECIM': [
-            'Cap Robson Leopoldino dos Reis - (31) 99711-8778',
-            '2º Ten Edmar Daltro Coutinho Júnior - (31) 99363-0606',
-            '2º Ten Hebert do Carmo Nonato - (31) 99612-4403',
-            '2º Ten Cristian Anderson de Freitas - (31) 98469-7837',
-            '2º Ten Marcelo Cardoso da Silva - (31) 98546-1811',
-            '2º Ten Renato Maia da Silva - (32) 98852-8883',
-            '2º Ten Fernando César Cardoso - (32) 98834-7941',
-            '2º Ten José Edson Alves da Costa - (35) 99972-2204',
-            '2º Ten Jairo Monteiro dos Santos - (31) 98594-9982',
-            '2º Ten Adailton Rogério da Cruz - (35) 98424-3270',
-            'Sub Ten Helton Luiz Dias de Sá - (32) 98867-9481',
-            'Sub Ten Eva Efigênia da Cruz - (31) 97547-3851',
-            'Sub Ten Marcio Edson Guimarães - (32) 98856-2957',
-            '1º Sgt Valtecir de Moraes - (34) 99995-8814',
-            '1º Sgt Célio Alves Evangelista - (31) 98889-6464',
-            '1º Sgt Luiz Fernandes de Oliveira - (31) 99686-4949',
-            '1º Sgt Alessandro Eduardo de Souza Rafael - (35) 98817-7012',
-            '1º Sgt Edson Alves da Silva - (31) 98538-5249',
-            '1º Sgt Paulo Sérgio dos Santos - (35) 99970-2806',
-            '1º Sgt José Ronaldo Ferrarezi - (32) 99167-1868',
-            '1º Sgt Paulo Henrique de Oliveira - (31) 98979-0807',
-            '1º Sgt Eduardo Luiz Trindade - (32) 98423-5803',
-            '1º Sgt Denisson Diane da Silva - (32) 99341-0260',
-            '1º Sgt Heraldo de Campos Prado Júnior - (35) 99946-6032',
-            '1º Sgt Francisco Daniel da Costa - (31) 99888-8055',
-            '2º Sgt Edwaldo Elias Nunes - (31) 98567-2633'
-        ],
-        'Fundação SALVAR': [
-            'Ten Cel Fellipe Augusto M. de Faria Mota - (31) 8726-0898',
-            '1º Ten Sandro Aloísio Matilde Junior - (31) 98525-1319',
-            '3º Sgt Glauber Miguel Gonçalves - (31) 98451-6417',
-            'Sd Jéssica Rojas Silva - (31) 99172-4692',
-            'Sd Thais Firmato Fortes - (31) 97101-2689'
-        ],
-        'GMG': [
-            'Cap Adriane Cristina da Silva - (31) 98873-1095',
-            '2º Ten Guilherme de Castro Quírico - (32) 98813-3965',
-            '1º Sgt Giovanni Batista Bento - (31) 98837-7293',
-            '1º Sgt Bruno Eustáquio de Souza Gomes - (31) 98638-9798',
-            '2º Sgt Heyder Alves Cangussu - (31) 97338-1542',
-            '2º Sgt João Flávio Alves - (35) 99220-9377',
-            '2º Sgt Olivaldo Reis Bispo - (31) 98827-9057',
-            '2º Sgt André Fillipe Rainon Ferreira - (31) 99070-7005',
-            '3º Sgt Artur Luis Vinhal Nunes Souza - (31) 99922-8931'
-        ],
-        'Intendência': [
-            '1º Sgt Jayme Araujo dos Santos Filho - (31) 99247-0193',
-            '1º Sgt Carlos Antônio Ferreira Santana - (31) 98809-6982',
-            '1º Sgt Edson Silva Filho - (31) 98664-4113',
-            '1º Sgt Gilson Ribeiro da Silva - (31) 97592-5018',
-            '1º Sgt Washington Miguel de Andrade Souza - (31) 98412-5897',
-            'Cb Lucas Barbosa Aguiar - (31) 98481-8314'
-        ],
-        'MPMG': [
-            'Cap Sandro Henrique Bragio - (31) 99619-7004',
-            'Cap Paulo Henrique Camargos Firme - (31) 98876-1423',
-            '1º Ten Rafael Bruno Rocha - (31) 98787-1355',
-            '1º Ten Julio Cesar Ferreira dos Santos - (31) 99521-4155',
-            '2º Ten Samuel Márcio da Luz - (31) 97508-4950',
-            '2º Sgt Thiago Faria de Araujo - (31) 99211-3577',
-            '3º Sgt João Paulo Vieira Cotta - (31) 99570-5544'
-        ],
-        'OGE': [
-            'Maj Wendell Hoover Gonçalves Rezende - (31) 98527-5260',
-            'Cap Carlos Alberto Ferreira da Silva - (31) 99473-1072',
-            '2º Sgt Julio Cesar Alves Fonseca - (31) 98765-7876',
-            '2º Sgt Suzana de Souza Braga - (31) 99180-6378',
-            'Cb Vinícius da Costa Gomes - (31) 99644-2415'
-        ],
-        'Secretaria Parlamentar': [
-            '1º Ten Andresa Vicente Amante - (31) 99127-9068',
-            'Cb Cristiano Lages Wardil - (31) 99392-0732',
-            'Cb Lúcio Marcos Oliveira Hortêncio - (31) 97175-4554'
-        ],
-        'SEJUSP': [
-            'Ten Cel Peterson José Paiva Monteiro - (31) 98709-2550',
-            'Maj Leandro de Oliveira Pereira - (31) 98709-3033',
-            'Cb Gefte da Silva Lemos - (31) 99343-8377'
-        ],
-        'SENASP': [
-            '3º Sgt Emília Tainá Couto Viana e Sousa - (31) 98343-6808',
-            '3º Sgt André Ferreira de Oliveira - (38) 99816-3930'
-        ],
-        'SES': [
-            'Maj Sílvia Amélia de Souza Paula - (31) 99122-5100',
-            '2º Ten Aline de Barros Souza Silveira - (31) 97167-7886'
-        ],
-        'SEE': [
-            'Maj Andiara Beatriz Ribeiro Miranda - (31) 97153-9897'
-        ],
-        'TJMG': [
-            'Maj Marcus Vinícius Siqueira Flores - (31) 98659-5707',
-            '1º Ten Carlos Eduardo de Oliveira - (31) 98600-2512',
-            'Sub Ten Fernando Eustáquio dos Santos - (31) 98801-1710',
-            '1º Sgt José Zito da Silva Filho - (31) 98781-7435',
-            '1º Sgt Fernando Iglésias Gonçalves - (31) 99871-2536',
-            '1º Sgt Jovane Jonatas Passos - (31) 98861-2326',
-            'Sd Igor Cláver Coelho de Resende - (31) 97530-8845'
-        ],
-        'TJMMG': [
-            'Sub Ten Carlos Rodrigues Gomes - (31) 98854-4380',
-            '2º Sgt Josaine Thais do Carmo - (31) 98788-1588',
-            '1º Sgt Rinaldo Cezar Fontes Cruz - (31) 99469-2218',
-            '2º Sgt Thiago Bruno de Albuquerque Morais - (31) 99137-8635',
-            '2º Sgt Gernando Pacheco Alcântara Torres - (31) 99480-0958',
-            '3º Sgt Lucélia Moreira Santos - (31) 99984-0225',
-            '2º Sgt Gustavo Duarte Oliveira - (31) 97243-7139',
-            'Cb Alexandre Polidoro - (31) 98890-7567',
-            'Cb Giovanni Tadeu B. dos Santos - (31) 99318-7722'
-        ]
-    };
-
-   // Função para exibir o modal com os militares de um órgão
-    function showModal(orgao) {
-        const modal = document.getElementById("modal");
-        const militaresList = document.getElementById("militares-list");
-        const militares = data[orgao];
-
-        if (militares && militares.length > 0) {
-            militaresList.innerHTML = militares
-                .map(militar => {
-                    const [nome, telefone] = militar.split(' - ');
-                    return `
-                        <p><strong>Nome:</strong> ${nome}</p>
-                        <p><strong>Telefone:</strong> ${telefone}</p>
-                        <hr style="border: 1px solid #ddd;">
-                    `;
-                })
-                .join('');
-        } else {
-            militaresList.innerHTML = '<p style="color: red;">Nenhum militar registrado neste órgão.</p>';
-        }
-
-        modal.style.display = "flex";
-    }
-
-    // Função para fechar o modal
-    function closeModal() {
-        const modal = document.getElementById("modal");
-        modal.style.display = "none";
-    }
-
-    // Função de pesquisa de militares
-    function searchMilitary() {
-        const query = document.getElementById('searchInput').value.trim().toLowerCase();
-        const resultDiv = document.getElementById('searchResult');
-        let found = false;
-
-        resultDiv.innerHTML = ''; // Limpa os resultados anteriores
-
-        for (const [orgao, militares] of Object.entries(data)) {
-            for (const militar of militares) {
-                if (militar.toLowerCase().includes(query)) {
-                    found = true;
-                    const [nome, telefone] = militar.split(' - ');
-                    resultDiv.innerHTML += `
-                        <p><strong>Nome:</strong> ${nome}</p>
-                        <p><strong>Telefone:</strong> ${telefone}</p>
-                        <p><strong>Órgão Externo:</strong> ${orgao}</p>
-                        <hr style="border: 1px solid #ddd;">
-                    `;
-                }
-            }
-        }
-
-        if (!found) {
-            resultDiv.innerHTML = '<p style="color: red;">Nenhum militar encontrado.</p>';
-        }
-    }
-
-    // Fechar modal ao clicar fora do conteúdo
-    window.onclick = function (event) {
-        const modal = document.getElementById("modal");
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    // Função para criar gráficos tipo Doughnut
-    function createChart(canvasId, previsto, existente, claro) {
-        const ctx = document.getElementById(canvasId).getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Previsto', 'Existente', 'Claro'],
-                datasets: [{
-                    data: [previsto, existente, claro],
-                    backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'], // Amarelo, Verde, Vermelho
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false // Oculta a legenda para foco no gráfico
-                    }
-                }
-            }
-        });
-    }
-
-    // Configuração dos gráficos para cada órgão externo
-    createChart('chart-afas', 6, 1, 5);
-    createChart('chart-cedec', 10, 7, 5);
-    createChart('chart-almg', 2, 2, 0);
-    createChart('chart-ctpm', 17, 13, 2);
-    createChart('chart-gmg', 15, 9, 3);
-    createChart('chart-intendencia', 7, 6, 2);
-    createChart('chart-mpmg', 7, 7, 0);
-    createChart('chart-senasp', 2, 2, 0);
-    createChart('chart-oge', 6, 5, 1);
-    createChart('chart-salvar', 7, 6, 1);
-    createChart('chart-see', 1, 1, 0);
-    createChart('chart-secretaria-parlamentar', 3, 3, 0);
-    createChart('chart-sejusp', 3, 3, 0);
-    createChart('chart-ses', 2, 2, 0);
-    createChart('chart-tjmg', 9, 7, 2);
-    createChart('chart-tjmmg', 9, 9, 0);
-    createChart('chart-ecim', 47, 26, 21); // Atualizado para ECIM
-    createChart('chart-coordenacao-dai2', 2, 1, 1);
+	// Dados dos militares organizados por órgão externo
+	const data = {
+	    'AFAS': [
+	        '1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704'
+	    ],
+	    'ALMG': [
+	        'Ten Cel Cléia Gonçalves Mota - (31) 98527-7579',
+	        '2º Sgt Pedro Henrique Garcia Pinto - (31) 99791-7322'
+	    ],
+	    'CEDEC': [
+	        'Ten Cel Wenderson Duarte Marcelino - (31) 98876-3781',
+	        'Maj Mardell da Silva Alves - (31) 98525-1628',
+	        '1º Ten Douglas Constantino Fernandes - (31) 98576-2386',
+	        '2º Ten Rogério Silva de Paula - (31) 98769-8364',
+	        '3º Sgt Luiz Ricardo Vago Lima - (31) 99835-4229',
+	        '3º Sgt Felipe Vaz de Sá - (31) 99086-3250',
+	        '3º Sgt Deivison Queiroz de Souza - (31) 98305-7477'
+	    ],
+	    'COORDENAÇÃO DAI/2': [
+	        'Maj Richelmy Murta Pinto - (35) 98464-0729',
+	        'Sd Larissa Elias Diana Vieira - (31) 99816-2524'
+	    ],
+	    'CTPM': [
+	        'Sub Ten Davidson dos Santos da Rocha - (31) 98687-2095',
+	        'Subten Marcos Rodrigues das Dores - (31) 99890-3446',
+	        '1º Sgt Dionísio Rosa Dias - (31) 98733-9992',
+	        '1º Sgt Wanderson Moreira Luiz - (31) 98503-2098',
+	        '2º Sgt Adilson Alves de Souza - (31) 99744-7210',
+	        '2º Sgt Emerson Alexandre Pereira de Mello - (31) 99971-4985',
+	        '2º Sgt Ângelo Rodrigo Siqueira - (31) 99618-1447',
+	        '2º Sgt Ismael Camilo dos Santos - (31) 98885-9318',
+	        '2º Sgt Alisson Alves Amorim - (31) 99208-1458',
+	        '2º Sgt Kleiris Marcus H. do Nascimento - (31) 99141-1913',
+	        '2º Sgt William Reis de Miranda - (31) 98645-4580',
+	        '2º Sgt Pérsio Soares de Carvalho - (31) 98978-5139',
+	        '3º Sgt Reginaldo Reis Bazílio - (31) 99233-0573',
+	        '2º Sgt Geraldo Doroteiro Ferreira - (31) 99689-0234'
+	    ],
+	    'ECIM': [
+	        'Cap Robson Leopoldino dos Reis - (31) 99711-8778',
+	        '2º Ten Edmar Daltro Coutinho Júnior - (31) 99363-0606',
+	        '2º Ten Hebert do Carmo Nonato - (31) 99612-4403',
+	        '2º Ten Cristian Anderson de Freitas - (31) 98469-7837',
+	        '2º Ten Marcelo Cardoso da Silva - (31) 98546-1811',
+	        '2º Ten Renato Maia da Silva - (32) 98852-8883',
+	        '2º Ten Fernando César Cardoso - (32) 98834-7941',
+	        '2º Ten José Edson Alves da Costa - (35) 99972-2204',
+	        '2º Ten Jairo Monteiro dos Santos - (31) 98594-9982',
+	        '2º Ten Adailton Rogério da Cruz - (35) 98424-3270',
+	        'Sub Ten Helton Luiz Dias de Sá - (32) 98867-9481',
+	        'Sub Ten Eva Efigênia da Cruz - (31) 97547-3851',
+	        'Sub Ten Marcio Edson Guimarães - (32) 98856-2957',
+	        '1º Sgt Valtecir de Moraes - (34) 99995-8814',
+	        '1º Sgt Célio Alves Evangelista - (31) 98889-6464',
+	        '1º Sgt Luiz Fernandes de Oliveira - (31) 99686-4949',
+	        '1º Sgt Alessandro Eduardo de Souza Rafael - (35) 98817-7012',
+	        '1º Sgt Edson Alves da Silva - (31) 98538-5249',
+	        '1º Sgt Paulo Sérgio dos Santos - (35) 99970-2806',
+	        '1º Sgt José Ronaldo Ferrarezi - (32) 99167-1868',
+	        '1º Sgt Paulo Henrique de Oliveira - (31) 98979-0807',
+	        '1º Sgt Eduardo Luiz Trindade - (32) 98423-5803',
+	        '1º Sgt Denisson Diane da Silva - (32) 99341-0260',
+	        '1º Sgt Heraldo de Campos Prado Júnior - (35) 99946-6032',
+	        '1º Sgt Francisco Daniel da Costa - (31) 99888-8055',
+	        '2º Sgt Edwaldo Elias Nunes - (31) 98567-2633'
+	    ],
+	    'Fundação SALVAR': [
+	        'Ten Cel Fellipe Augusto M. de Faria Mota - (31) 8726-0898',
+	        '1º Ten Sandro Aloísio Matilde Junior - (31) 98525-1319',
+	        '3º Sgt Glauber Miguel Gonçalves - (31) 98451-6417',
+	        'Sd Jéssica Rojas Silva - (31) 99172-4692',
+	        'Sd Thais Firmato Fortes - (31) 97101-2689'
+	    ],
+	    'GMG': [
+	        'Cap Adriane Cristina da Silva - (31) 98873-1095',
+	        '2º Ten Guilherme de Castro Quírico - (32) 98813-3965',
+	        '1º Sgt Giovanni Batista Bento - (31) 98837-7293',
+	        '1º Sgt Bruno Eustáquio de Souza Gomes - (31) 98638-9798',
+	        '2º Sgt Heyder Alves Cangussu - (31) 97338-1542',
+	        '2º Sgt João Flávio Alves - (35) 99220-9377',
+	        '2º Sgt Olivaldo Reis Bispo - (31) 98827-9057',
+	        '2º Sgt André Fillipe Rainon Ferreira - (31) 99070-7005',
+	        '3º Sgt Artur Luis Vinhal Nunes Souza - (31) 99922-8931'
+	    ],
+	    'Intendência': [
+	        '1º Sgt Jayme Araujo dos Santos Filho - (31) 99247-0193',
+	        '1º Sgt Carlos Antônio Ferreira Santana - (31) 98809-6982',
+	        '1º Sgt Edson Silva Filho - (31) 98664-4113',
+	        '1º Sgt Gilson Ribeiro da Silva - (31) 97592-5018',
+	        '1º Sgt Washington Miguel de Andrade Souza - (31) 98412-5897',
+	        'Cb Lucas Barbosa Aguiar - (31) 98481-8314'
+	    ],
+	    'MPMG': [
+	        'Cap Sandro Henrique Bragio - (31) 99619-7004',
+	        'Cap Paulo Henrique Camargos Firme - (31) 98876-1423',
+	        '1º Ten Rafael Bruno Rocha - (31) 98787-1355',
+	        '1º Ten Julio Cesar Ferreira dos Santos - (31) 99521-4155',
+	        '2º Ten Samuel Márcio da Luz - (31) 97508-4950',
+	        '2º Sgt Thiago Faria de Araujo - (31) 99211-3577',
+	        '3º Sgt João Paulo Vieira Cotta - (31) 99570-5544'
+	    ],
+	    'OGE': [
+	        'Maj Wendell Hoover Gonçalves Rezende - (31) 98527-5260',
+	        'Cap Carlos Alberto Ferreira da Silva - (31) 99473-1072',
+	        '2º Sgt Julio Cesar Alves Fonseca - (31) 98765-7876',
+	        '2º Sgt Suzana de Souza Braga - (31) 99180-6378',
+	        'Cb Vinícius da Costa Gomes - (31) 99644-2415'
+	    ],
+	    'Secretaria Parlamentar': [
+	        '1º Ten Andresa Vicente Amante - (31) 99127-9068',
+	        'Cb Cristiano Lages Wardil - (31) 99392-0732',
+	        'Cb Lúcio Marcos Oliveira Hortêncio - (31) 97175-4554'
+	    ],
+	    'SEJUSP': [
+	        'Ten Cel Peterson José Paiva Monteiro - (31) 98709-2550',
+	        'Maj Leandro de Oliveira Pereira - (31) 98709-3033',
+	        'Cb Gefte da Silva Lemos - (31) 99343-8377'
+	    ],
+	    'SENASP': [
+	        '3º Sgt Emília Tainá Couto Viana e Sousa - (31) 98343-6808',
+	        '3º Sgt André Ferreira de Oliveira - (38) 99816-3930'
+	    ],
+	    'SES': [
+	        'Maj Sílvia Amélia de Souza Paula - (31) 99122-5100',
+	        '2º Ten Aline de Barros Souza Silveira - (31) 97167-7886'
+	    ],
+	    'SEE': [
+	        'Maj Andiara Beatriz Ribeiro Miranda - (31) 97153-9897'
+	    ],
+	    'TJMG': [
+	        'Maj Marcus Vinícius Siqueira Flores - (31) 98659-5707',
+	        '1º Ten Carlos Eduardo de Oliveira - (31) 98600-2512',
+	        'Sub Ten Fernando Eustáquio dos Santos - (31) 98801-1710',
+	        '1º Sgt José Zito da Silva Filho - (31) 98781-7435',
+	        '1º Sgt Fernando Iglésias Gonçalves - (31) 99871-2536',
+	        '1º Sgt Jovane Jonatas Passos - (31) 98861-2326',
+	        'Sd Igor Cláver Coelho de Resende - (31) 97530-8845'
+	    ],
+	    'TJMMG': [
+	        'Sub Ten Carlos Rodrigues Gomes - (31) 98854-4380',
+	        '2º Sgt Josaine Thais do Carmo - (31) 98788-1588',
+	        '1º Sgt Rinaldo Cezar Fontes Cruz - (31) 99469-2218',
+	        '2º Sgt Thiago Bruno de Albuquerque Morais - (31) 99137-8635',
+	        '2º Sgt Gernando Pacheco Alcântara Torres - (31) 99480-0958',
+	        '3º Sgt Lucélia Moreira Santos - (31) 99984-0225',
+	        '2º Sgt Gustavo Duarte Oliveira - (31) 97243-7139',
+	        'Cb Alexandre Polidoro - (31) 98890-7567',
+	        'Cb Giovanni Tadeu B. dos Santos - (31) 99318-7722'
+	    ]
+	};
+	
+	   // Função para exibir o modal com os militares de um órgão
+	function showModal(orgao) {
+	    const modal = document.getElementById("modal");
+	    const militaresList = document.getElementById("militares-list");
+	    const militares = data[orgao];
+	
+	    if (militares && militares.length > 0) {
+	        militaresList.innerHTML = militares
+	            .map(militar => {
+	                const [nome, telefone] = militar.split(' - ');
+	                return `
+	                    <p><strong>Nome:</strong> ${nome}</p>
+	                    <p><strong>Telefone:</strong> ${telefone}</p>
+	                    <hr style="border: 1px solid #ddd;">
+	                `;
+	            })
+	            .join('');
+	    } else {
+	        militaresList.innerHTML = '<p style="color: red;">Nenhum militar registrado neste órgão.</p>';
+	    }
+	
+	    modal.style.display = "flex";
+	}
+	
+	// Função para fechar o modal
+	function closeModal() {
+	    const modal = document.getElementById("modal");
+	    modal.style.display = "none";
+	}
+	
+	// Função de pesquisa de militares
+	function searchMilitary() {
+	    const query = document.getElementById('searchInput').value.trim().toLowerCase();
+	    const resultDiv = document.getElementById('searchResult');
+	    let found = false;
+	
+	    resultDiv.innerHTML = ''; // Limpa os resultados anteriores
+	
+	    for (const [orgao, militares] of Object.entries(data)) {
+	        for (const militar of militares) {
+	            if (militar.toLowerCase().includes(query)) {
+	                found = true;
+	                const [nome, telefone] = militar.split(' - ');
+	                resultDiv.innerHTML += `
+	                    <p><strong>Nome:</strong> ${nome}</p>
+	                    <p><strong>Telefone:</strong> ${telefone}</p>
+	                    <p><strong>Órgão Externo:</strong> ${orgao}</p>
+	                    <hr style="border: 1px solid #ddd;">
+	                `;
+	            }
+	        }
+	    }
+	
+	    if (!found) {
+	        resultDiv.innerHTML = '<p style="color: red;">Nenhum militar encontrado.</p>';
+	    }
+	}
+	
+	// Fechar modal ao clicar fora do conteúdo
+	window.onclick = function (event) {
+	    const modal = document.getElementById("modal");
+	    if (event.target === modal) {
+	        modal.style.display = "none";
+	    }
+	};
+	
+	// Função para criar gráficos tipo Doughnut
+	function createChart(canvasId, previsto, existente, claro) {
+	    const ctx = document.getElementById(canvasId).getContext('2d');
+	    new Chart(ctx, {
+	        type: 'doughnut',
+	        data: {
+	            labels: ['Previsto', 'Existente', 'Claro'],
+	            datasets: [{
+	                data: [previsto, existente, claro],
+	                backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'], // Amarelo, Verde, Vermelho
+	                borderWidth: 1
+	            }]
+	        },
+	        options: {
+	            responsive: true,
+	            maintainAspectRatio: false,
+	            plugins: {
+	                legend: {
+	                    display: false // Oculta a legenda para foco no gráfico
+	                }
+	            }
+	        }
+	    });
+	}
+	
+	// Configuração dos gráficos para cada órgão externo
+	createChart('chart-afas', 6, 1, 5);
+	createChart('chart-cedec', 10, 7, 5);
+	createChart('chart-almg', 2, 2, 0);
+	createChart('chart-ctpm', 17, 13, 2);
+	createChart('chart-gmg', 15, 9, 3);
+	createChart('chart-intendencia', 7, 6, 2);
+	createChart('chart-mpmg', 7, 7, 0);
+	createChart('chart-senasp', 2, 2, 0);
+	createChart('chart-oge', 6, 5, 1);
+	createChart('chart-salvar', 7, 6, 1);
+	createChart('chart-see', 1, 1, 0);
+	createChart('chart-secretaria-parlamentar', 3, 3, 0);
+	createChart('chart-sejusp', 3, 3, 0);
+	createChart('chart-ses', 2, 2, 0);
+	createChart('chart-tjmg', 9, 7, 2);
+	createChart('chart-tjmmg', 9, 9, 0);
+	createChart('chart-ecim', 47, 26, 21); // Atualizado para ECIM
+	createChart('chart-coordenacao-dai2', 2, 1, 1);
 </script>
 <footer style="text-align: center; padding: 20px; font-size: 14px; color: #666; background-color: #f1f3f5;">
-    <p>Corpo de Bombeiros Militar de Minas Gerais - Diretoria de Assuntos Institucionais - Órgãos Externos</p>
-    <p>Compromisso e Excelência no serviço público.</p>
-    <p>&copy; 2025 Todos os Direitos Reservados</p>
+	<p>Corpo de Bombeiros Militar de Minas Gerais - Diretoria de Assuntos Institucionais - Órgãos Externos</p>
+	<p>Compromisso e Excelência no serviço público.</p>
+	<p>&copy; 2025 Todos os Direitos Reservados</p>
 </footer>
-
-    </div>
+</div>
 </body>
+
 </html>
