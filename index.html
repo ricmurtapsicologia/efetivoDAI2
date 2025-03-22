@@ -54,12 +54,14 @@
 		@keyframes fadeIn {
 		  to { opacity: 1; }
 		}
-		
+		    
 		/* Splash Screen */
 		#splash {
 		  position: fixed;
-		  top: 0; left: 0;
-		  width: 100%; height: 100%;
+		  top: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 100%;
 		  background: #0b3d91 url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg') no-repeat center center/cover;
 		  display: flex;
 		  flex-direction: column;
@@ -80,15 +82,13 @@
 		  opacity: 0;
 		  pointer-events: none;
 		}
-		
+		    
 		/* Cabeçalho com banner */
 		header.banner {
-		  background-image: url('https://i.pinimg.com/736x/76/8e/8e/768e8e9a29e1b14b0c2d7eb293bde7dd.jpg');
-		  height: 300px;
-		  background-size: cover;
-		  background-position: center;
+		  /* Removemos o background-image da versão anterior */
+		  text-align: center;
 		}
-		
+		    
 		/* Container principal */
 		.container {
 		  max-width: 1200px;
@@ -107,7 +107,7 @@
 		  border-bottom: 2px solid var(--border-color);
 		  padding-bottom: 10px;
 		}
-		
+		    
 		/* Dados Gerais */
 		.general-data {
 		  background-color: var(--light-bg);
@@ -124,7 +124,7 @@
 		  font-weight: 600;
 		  color: var(--secondary-color);
 		}
-		
+		    
 		/* Legenda */
 		.legend {
 		  display: flex;
@@ -145,7 +145,7 @@
 		  border-radius: 3px;
 		  margin-right: 5px;
 		}
-		
+		    
 		/* Área de pesquisa */
 		.search-container {
 		  text-align: center;
@@ -181,7 +181,7 @@
 		  color: var(--primary-color);
 		  text-align: center;
 		}
-		
+		    
 		/* Grid de blocos */
 		.row {
 		  display: flex;
@@ -228,7 +228,7 @@
 		  margin-top: 10px;
 		  font-weight: 500;
 		}
-		
+		    
 		/* Modal */
 		.modal {
 		  display: none;
@@ -274,7 +274,7 @@
 		  color: var(--secondary-color);
 		  text-decoration: none;
 		}
-		
+		    
 		/* Lista de efetivo */
 		.list-toggle {
 		  display: flex;
@@ -307,7 +307,7 @@
 		  font-size: 16px;
 		  line-height: 1.8;
 		}
-		
+		    
 		/* Rodapé */
 		footer {
 		  text-align: center;
@@ -317,7 +317,7 @@
 		  background-color: var(--light-bg);
 		  margin-top: 20px;
 		}
-		
+		    
 		/* Responsividade */
 		@media (max-width: 576px) {
 		  .block {
@@ -351,8 +351,36 @@
 		<h1>Distribuição de Efetivo DAI/2</h1>
 		<p>Carregando dados...</p>
 	</div>
-	<!-- Cabeçalho com banner -->
-	<header class="banner" role="banner"></header>
+	<!-- Cabeçalho com banner (com novo banner em SVG responsivo) -->
+	<header class="banner" role="banner">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 300" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: auto;">
+			<defs>
+				<!-- Gradiente linear para um fundo que passa de um azul profundo a um azul claro -->
+				<linearGradient id="bgGradient" x1="0" y1="0" x2="1920" y2="300" gradientUnits="userSpaceOnUse">
+					<stop offset="0%" stop-color="#0b3d91" />
+					<stop offset="100%" stop-color="#1c64f2" />
+				</linearGradient>
+				<!-- Filtro de drop shadow para dar profundidade ao texto -->
+				<filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+					<feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur" />
+					<feOffset in="blur" dx="0" dy="2" result="offsetBlur" />
+					<feMerge>
+						<feMergeNode in="offsetBlur" />
+						<feMergeNode in="SourceGraphic" />
+					</feMerge>
+				</filter>
+				<!-- Padrão sutil de linhas diagonais para dar textura -->
+				<pattern id="patternLines" patternUnits="userSpaceOnUse" width="40" height="40">
+					<path d="M0 0 L40 40" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+				</pattern>
+			</defs>
+			<!-- Fundo com gradiente e padrão -->
+			<rect width="1920" height="300" fill="url(#bgGradient)" />
+			<rect width="1920" height="300" fill="url(#patternLines)" />
+			<!-- Texto central com sombra para destaque -->
+			<text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="60" font-family="Segoe UI, sans-serif" filter="url(#dropShadow)"> Distribuição de Efetivo DAI/2 </text>
+		</svg>
+	</header>
 	<!-- Conteúdo Principal -->
 	<main class="container">
 		<h1 class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</h1>
@@ -549,11 +577,11 @@
 		    const splash = document.getElementById('splash');
 		    splash.classList.add('hidden');
 		  }, 2000);
-		
+		    
 		  // Iniciar toda a lógica da página após o DOM carregado
 		  initPageLogic();
 		});
-		
+		    
 		const initPageLogic = () => {
 		  /*******************************************************
 		   * 1) ESTRUTURA DE DADOS PARA PREVISTO/EXISTENTE POR POSTO
@@ -704,174 +732,174 @@
 		      "Ten-Cel":  { previsto: 1, existente: 1 }
 		    }
 		  };
-		
+		    
 		  /****************************************
 		   * 2) DADOS DE MILITARES (já existente)
 		   ****************************************/
 		  const data = {
-				    'AFAS': [
-				      '1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704'
-				    ],
-				    'ALMG': [
-				      'Ten Cel Cléia Gonçalves Mota - (31) 98527-7579',
-				      '2º Sgt Pedro Henrique Garcia Pinto - (31) 99791-7322'
-				    ],
-				    'CEDEC': [
-				      'Ten Cel Wenderson Duarte Marcelino - (31) 98876-3781',
-				      'Maj Mardell da Silva Alves - (31) 98525-1628',
-				      '1º Ten Douglas Constantino Fernandes - (31) 98576-2386',
-				      '2º Ten Rogério Silva de Paula - (31) 98769-8364',
-				      '3º Sgt Luiz Ricardo Vago Lima - (31) 99835-4229',
-				      '3º Sgt Felipe Vaz de Sá - (31) 99086-3250',
-				      '3º Sgt Deivison Queiroz de Souza - (31) 98305-7477'
-				    ],
-				    'COORDENAÇÃO DAI/2': [
-				      'Maj Richelmy Murta Pinto - (35) 98464-0729',
-				      'Sd Larissa Elias Diana Vieira - (31) 99816-2524'
-				    ],
-				    'CTPM': [
-				      'Sub Ten Davidson dos Santos da Rocha - (31) 98687-2095',
-				      'Sub Ten Wagner Luiz Gonçalves - (31) 98746-1155',
-				      '1º Sgt Dionísio Rosa Dias - (31) 98733-9992',
-				      '1º Sgt Wanderson Moreira Luiz - (31) 98503-2098',
-				      '2º Sgt Adilson Alves de Souza - (31) 99744-7210',
-				      '2º Sgt Emerson Alexandre Pereira de Mello - (31) 99971-4985',
-				      '2º Sgt Ângelo Rodrigo Siqueira - (31) 99618-1447',
-				      '2º Sgt Ismael Camilo dos Santos - (31) 98885-9318',
-				      '2º Sgt Alisson Alves Amorim - (31) 99208-1458',
-				      '2º Sgt Kleiris Marcus H. do Nascimento - (31) 99141-1913',
-				      '2º Sgt William Reis de Miranda - (31) 98645-4580',
-				      '2º Sgt Pérsio Soares de Carvalho - (31) 98978-5139',
-				      '3º Sgt Reginaldo Reis Bazílio - (31) 99233-0573',
-				      '2º Sgt Geraldo Doroterio Ferreira - (31) 99689-0234'
-				    ],
-				    'ECIM': [
-				      'Cap Robson Leopoldino dos Reis - (31) 99711-8778',
-				      '2º Ten Edmar Daltro Coutinho Júnior - (31) 99363-0606',
-				      '2º Ten Hebert do Carmo Nonato - (31) 99612-4403',
-				      '2º Ten Cristian Anderson de Freitas - (31) 98469-7837',
-				      '2º Ten Marcelo Cardoso da Silva - (31) 98546-1811',
-				      '2º Ten Renato Maia da Silva - (32) 98852-8883',
-				      '2º Ten Fernando César Cardoso - (32) 98834-7941',
-				      '2º Ten José Edson Alves da Costa - (35) 99972-2204',
-				      '2º Ten Jairo Monteiro dos Santos - (31) 98594-9982',
-				      '2º Ten Adailton Rogério da Cruz - (35) 98424-3270',
-				      'Sub Ten Helton Luiz Dias de Sá - (32) 98867-9481',
-				      'Sub Ten Eva Efigênia da Cruz - (31) 97516-5093',
-				      'Sub Ten Marcio Edson Guimarães - (32) 98856-2957',
-				      '1º Sgt Gilderson Tomé de Souza - (31) 99753-5100',
-				      '1º Sgt Célio Alves Evangelista - (31) 98889-6464',
-				      '1º Sgt Luiz Fernandes de Oliveira - (31) 99686-4949',
-				      '1º Sgt Alessandro Eduardo de Souza Rafael - (35) 98817-7012',
-				      '1º Sgt Edson Alves da Silva - (31) 98538-5249',
-				      '1º Sgt Paulo Sérgio dos Santos - (35) 99970-2806',
-				      '1º Sgt José Ronaldo Ferrarezi - (32) 99167-1868',
-				      '1º Sgt Paulo Henrique de Oliveira - (31) 98979-0807',
-				      '1º Sgt Eduardo Luiz Trindade - (32) 98423-5803',
-				      '1º Sgt Denisson Diane da Silva - (32) 99341-0260',
-				      '1º Sgt Heraldo de Campos Prado Júnior - (35) 99946-6032',
-				      '1º Sgt Francisco Daniel da Costa - (31) 99888-8055',
-				      '2º Sgt Edwaldo Elias Nunes - (31) 98567-2633',
-				      '2º Sgt Ivair Batista - (31) 99785-5435',
-				      '2º Sgt Cláudio Aristides Costa - (31) 97524-1867'
-				    ],
-				    'Fundação SALVAR': [
-				      'Ten Cel Fellipe Augusto M. de Faria Mota - (31) 8726-0898',
-				      '1º Ten Sandro Aloísio Matilde Junior - (31) 98525-1319',
-				      'Sub Ten Carlos Martins de Freitas - (31) 99141-7224',
-				      '3º Sgt Glauber Miguel Gonçalves - (31) 98451-6417',
-				      'Sd Jéssica Rojas Silva - (31) 99172-4692',
-				      'Sd Thais Firmato Fortes - (31) 97101-2689'
-				    ],
-				    'GMG': [
-				      'Cap Adriane Cristina da Silva - (31) 98873-1095',
-				      '2º Ten Guilherme de Castro Quírico - (32) 98813-3965',
-				      '1º Sgt Giovanni Batista Bento - (31) 98837-7293',
-				      '1º Sgt Bruno Eustáquio de Souza Gomes - (31) 98638-9798',
-				      '2º Sgt Heyder Alves Cangussu - (31) 97338-1542',
-				      '2º Sgt João Flávio Alves - (35) 99220-9377',
-				      '2º Sgt Olivaldo Reis Bispo - (31) 98827-9057',
-				      '2º Sgt André Fillipe Rainon Ferreira - (31) 99070-7005',
-				      '3º Sgt Artur Luis Vinhal Nunes Souza - (31) 99922-8931'
-				    ],
-				    'Intendência': [
-				      '1º Sgt Jayme Araujo dos Santos Filho - (31) 99247-0193',
-				      '1º Sgt Carlos Antônio Ferreira Santana - (31) 98809-6982',
-				      '1º Sgt Edson Silva Filho - (31) 98664-4113',
-				      '1º Sgt Gilson Ribeiro da Silva - (31) 97592-5018',
-				      '1º Sgt Washington Miguel de Andrade Souza - (31) 98412-5897',
-				      'Cb Lucas Barbosa Aguiar - (31) 98481-8314'
-				    ],
-				    'MPMG': [
-				      'Cap Adler Augusto Dias da Silva - (31) 98760-4641',
-				      'Cap Paulo Henrique Camargos Firme - (31) 98876-1423',
-				      '1º Ten Thiago Alves da Silva Magalhães Campos - (31) 98481-9767',
-				      '1º Ten Julio Cesar Ferreira dos Santos - (31) 99521-4155',
-				      '2º Ten Samuel Márcio da Luz - (31) 97508-4950',
-				      '2º Sgt Thiago Faria de Araujo - (31) 99211-3577',
-				      '3º Sgt João Paulo Vieira Cotta - (31) 99570-5544'
-				    ],
-				    'OGE': [
-				      'Maj Wendell Hoover Gonçalves Rezende - (31) 98527-5260',
-				      'Cap Carlos Alberto Ferreira da Silva - (31) 99473-1072',
-				      '2º Sgt Julio Cesar Alves Fonseca - (31) 98765-7876',
-				      '2º Sgt Suzana de Souza Braga - (31) 99180-6378',
-				      'Cb Vinícius da Costa Gomes - (31) 99644-2415'
-				    ],
-				    'Secretaria Parlamentar': [
-				      '1º Ten Andresa Vicente Amante - (31) 99127-9068',
-				      'Cb Cristiano Lages Wardil - (31) 99392-0732',
-				      'Cb Lúcio Marcos Oliveira Hortêncio - (31) 97175-4554'
-				    ],
-				    'SEJUSP': [
-				      'Ten Cel Peterson José Paiva Monteiro - (31) 98709-2550',
-				      'Maj Leandro de Oliveira Pereira - (31) 98709-3033',
-				      'Cb Gefte da Silva Lemos - (31) 99343-8377'
-				    ],
-				    'SENASP': [
-				      '3º Sgt Emília Tainá Couto Viana e Sousa - (31) 98343-6808',
-				      '3º Sgt André Ferreira de Oliveira - (38) 99816-3930'
-				    ],
-				    'SES': [
-				      'Maj Sílvia Amélia de Souza Paula - (31) 99122-5100',
-				      '2º Ten Aline de Barros Souza Silveira - (31) 97167-7886'
-				    ],
-				    'SEE': [
-				      'Maj Andiara Beatriz Ribeiro Miranda - (31) 97153-9897'
-				    ],
-				    'TJMG': [
-				      'Maj Marcus Vinícius Siqueira Flores - (31) 98659-5707',
-				      '1º Ten Carlos Eduardo de Oliveira - (31) 98600-2512',
-				      'Sub Ten Fernando Eustáquio dos Santos - (31) 98801-1710',
-				      '1º Sgt José Zito da Silva Filho - (31) 98781-7435',
-				      '1º Sgt Fernando Iglésias Gonçalves - (31) 99871-2536',
-				      '1º Sgt Jovane Jonatas Passos - (31) 98861-2326',
-				      'Sd Igor Cláver Coelho de Resende - (31) 97530-8845'
-				    ],
-				    'TJMMG': [
-				      '1º Ten Flávio de Oliveira Barbosa - (35) 99727-1810',
-				      'Sub Ten Carlos Rodrigues Gomes - (31) 98854-4380',
-				      '2º Sgt Josaine Thais do Carmo - (31) 98788-1588',
-				      '1º Sgt Rinaldo Cezar Fontes Cruz - (31) 99469-2218',
-				      '2º Sgt Thiago Bruno de Albuquerque Morais - (31) 99137-8635',
-				      '2º Sgt Wagner Magno Alves dos Santos - (31) 98978-4116',
-				      '3º Sgt Lucélia Moreira Santos - (31) 99984-0225',
-				      '2º Sgt Gustavo Duarte Oliveira - (31) 97243-7139',
-				      'Cb Alexandre Polidoro - (31) 98890-7567',
-				      'Cb Giovanni Tadeu B. dos Santos - (31) 99318-7722'
-				    ]
-				  };
-		
+		    		    'AFAS': [
+		    		      '1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704'
+		    		    ],
+		    		    'ALMG': [
+		    		      'Ten Cel Cléia Gonçalves Mota - (31) 98527-7579',
+		    		      '2º Sgt Pedro Henrique Garcia Pinto - (31) 99791-7322'
+		    		    ],
+		    		    'CEDEC': [
+		    		      'Ten Cel Wenderson Duarte Marcelino - (31) 98876-3781',
+		    		      'Maj Mardell da Silva Alves - (31) 98525-1628',
+		    		      '1º Ten Douglas Constantino Fernandes - (31) 98576-2386',
+		    		      '2º Ten Rogério Silva de Paula - (31) 98769-8364',
+		    		      '3º Sgt Luiz Ricardo Vago Lima - (31) 99835-4229',
+		    		      '3º Sgt Felipe Vaz de Sá - (31) 99086-3250',
+		    		      '3º Sgt Deivison Queiroz de Souza - (31) 98305-7477'
+		    		    ],
+		    		    'COORDENAÇÃO DAI/2': [
+		    		      'Maj Richelmy Murta Pinto - (35) 98464-0729',
+		    		      'Sd Larissa Elias Diana Vieira - (31) 99816-2524'
+		    		    ],
+		    		    'CTPM': [
+		    		      'Sub Ten Davidson dos Santos da Rocha - (31) 98687-2095',
+		    		      'Sub Ten Wagner Luiz Gonçalves - (31) 98746-1155',
+		    		      '1º Sgt Dionísio Rosa Dias - (31) 98733-9992',
+		    		      '1º Sgt Wanderson Moreira Luiz - (31) 98503-2098',
+		    		      '2º Sgt Adilson Alves de Souza - (31) 99744-7210',
+		    		      '2º Sgt Emerson Alexandre Pereira de Mello - (31) 99971-4985',
+		    		      '2º Sgt Ângelo Rodrigo Siqueira - (31) 99618-1447',
+		    		      '2º Sgt Ismael Camilo dos Santos - (31) 98885-9318',
+		    		      '2º Sgt Alisson Alves Amorim - (31) 99208-1458',
+		    		      '2º Sgt Kleiris Marcus H. do Nascimento - (31) 99141-1913',
+		    		      '2º Sgt William Reis de Miranda - (31) 98645-4580',
+		    		      '2º Sgt Pérsio Soares de Carvalho - (31) 98978-5139',
+		    		      '3º Sgt Reginaldo Reis Bazílio - (31) 99233-0573',
+		    		      '2º Sgt Geraldo Doroterio Ferreira - (31) 99689-0234'
+		    		    ],
+		    		    'ECIM': [
+		    		      'Cap Robson Leopoldino dos Reis - (31) 99711-8778',
+		    		      '2º Ten Edmar Daltro Coutinho Júnior - (31) 99363-0606',
+		    		      '2º Ten Hebert do Carmo Nonato - (31) 99612-4403',
+		    		      '2º Ten Cristian Anderson de Freitas - (31) 98469-7837',
+		    		      '2º Ten Marcelo Cardoso da Silva - (31) 98546-1811',
+		    		      '2º Ten Renato Maia da Silva - (32) 98852-8883',
+		    		      '2º Ten Fernando César Cardoso - (32) 98834-7941',
+		    		      '2º Ten José Edson Alves da Costa - (35) 99972-2204',
+		    		      '2º Ten Jairo Monteiro dos Santos - (31) 98594-9982',
+		    		      '2º Ten Adailton Rogério da Cruz - (35) 98424-3270',
+		    		      'Sub Ten Helton Luiz Dias de Sá - (32) 98867-9481',
+		    		      'Sub Ten Eva Efigênia da Cruz - (31) 97516-5093',
+		    		      'Sub Ten Marcio Edson Guimarães - (32) 98856-2957',
+		    		      '1º Sgt Gilderson Tomé de Souza - (31) 99753-5100',
+		    		      '1º Sgt Célio Alves Evangelista - (31) 98889-6464',
+		    		      '1º Sgt Luiz Fernandes de Oliveira - (31) 99686-4949',
+		    		      '1º Sgt Alessandro Eduardo de Souza Rafael - (35) 98817-7012',
+		    		      '1º Sgt Edson Alves da Silva - (31) 98538-5249',
+		    		      '1º Sgt Paulo Sérgio dos Santos - (35) 99970-2806',
+		    		      '1º Sgt José Ronaldo Ferrarezi - (32) 99167-1868',
+		    		      '1º Sgt Paulo Henrique de Oliveira - (31) 98979-0807',
+		    		      '1º Sgt Eduardo Luiz Trindade - (32) 98423-5803',
+		    		      '1º Sgt Denisson Diane da Silva - (32) 99341-0260',
+		    		      '1º Sgt Heraldo de Campos Prado Júnior - (35) 99946-6032',
+		    		      '1º Sgt Francisco Daniel da Costa - (31) 99888-8055',
+		    		      '2º Sgt Edwaldo Elias Nunes - (31) 98567-2633',
+		    		      '2º Sgt Ivair Batista - (31) 99785-5435',
+		    		      '2º Sgt Cláudio Aristides Costa - (31) 97524-1867'
+		    		    ],
+		    		    'Fundação SALVAR': [
+		    		      'Ten Cel Fellipe Augusto M. de Faria Mota - (31) 8726-0898',
+		    		      '1º Ten Sandro Aloísio Matilde Junior - (31) 98525-1319',
+		    		      'Sub Ten Carlos Martins de Freitas - (31) 99141-7224',
+		    		      '3º Sgt Glauber Miguel Gonçalves - (31) 98451-6417',
+		    		      'Sd Jéssica Rojas Silva - (31) 99172-4692',
+		    		      'Sd Thais Firmato Fortes - (31) 97101-2689'
+		    		    ],
+		    		    'GMG': [
+		    		      'Cap Adriane Cristina da Silva - (31) 98873-1095',
+		    		      '2º Ten Guilherme de Castro Quírico - (32) 98813-3965',
+		    		      '1º Sgt Giovanni Batista Bento - (31) 98837-7293',
+		    		      '1º Sgt Bruno Eustáquio de Souza Gomes - (31) 98638-9798',
+		    		      '2º Sgt Heyder Alves Cangussu - (31) 97338-1542',
+		    		      '2º Sgt João Flávio Alves - (35) 99220-9377',
+		    		      '2º Sgt Olivaldo Reis Bispo - (31) 98827-9057',
+		    		      '2º Sgt André Fillipe Rainon Ferreira - (31) 99070-7005',
+		    		      '3º Sgt Artur Luis Vinhal Nunes Souza - (31) 99922-8931'
+		    		    ],
+		    		    'Intendência': [
+		    		      '1º Sgt Jayme Araujo dos Santos Filho - (31) 99247-0193',
+		    		      '1º Sgt Carlos Antônio Ferreira Santana - (31) 98809-6982',
+		    		      '1º Sgt Edson Silva Filho - (31) 98664-4113',
+		    		      '1º Sgt Gilson Ribeiro da Silva - (31) 97592-5018',
+		    		      '1º Sgt Washington Miguel de Andrade Souza - (31) 98412-5897',
+		    		      'Cb Lucas Barbosa Aguiar - (31) 98481-8314'
+		    		    ],
+		    		    'MPMG': [
+		    		      'Cap Adler Augusto Dias da Silva - (31) 98760-4641',
+		    		      'Cap Paulo Henrique Camargos Firme - (31) 98876-1423',
+		    		      '1º Ten Thiago Alves da Silva Magalhães Campos - (31) 98481-9767',
+		    		      '1º Ten Julio Cesar Ferreira dos Santos - (31) 99521-4155',
+		    		      '2º Ten Samuel Márcio da Luz - (31) 97508-4950',
+		    		      '2º Sgt Thiago Faria de Araujo - (31) 99211-3577',
+		    		      '3º Sgt João Paulo Vieira Cotta - (31) 99570-5544'
+		    		    ],
+		    		    'OGE': [
+		    		      'Maj Wendell Hoover Gonçalves Rezende - (31) 98527-5260',
+		    		      'Cap Carlos Alberto Ferreira da Silva - (31) 99473-1072',
+		    		      '2º Sgt Julio Cesar Alves Fonseca - (31) 98765-7876',
+		    		      '2º Sgt Suzana de Souza Braga - (31) 99180-6378',
+		    		      'Cb Vinícius da Costa Gomes - (31) 99644-2415'
+		    		    ],
+		    		    'Secretaria Parlamentar': [
+		    		      '1º Ten Andresa Vicente Amante - (31) 99127-9068',
+		    		      'Cb Cristiano Lages Wardil - (31) 99392-0732',
+		    		      'Cb Lúcio Marcos Oliveira Hortêncio - (31) 97175-4554'
+		    		    ],
+		    		    'SEJUSP': [
+		    		      'Ten Cel Peterson José Paiva Monteiro - (31) 98709-2550',
+		    		      'Maj Leandro de Oliveira Pereira - (31) 98709-3033',
+		    		      'Cb Gefte da Silva Lemos - (31) 99343-8377'
+		    		    ],
+		    		    'SENASP': [
+		    		      '3º Sgt Emília Tainá Couto Viana e Sousa - (31) 98343-6808',
+		    		      '3º Sgt André Ferreira de Oliveira - (38) 99816-3930'
+		    		    ],
+		    		    'SES': [
+		    		      'Maj Sílvia Amélia de Souza Paula - (31) 99122-5100',
+		    		      '2º Ten Aline de Barros Souza Silveira - (31) 97167-7886'
+		    		    ],
+		    		    'SEE': [
+		    		      'Maj Andiara Beatriz Ribeiro Miranda - (31) 97153-9897'
+		    		    ],
+		    		    'TJMG': [
+		    		      'Maj Marcus Vinícius Siqueira Flores - (31) 98659-5707',
+		    		      '1º Ten Carlos Eduardo de Oliveira - (31) 98600-2512',
+		    		      'Sub Ten Fernando Eustáquio dos Santos - (31) 98801-1710',
+		    		      '1º Sgt José Zito da Silva Filho - (31) 98781-7435',
+		    		      '1º Sgt Fernando Iglésias Gonçalves - (31) 99871-2536',
+		    		      '1º Sgt Jovane Jonatas Passos - (31) 98861-2326',
+		    		      'Sd Igor Cláver Coelho de Resende - (31) 97530-8845'
+		    		    ],
+		    		    'TJMMG': [
+		    		      '1º Ten Flávio de Oliveira Barbosa - (35) 99727-1810',
+		    		      'Sub Ten Carlos Rodrigues Gomes - (31) 98854-4380',
+		    		      '2º Sgt Josaine Thais do Carmo - (31) 98788-1588',
+		    		      '1º Sgt Rinaldo Cezar Fontes Cruz - (31) 99469-2218',
+		    		      '2º Sgt Thiago Bruno de Albuquerque Morais - (31) 99137-8635',
+		    		      '2º Sgt Wagner Magno Alves dos Santos - (31) 98978-4116',
+		    		      '3º Sgt Lucélia Moreira Santos - (31) 99984-0225',
+		    		      '2º Sgt Gustavo Duarte Oliveira - (31) 97243-7139',
+		    		      'Cb Alexandre Polidoro - (31) 98890-7567',
+		    		      'Cb Giovanni Tadeu B. dos Santos - (31) 99318-7722'
+		    		    ]
+		    		  };
+		    
 		  // Modal
 		  const modal = document.getElementById('modal');
 		  const militaresList = document.getElementById('militares-list');
 		  const modalClose = document.getElementById('modalClose');
-		
+		    
 		  const showModal = orgao => {
 		    const militares = data[orgao];
 		    const modalTitle = document.getElementById('modalTitle');
 		    modalTitle.textContent = `Relação de Militares - ${orgao}`;
-		
+		    
 		    militaresList.innerHTML = (militares && militares.length)
 		      ? militares.map(militar => {
 		          const [nome, telefone] = militar.split(' - ');
@@ -882,20 +910,20 @@
 		          `;
 		        }).join('')
 		      : '<p style="color: red;">Nenhum militar registrado neste órgão.</p>';
-		
+		    
 		    modal.style.display = 'flex';
 		  };
-		
+		    
 		  modalClose.addEventListener('click', () => modal.style.display = 'none');
 		  window.addEventListener('click', event => {
 		    if (event.target === modal) modal.style.display = 'none';
 		  });
-		
+		    
 		  // Pesquisa de militares (já existente)
 		  const searchInput = document.getElementById('searchInput');
 		  const searchButton = document.getElementById('searchButton');
 		  const searchResult = document.getElementById('searchResult');
-		
+		    
 		  const searchMilitary = () => {
 		    const query = searchInput.value.trim().toLowerCase();
 		    let found = false;
@@ -919,14 +947,14 @@
 		    }
 		  };
 		  searchButton.addEventListener('click', searchMilitary);
-		
+		    
 		  /**********************************************
 		   * 3) NOVA BUSCA DE "CLARO" POR POSTO/GRADUAÇÃO
 		   **********************************************/
 		  const rankSelect = document.getElementById('rankSelect');
 		  const rankButton = document.getElementById('rankButton');
 		  const claroResult = document.getElementById('claroResult');
-		
+		    
 		  const searchClaro = () => {
 		    const selectedRank = rankSelect.value; // ex.: "Sgt/SubTen"
 		    if (!selectedRank) {
@@ -935,7 +963,7 @@
 		    }
 		    claroResult.innerHTML = '';
 		    let foundAny = false;
-		
+		    
 		    // Percorre cada órgão do objeto "distribuicao"
 		    Object.keys(distribuicao).forEach(orgao => {
 		      const postoGrad = distribuicao[orgao][selectedRank];
@@ -955,13 +983,13 @@
 		        }
 		      }
 		    });
-		
+		    
 		    if (!foundAny) {
 		      claroResult.innerHTML = '<p style="color: red;">Nenhum órgão possui claro para este posto/graduação.</p>';
 		    }
 		  };
 		  rankButton.addEventListener('click', searchClaro);
-		
+		    
 		  // Criação dos gráficos Doughnut (mantido)
 		  const createChart = (canvasId, previsto, existente, claro) => {
 		    const ctx = document.getElementById(canvasId).getContext('2d');
@@ -982,7 +1010,7 @@
 		      }
 		    });
 		  };
-		
+		    
 		  // Inicialização dos gráficos (mantido)
 		  createChart('chart-afas', 4, 1, 3);
 		  createChart('chart-cedec', 10, 7, 3);
@@ -1002,12 +1030,12 @@
 		  createChart('chart-tjmmg', 11, 11, 0);
 		  createChart('chart-ecim', 47, 28, 19);
 		  createChart('chart-coordenacao-dai2', 2, 1, 1);
-		
+		    
 		  // Eventos de clique para cada bloco (mantido)
 		  document.querySelectorAll('.block').forEach(block => {
 		    block.addEventListener('click', () => showModal(block.getAttribute('data-orgao')));
 		  });
-		
+		    
 		  // Toggle da lista de efetivo (mantido)
 		  const showListBtn = document.getElementById('showListBtn');
 		  const militaryList = document.getElementById('militaryList');
