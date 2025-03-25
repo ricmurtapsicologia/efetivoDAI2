@@ -2,46 +2,24 @@
 <html lang="pt-BR">
 
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Distribuição de Efetivo DAI/2</title>
-
-<!-- Metadados de SEO e redes sociais -->
-<meta property="og:title" content="Distribuição de Efetivo DAI/2" />
-<meta
-  property="og:description"
-  content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos."
-/>
-<meta
-  property="og:image"
-  content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg"
-/>
-<meta
-  property="og:url"
-  content="https://ricmurtapsicologia.github.io/efetivoDAI2/"
-/>
-<meta property="og:type" content="website" />
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Distribuição de Efetivo DAI/2" />
-<meta
-  name="twitter:description"
-  content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos."
-/>
-<meta
-  name="twitter:image"
-  content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg"
-/>
-
-<!-- Favicon (usando a mesma imagem de pré-visualização do WhatsApp) -->
-<link
-  rel="icon"
-  href="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg"
-/>
-
-<!-- Biblioteca Chart.js (para gráficos) -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<!-- CSS Consolidado e Otimizado -->
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Distribuição de Efetivo DAI/2</title>
+	<!-- Metadados para SEO e redes sociais -->
+	<meta property="og:title" content="Distribuição de Efetivo DAI/2" />
+	<meta property="og:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
+	<meta property="og:image" content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg" />
+	<meta property="og:url" content="https://ricmurtapsicologia.github.io/efetivoDAI2/" />
+	<meta property="og:type" content="website" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Distribuição de Efetivo DAI/2" />
+	<meta name="twitter:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
+	<meta name="twitter:image" content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg" />
+	<!-- Favicon -->
+	<link rel="icon" href="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg" />
+	<!-- Chart.js -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<!-- CSS Consolidado -->
 	<style>
 		:root {
 		  --primary-bg: #f8f9fa;
@@ -58,14 +36,15 @@
 		  --transition-speed: 0.3s;
 		}
 		
-		html {
-		  scroll-behavior: smooth;
-		}
-		
+		/* Reset e base */
 		*, *::before, *::after {
 		  margin: 0;
 		  padding: 0;
 		  box-sizing: border-box;
+		}
+		
+		html {
+		  scroll-behavior: smooth;
 		}
 		
 		body {
@@ -74,7 +53,7 @@
 		  color: var(--primary-color);
 		  line-height: 1.6;
 		  overflow-x: hidden;
-		  /* Fade-In do body */
+		  /* Fade-in geral */
 		  opacity: 0;
 		  animation: fadeIn 0.6s forwards ease-in-out;
 		}
@@ -83,16 +62,14 @@
 		  to { opacity: 1; }
 		}
 		
-		/* Splash Screen */
+		/* ---------- SPLASH SCREEN ---------- */
 		#splash {
 		  position: fixed;
 		  top: 0;
 		  left: 0;
 		  width: 100%;
 		  height: 100%;
-		  background: #0b3d91
-		    url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg')
-		    no-repeat center center/cover;
+		  background: #0b3d91 url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg') no-repeat center center/cover;
 		  display: flex;
 		  flex-direction: column;
 		  align-items: center;
@@ -101,6 +78,10 @@
 		  z-index: 9999;
 		  transition: opacity 1s ease;
 		}
+		#splash.hidden {
+		  opacity: 0;
+		  pointer-events: none;
+		}
 		#splash h1 {
 		  font-size: 2rem;
 		  margin-bottom: 0.5rem;
@@ -108,30 +89,88 @@
 		#splash p {
 		  font-size: 1rem;
 		}
-		#splash.hidden {
-		  opacity: 0;
-		  pointer-events: none;
+		
+		/* ---------- ONBOARDING ---------- */
+		#onboarding {
+		  position: fixed;
+		  top: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 100%;
+		  background: var(--accent-green);
+		  color: #fff;
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  z-index: 9000;
+		  padding: 20px;
+		}
+		#onboarding.hidden {
+		  display: none;
+		}
+		.onboarding-step {
+		  max-width: 600px;
+		  text-align: center;
+		  animation: slideIn 0.5s ease-out;
+		}
+		.onboarding-step.hidden {
+		  display: none;
+		}
+		@keyframes slideIn {
+		  from { transform: translateY(20px); opacity: 0; }
+		  to { transform: translateY(0); opacity: 1; }
+		}
+		.onboarding-step h2 {
+		  font-size: 1.75rem;
+		  margin-bottom: 10px;
+		}
+		.onboarding-step p {
+		  font-size: 1rem;
+		  margin-bottom: 20px;
+		}
+		.onboarding-controls {
+		  display: flex;
+		  justify-content: center;
+		  gap: 20px;
+		  flex-wrap: wrap;
+		}
+		.onboarding-controls button {
+		  padding: 10px 20px;
+		  border: none;
+		  border-radius: 8px;
+		  font-size: 1rem;
+		  cursor: pointer;
+		  transition: background-color var(--transition-speed);
+		}
+		.btn-continue {
+		  background-color: var(--secondary-bg);
+		  color: var(--accent-green);
+		}
+		.btn-continue:hover {
+		  background-color: #e0e0e0;
+		}
+		.btn-skip {
+		  background: transparent;
+		  border: 2px solid #fff;
+		  color: #fff;
+		}
+		.btn-skip:hover {
+		  background: rgba(255,255,255,0.2);
 		}
 		
-		/* Cabeçalho com banner usando imagem do Unsplash */
+		/* ---------- CABEÇALHO E BANNER ---------- */
 		header.banner {
 		  width: 100%;
-		  height: 400px; /* Altura padrão para telas maiores */
+		  height: 400px;
 		  position: relative;
 		  background: url('https://images.unsplash.com/photo-1511649475669-e288648b2339?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3')
-		          no-repeat center 93%; /* Ajuste aqui a porcentagem para “descer” a imagem */
+		              no-repeat center 93%;
 		  background-size: cover;
-		 /* Propriedade de transição para background-position */
 		  transition: background-position 0.6s ease-in-out;
 		}
-		
-		/* Ao passar o mouse, altera levemente o background-position
-		   para criar a sensação de “sway” */
 		header.banner:hover {
 		  background-position: center 60%;
-		
 		}
-		/* Texto sobre o banner */
 		header.banner .banner-text {
 		  position: absolute;
 		  top: 50%;
@@ -147,8 +186,11 @@
 		  line-height: 1.2;
 		}
 		
-		/* Container principal */
-		.container {
+		/* ---------- CONTEÚDO PRINCIPAL ---------- */
+		#mainContent.hidden {
+		  display: none;
+		}
+		main.container {
 		  max-width: 1200px;
 		  margin: 20px auto;
 		  padding: 20px;
@@ -158,16 +200,13 @@
 		}
 		.title {
 		  text-align: center;
-		  margin-bottom: 20px;
+		  margin: 10px 0 20px;
 		  font-size: 32px;
 		  font-weight: bold;
 		  color: var(--secondary-color);
 		  border-bottom: 2px solid var(--border-color);
 		  padding-bottom: 10px;
-		  margin-top: 10px; /* Pequeno respiro entre o banner e o título */
 		}
-		
-		/* Dados Gerais */
 		.general-data {
 		  background-color: var(--light-bg);
 		  padding: 20px;
@@ -184,28 +223,7 @@
 		  color: var(--secondary-color);
 		}
 		
-		/* Legenda */
-		.legend {
-		  display: flex;
-		  justify-content: center;
-		  gap: 20px;
-		  align-items: center;
-		  margin-bottom: 20px;
-		  flex-wrap: wrap;
-		}
-		.legend-item {
-		  display: flex;
-		  align-items: center;
-		}
-		.legend-color {
-		  display: inline-block;
-		  width: 15px;
-		  height: 15px;
-		  border-radius: 3px;
-		  margin-right: 5px;
-		}
-		
-		/* Área de pesquisa */
+		/* ---------- ÁREA DE PESQUISA ---------- */
 		.search-container {
 		  text-align: center;
 		  margin-top: 10px;
@@ -235,15 +253,14 @@
 		.search-container button:hover {
 		  background-color: #3ea44c;
 		}
-		#searchResult,
-		#claroResult {
+		#searchResult, #claroResult {
 		  margin-top: 20px;
 		  font-size: 18px;
 		  color: var(--primary-color);
 		  text-align: center;
 		}
 		
-		/* Grid de blocos */
+		/* ---------- GRID DOS BLOCOS (USANDO FLEX) ---------- */
 		.row {
 		  display: flex;
 		  flex-wrap: wrap;
@@ -290,7 +307,40 @@
 		  font-weight: 500;
 		}
 		
-		/* Modal */
+		/* ---------- LISTA DE EFETIVO E BOTÃO ---------- */
+		.list-toggle {
+		  display: flex;
+		  justify-content: center;
+		  margin-top: 20px;
+		}
+		.list-toggle button {
+		  padding: 10px 20px;
+		  border-radius: 8px;
+		  border: none;
+		  background-color: var(--accent-green);
+		  color: #fff;
+		  font-size: 16px;
+		  cursor: pointer;
+		  width: 60%;
+		  text-align: center;
+		  transition: background-color var(--transition-speed);
+		}
+		.list-toggle button:hover {
+		  background-color: #3ea44c;
+		}
+		.military-list {
+		  margin-top: 20px;
+		  display: none;
+		  text-align: center;
+		}
+		.military-list ul {
+		  list-style-type: none;
+		  padding: 0;
+		  font-size: 16px;
+		  line-height: 1.8;
+		}
+		
+		/* ---------- MODAL ---------- */
 		.modal {
 		  display: none;
 		  position: fixed;
@@ -330,46 +380,11 @@
 		  top: 10px;
 		  right: 20px;
 		}
-		.modal-content .close:hover,
-		.modal-content .close:focus {
+		.modal-content .close:hover {
 		  color: var(--secondary-color);
-		  text-decoration: none;
 		}
 		
-		/* Lista de efetivo */
-		.list-toggle {
-		  display: flex;
-		  justify-content: center;
-		  margin-top: 20px;
-		}
-		.list-toggle button {
-		  padding: 10px 20px;
-		  border-radius: 8px;
-		  border: none;
-		  background-color: var(--accent-green);
-		  color: #fff;
-		  font-size: 16px;
-		  cursor: pointer;
-		  width: 60%;
-		  text-align: center;
-		  transition: background-color var(--transition-speed);
-		}
-		.list-toggle button:hover {
-		  background-color: #3ea44c;
-		}
-		.military-list {
-		  margin-top: 20px;
-		  display: none;
-		  text-align: center;
-		}
-		.military-list ul {
-		  list-style-type: none;
-		  padding: 0;
-		  font-size: 16px;
-		  line-height: 1.8;
-		}
-		
-		/* Rodapé */
+		/* ---------- RODAPÉ ---------- */
 		footer {
 		  text-align: center;
 		  padding: 20px;
@@ -379,7 +394,7 @@
 		  margin-top: 20px;
 		}
 		
-		/* Responsividade */
+		/* ---------- RESPONSIVIDADE ---------- */
 		@media (max-width: 576px) {
 		  .block {
 		    width: 100%;
@@ -390,7 +405,6 @@
 		  #splash p {
 		    font-size: 0.875rem;
 		  }
-		  /* Ajuste do banner para celulares */
 		  header.banner {
 		    height: 180px;
 		    background-position: center 30%;
@@ -408,19 +422,11 @@
 		    font-size: 14px;
 		  }
 		}
-		
 		@media (min-width: 577px) and (max-width: 768px) {
 		  .block {
 		    width: 48%;
 		  }
 		}
-		
-		@media (min-width: 769px) and (max-width: 992px) {
-		  .block {
-		    width: 48%;
-		  }
-		}
-		
 		@media (min-width: 993px) {
 		  .block {
 		    width: 30%;
@@ -433,175 +439,216 @@
 </head>
 
 <body>
-	<!-- Splash Screen -->
+	<!-- SPLASH SCREEN -->
 	<div id="splash">
 		<h1>Distribuição de Efetivo DAI/2</h1>
 		<p>Carregando dados...</p>
 	</div>
-	<!-- Cabeçalho com banner -->
-	<header class="banner" role="banner">
-		<!-- Texto sobreposto ao banner -->
-		<div class="banner-text"> Distribuição de Efetivo DAI/2 </div>
-	</header>
-	<!-- Conteúdo Principal -->
-	<main class="container">
-		<h1 class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</h1>
-		<section class="general-data" aria-label="Dados Gerais">
-			<p>Total Previsto: 156</p>
-			<p>Total Existente: 114</p>
-			<p>Total Claro: 41</p>
-		</section>
-		<!-- Área de Pesquisa (por nome) -->
-		<section class="search-container" aria-label="Pesquisar Militar">
-			<input type="text" id="searchInput" placeholder="Pesquisar militar por nome ou posto..." />
-			<button id="searchButton">Pesquisar Militar</button>
-		</section>
-		<div id="searchResult"></div>
-		<!-- NOVO: Pesquisa de CLARO por posto/graduação -->
-		<section class="search-container" aria-label="Pesquisar Claro por Posto/Graduação">
-			<select id="rankSelect">
-				<option value="">Selecione o Posto/Graduação</option>
-				<option value="Sd/Cb">Sd/Cb</option>
-				<option value="Sgt/SubTen">Sgt/SubTen</option>
-				<option value="Ten">Ten</option>
-				<option value="Cap">Cap</option>
-				<option value="Maj">Maj</option>
-				<option value="Ten-Cel">Ten-Cel</option>
-			</select>
-			<button id="rankButton">Pesquisar Claro</button>
-		</section>
-		<div id="claroResult" style="margin-top: 20px; text-align: center;"></div>
-		<!-- Blocos dos Órgãos Externos -->
-		<section class="row" aria-label="Blocos dos Órgãos Externos">
-			<div class="block" data-orgao="AFAS">
-				<h3>AFAS</h3>
-				<canvas id="chart-afas"></canvas>
-				<div class="numbers">Existente: 1</div>
+	<!-- ONBOARDING (Multi-etapas) -->
+	<div id="onboarding" class="hidden">
+		<!-- Etapa 1: Boas-vindas -->
+		<div class="onboarding-step" data-step="1">
+			<h2>Bem-vindo ao Portal DAI/2</h2>
+			<p>Aqui você pode visualizar a distribuição do efetivo dos órgãos externos e acessar informações detalhadas de cada unidade.</p>
+			<div class="onboarding-controls">
+				<button class="btn-continue">Continuar</button>
+				<button class="btn-skip">Pular</button>
 			</div>
-			<div class="block" data-orgao="ALMG">
-				<h3>ALMG</h3>
-				<canvas id="chart-almg"></canvas>
-				<div class="numbers">Existente: 2</div>
+		</div>
+		<!-- Etapa 2: Pesquisa -->
+		<div class="onboarding-step hidden" data-step="2">
+			<h2>Pesquisa de Militares</h2>
+			<p>Utilize os campos de pesquisa para encontrar militares por nome ou por posto/graduação. Essa função permite identificar rapidamente os dados desejados.</p>
+			<div class="onboarding-controls">
+				<button class="btn-continue">Continuar</button>
+				<button class="btn-skip">Pular</button>
 			</div>
-			<div class="block" data-orgao="CEDEC">
-				<h3>CEDEC</h3>
-				<canvas id="chart-cedec"></canvas>
-				<div class="numbers">Existente: 7</div>
+		</div>
+		<!-- Etapa 3: Gráficos Interativos -->
+		<div class="onboarding-step hidden" data-step="3">
+			<h2>Gráficos Interativos</h2>
+			<p>Os gráficos (do tipo Doughnut) mostram a relação entre os valores previsto, existente e o “claro” de cada órgão.</p>
+			<div class="onboarding-controls">
+				<button class="btn-continue">Continuar</button>
+				<button class="btn-skip">Pular</button>
 			</div>
-		</section>
-		<section class="row">
-			<div class="block" data-orgao="COORDENAÇÃO DAI/2">
-				<h3>COORDENAÇÃO DAI/2</h3>
-				<canvas id="chart-coordenacao-dai2"></canvas>
-				<div class="numbers">Existente: 1</div>
+		</div>
+		<!-- Etapa 4: Lista de Efetivo -->
+		<div class="onboarding-step hidden" data-step="4">
+			<h2>Previsão de Efetivo</h2>
+			<p>Visualize a previsão de efetivo pelo DDQOD clicando no botão correspondente. Todas as funções foram pensadas para facilitar sua consulta.</p>
+			<div class="onboarding-controls">
+				<button class="btn-continue">Finalizar</button>
+				<button class="btn-skip">Pular</button>
 			</div>
-			<div class="block" data-orgao="CTPM">
-				<h3>Colégio Tiradentes RMBH</h3>
-				<canvas id="chart-ctpm"></canvas>
-				<div class="numbers">Existente: 14</div>
-			</div>
-			<div class="block" data-orgao="ECIM">
-				<h3>Escola Cívico-Militar</h3>
-				<canvas id="chart-ecim"></canvas>
-				<div class="numbers">Existente: 28</div>
-			</div>
-		</section>
-		<section class="row">
-			<div class="block" data-orgao="Fundação SALVAR">
-				<h3>Assessoria Fundacional</h3>
-				<canvas id="chart-salvar"></canvas>
-				<div class="numbers">Existente: 6</div>
-			</div>
-			<div class="block" data-orgao="GMG">
-				<h3>GMG</h3>
-				<canvas id="chart-gmg"></canvas>
-				<div class="numbers">Existente: 9</div>
-			</div>
-			<div class="block" data-orgao="Intendência">
-				<h3>Intendência CAMG</h3>
-				<canvas id="chart-intendencia"></canvas>
-				<div class="numbers">Existente: 6</div>
-			</div>
-		</section>
-		<section class="row">
-			<div class="block" data-orgao="MPMG">
-				<h3>MPMG</h3>
-				<canvas id="chart-mpmg"></canvas>
-				<div class="numbers">Existente: 7</div>
-			</div>
-			<div class="block" data-orgao="OGE">
-				<h3>OGE</h3>
-				<canvas id="chart-oge"></canvas>
-				<div class="numbers">Existente: 5</div>
-			</div>
-			<div class="block" data-orgao="Secretaria Parlamentar">
-				<h3>Secretaria Parlamentar</h3>
-				<canvas id="chart-secretaria-parlamentar"></canvas>
-				<div class="numbers">Existente: 3</div>
-			</div>
-		</section>
-		<section class="row">
-			<div class="block" data-orgao="SEE">
-				<h3>SEE</h3>
-				<canvas id="chart-see"></canvas>
-				<div class="numbers">Existente: 1</div>
-			</div>
-			<div class="block" data-orgao="SEJUSP">
-				<h3>SEJUSP</h3>
-				<canvas id="chart-sejusp"></canvas>
-				<div class="numbers">Existente: 3</div>
-			</div>
-			<div class="block" data-orgao="SENASP">
-				<h3>SENASP/MJ</h3>
-				<canvas id="chart-senasp"></canvas>
-				<div class="numbers">Existente: 2</div>
-			</div>
-		</section>
-		<section class="row">
-			<div class="block" data-orgao="SES">
-				<h3>SES</h3>
-				<canvas id="chart-ses"></canvas>
-				<div class="numbers">Existente: 2</div>
-			</div>
-			<div class="block" data-orgao="TJMG">
-				<h3>TJMG</h3>
-				<canvas id="chart-tjmg"></canvas>
-				<div class="numbers">Existente: 7</div>
-			</div>
-			<div class="block" data-orgao="TJMMG">
-				<h3>TJMMG</h3>
-				<canvas id="chart-tjmmg"></canvas>
-				<div class="numbers">Existente: 11</div>
-			</div>
-		</section>
-		<!-- Botão e Lista de Efetivo -->
-		<section class="list-toggle">
-			<button id="showListBtn">Clique aqui para visualizar a Previsão de Efetivo pelo DDQOD</button>
-		</section>
-		<section class="military-list" id="militaryList">
-			<ul>
-				<li><strong>AFAS:</strong> 3 SubTen/Sgt, 1 Cb/Sd <strong>Total: 4</strong></li>
-				<li><strong>ALMG:</strong> 1 Ten-Cel, 1 SubTen/Sgt <strong>Total: 2</strong></li>
-				<li><strong>Assessoria Fundacional:</strong> 1 Ten-Cel, 1 Ten, 2 SubTen/Sgt, 3 Cb/Sd <strong>Total: 7</strong></li>
-				<li><strong>CEDEC:</strong> 1 Ten-Cel, 1 Maj, 2 Ten, 5 SubTen/Sgt, 1 Cb/Sd <strong>Total: 10</strong></li>
-				<li><strong>Colégio Tiradentes RMBH:</strong> 16 SubTen/Sgt, 1 Especialista <strong>Total: 17</strong></li>
-				<li><strong>Coordenação:</strong> 1 Maj, 1 SubTen/Sgt <strong>Total: 2</strong></li>
-				<li><strong>Escola Cívico-Militar:</strong> 1 Cap, 9 Ten, 36 SubTen/Sgt, 1 Cb/Sd <strong>Total: 47</strong></li>
-				<li><strong>GMG:</strong> 1 Maj, 1 Cap, 1 Ten, 9 SubTen/Sgt, 2 Cb/Sd <strong>Total: 14</strong></li>
-				<li><strong>Intendência CAMG:</strong> 1 Ten, 5 SubTen/Sgt <strong>Total: 6</strong></li>
-				<li><strong>MPMG:</strong> 2 Cap, 3 Ten, 2 SubTen/Sgt <strong>Total: 7</strong></li>
-				<li><strong>OGE:</strong> 1 Maj, 1 Cap, 2 SubTen/Sgt, 1 Cb/Sd <strong>Total: 5</strong></li>
-				<li><strong>SEJUSP:</strong> 1 Ten-Cel, 1 Maj, 1 SubTen/Sgt <strong>Total: 3</strong></li>
-				<li><strong>Secretaria Parlamentar:</strong> 1 Ten, 2 Cb/Sd <strong>Total: 3</strong></li>
-				<li><strong>SEE:</strong> 1 Maj <strong>Total: 1</strong></li>
-				<li><strong>SES:</strong> 1 Maj, 1 Ten <strong>Total: 2</strong></li>
-				<li><strong>SENASP/MJ:</strong> 2 SubTen/Sgt <strong>Total: 2</strong></li>
-				<li><strong>TJMG:</strong> 1 Maj, 1 Ten, 5 SubTen/Sgt, 1 Cb/Sd <strong>Total: 8</strong></li>
-				<li><strong>TJMMG:</strong> 1 Cel, 1 Ten, 7 SubTen/Sgt, 2 Cb/Sd <strong>Total: 11</strong></li>
-			</ul>
-		</section>
+		</div>
+	</div>
+	<!-- CONTEÚDO PRINCIPAL -->
+	<main id="mainContent" class="hidden">
+		<!-- Cabeçalho com Banner -->
+		<header class="banner" role="banner">
+			<div class="banner-text">Distribuição de Efetivo DAI/2</div>
+		</header>
+		<!-- Container Principal -->
+		<main class="container">
+			<h1 class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</h1>
+			<section class="general-data" aria-label="Dados Gerais">
+				<p>Total Previsto: 156</p>
+				<p>Total Existente: 116</p>
+				<p>Total Claro: 40</p>
+			</section>
+			<!-- Área de Pesquisa (por nome) -->
+			<section class="search-container" aria-label="Pesquisar Militar">
+				<input type="text" id="searchInput" placeholder="Pesquisar militar por nome ou posto..." />
+				<button id="searchButton">Pesquisar Militar</button>
+			</section>
+			<div id="searchResult"></div>
+			<!-- Pesquisa de CLARO por posto/graduação -->
+			<section class="search-container" aria-label="Pesquisar Claro por Posto/Graduação">
+				<select id="rankSelect">
+					<option value="">Selecione o Posto/Graduação</option>
+					<option value="Sd/Cb">Sd/Cb</option>
+					<option value="Sgt/SubTen">Sgt/SubTen</option>
+					<option value="Ten">Ten</option>
+					<option value="Cap">Cap</option>
+					<option value="Maj">Maj</option>
+					<option value="Ten-Cel">Ten-Cel</option>
+				</select>
+				<button id="rankButton">Pesquisar Claro</button>
+			</section>
+			<div id="claroResult"></div>
+			<!-- Blocos dos Órgãos Externos -->
+			<section class="row" aria-label="Blocos dos Órgãos Externos">
+				<div class="block" data-orgao="AFAS">
+					<h3>AFAS</h3>
+					<canvas id="chart-afas"></canvas>
+					<div class="numbers">Existente: 1</div>
+				</div>
+				<div class="block" data-orgao="ALMG">
+					<h3>ALMG</h3>
+					<canvas id="chart-almg"></canvas>
+					<div class="numbers">Existente: 2</div>
+				</div>
+				<div class="block" data-orgao="CEDEC">
+					<h3>CEDEC</h3>
+					<canvas id="chart-cedec"></canvas>
+					<div class="numbers">Existente: 7</div>
+				</div>
+			</section>
+			<section class="row">
+				<div class="block" data-orgao="COORDENAÇÃO DAI/2">
+					<h3>COORDENAÇÃO DAI/2</h3>
+					<canvas id="chart-coordenacao-dai2"></canvas>
+					<div class="numbers">Existente: 1</div>
+				</div>
+				<div class="block" data-orgao="CTPM">
+					<h3>Colégio Tiradentes RMBH</h3>
+					<canvas id="chart-ctpm"></canvas>
+					<div class="numbers">Existente: 14</div>
+				</div>
+				<div class="block" data-orgao="ECIM">
+					<h3>Escola Cívico-Militar</h3>
+					<canvas id="chart-ecim"></canvas>
+					<div class="numbers">Existente: 28</div>
+				</div>
+			</section>
+			<section class="row">
+				<div class="block" data-orgao="Fundação SALVAR">
+					<h3>Assessoria Fundacional</h3>
+					<canvas id="chart-salvar"></canvas>
+					<div class="numbers">Existente: 6</div>
+				</div>
+				<div class="block" data-orgao="GMG">
+					<h3>GMG</h3>
+					<canvas id="chart-gmg"></canvas>
+					<div class="numbers">Existente: 10</div>
+				</div>
+				<div class="block" data-orgao="Intendência">
+					<h3>Intendência CAMG</h3>
+					<canvas id="chart-intendencia"></canvas>
+					<div class="numbers">Existente: 6</div>
+				</div>
+			</section>
+			<section class="row">
+				<div class="block" data-orgao="MPMG">
+					<h3>MPMG</h3>
+					<canvas id="chart-mpmg"></canvas>
+					<div class="numbers">Existente: 7</div>
+				</div>
+				<div class="block" data-orgao="OGE">
+					<h3>OGE</h3>
+					<canvas id="chart-oge"></canvas>
+					<div class="numbers">Existente: 5</div>
+				</div>
+				<div class="block" data-orgao="Secretaria Parlamentar">
+					<h3>Secretaria Parlamentar</h3>
+					<canvas id="chart-secretaria-parlamentar"></canvas>
+					<div class="numbers">Existente: 3</div>
+				</div>
+			</section>
+			<section class="row">
+				<div class="block" data-orgao="SEE">
+					<h3>SEE</h3>
+					<canvas id="chart-see"></canvas>
+					<div class="numbers">Existente: 1</div>
+				</div>
+				<div class="block" data-orgao="SEJUSP">
+					<h3>SEJUSP</h3>
+					<canvas id="chart-sejusp"></canvas>
+					<div class="numbers">Existente: 3</div>
+				</div>
+				<div class="block" data-orgao="SENASP">
+					<h3>SENASP/MJ</h3>
+					<canvas id="chart-senasp"></canvas>
+					<div class="numbers">Existente: 2</div>
+				</div>
+			</section>
+			<section class="row">
+				<div class="block" data-orgao="SES">
+					<h3>SES</h3>
+					<canvas id="chart-ses"></canvas>
+					<div class="numbers">Existente: 2</div>
+				</div>
+				<div class="block" data-orgao="TJMG">
+					<h3>TJMG</h3>
+					<canvas id="chart-tjmg"></canvas>
+					<div class="numbers">Existente: 7</div>
+				</div>
+				<div class="block" data-orgao="TJMMG">
+					<h3>TJMMG</h3>
+					<canvas id="chart-tjmmg"></canvas>
+					<div class="numbers">Existente: 11</div>
+				</div>
+			</section>
+			<!-- Botão e Lista de Efetivo -->
+			<section class="list-toggle">
+				<button id="showListBtn">Clique aqui para visualizar a Previsão de Efetivo pelo DDQOD</button>
+			</section>
+			<section class="military-list" id="militaryList">
+				<ul>
+					<li><strong>AFAS:</strong> 3 SubTen/Sgt, 1 Cb/Sd <strong>Total: 4</strong></li>
+					<li><strong>ALMG:</strong> 1 Ten-Cel, 1 SubTen/Sgt <strong>Total: 2</strong></li>
+					<li><strong>Assessoria Fundacional:</strong> 1 Ten-Cel, 1 Ten, 2 SubTen/Sgt, 3 Cb/Sd <strong>Total: 7</strong></li>
+					<li><strong>CEDEC:</strong> 1 Ten-Cel, 1 Maj, 2 Ten, 5 SubTen/Sgt, 1 Cb/Sd <strong>Total: 10</strong></li>
+					<li><strong>Colégio Tiradentes RMBH:</strong> 16 SubTen/Sgt, 1 Especialista <strong>Total: 17</strong></li>
+					<li><strong>Coordenação:</strong> 1 Maj, 1 SubTen/Sgt <strong>Total: 2</strong></li>
+					<li><strong>Escola Cívico-Militar:</strong> 1 Cap, 9 Ten, 36 SubTen/Sgt, 1 Cb/Sd <strong>Total: 47</strong></li>
+					<li><strong>GMG:</strong> 1 Maj, 1 Cap, 1 Ten, 9 SubTen/Sgt, 2 Cb/Sd <strong>Total: 14</strong></li>
+					<li><strong>Intendência CAMG:</strong> 1 Ten, 5 SubTen/Sgt <strong>Total: 6</strong></li>
+					<li><strong>MPMG:</strong> 2 Cap, 3 Ten, 2 SubTen/Sgt <strong>Total: 7</strong></li>
+					<li><strong>OGE:</strong> 1 Maj, 1 Cap, 2 SubTen/Sgt, 1 Cb/Sd <strong>Total: 5</strong></li>
+					<li><strong>SEJUSP:</strong> 1 Ten-Cel, 1 Maj, 1 SubTen/Sgt <strong>Total: 3</strong></li>
+					<li><strong>Secretaria Parlamentar:</strong> 1 Ten, 2 Cb/Sd <strong>Total: 3</strong></li>
+					<li><strong>SEE:</strong> 1 Maj <strong>Total: 1</strong></li>
+					<li><strong>SES:</strong> 1 Maj, 1 Ten <strong>Total: 2</strong></li>
+					<li><strong>SENASP/MJ:</strong> 2 SubTen/Sgt <strong>Total: 2</strong></li>
+					<li><strong>TJMG:</strong> 1 Maj, 1 Ten, 5 SubTen/Sgt, 1 Cb/Sd <strong>Total: 8</strong></li>
+					<li><strong>TJMMG:</strong> 1 Cel, 1 Ten, 7 SubTen/Sgt, 2 Cb/Sd <strong>Total: 11</strong></li>
+				</ul>
+			</section>
+		</main>
 	</main>
-	<!-- Modal de Militares -->
+	<!-- MODAL DE MILITARES -->
 	<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
 		<div class="modal-content">
 			<span class="close" id="modalClose">&times;</span>
@@ -609,32 +656,68 @@
 			<div id="militares-list"></div>
 		</div>
 	</div>
-	<!-- Rodapé -->
+	<!-- RODAPÉ -->
 	<footer>
 		<p>Corpo de Bombeiros Militar de Minas Gerais - Diretoria de Assuntos Institucionais - Órgãos Externos</p>
 		<p>Compromisso e Excelência no serviço público.</p>
 		<p>&copy; 2025 Todos os Direitos Reservados</p>
 	</footer>
-	<!-- JavaScript (ES6+ com transições suaves) -->
+	<!-- JavaScript -->
 	<script>
+		/* ---------- CONTROLE DA SPLASH E DO ONBOARDING ---------- */
 		document.addEventListener('DOMContentLoaded', () => {
-		  // Oculta o splash após 2 segundos
+		  // Exibe a splash por 2 segundos e depois inicia o onboarding
 		  setTimeout(() => {
 		    document.getElementById('splash').classList.add('hidden');
+		    document.getElementById('onboarding').classList.remove('hidden');
+		    currentOnboardingStep = 1;
+		    showOnboardingStep(currentOnboardingStep);
 		  }, 2000);
-		  
-		  // Inicia a lógica da página
-		  initPageLogic();
 		});
 		
+		let currentOnboardingStep = 1;
+		const totalOnboardingSteps = 4;
+		
+		function showOnboardingStep(step) {
+		  document.querySelectorAll('.onboarding-step').forEach(stepEl => {
+		    stepEl.classList.add('hidden');
+		  });
+		  const currentStepEl = document.querySelector(`.onboarding-step[data-step="${step}"]`);
+		  if (currentStepEl) {
+		    currentStepEl.classList.remove('hidden');
+		  }
+		}
+		
+		function finishOnboarding() {
+		  document.getElementById('onboarding').classList.add('hidden');
+		  document.getElementById('mainContent').classList.remove('hidden');
+		  initPageLogic();
+		}
+		
+		// Delegação de eventos para os botões do onboarding
+		document.addEventListener('click', (e) => {
+		  if(e.target.classList.contains('btn-continue')){
+		    currentOnboardingStep++;
+		    if(currentOnboardingStep <= totalOnboardingSteps){
+		      showOnboardingStep(currentOnboardingStep);
+		    } else {
+		      finishOnboarding();
+		    }
+		  }
+		  if(e.target.classList.contains('btn-skip')){
+		    finishOnboarding();
+		  }
+		});
+		
+		/* ---------- LÓGICA DA PÁGINA (mantida conforme o original) ---------- */
 		const initPageLogic = () => {
 		  /*******************************************************
 		   * 1) ESTRUTURA DE DADOS PARA PREVISTO/EXISTENTE POR POSTO
 		   *******************************************************/
 		  const distribuicao = {
 		    "AFAS": {
-		      "Sd/Cb":    { previsto: 1, existente: 1 },
-		      "Sgt/SubTen": { previsto: 3, existente: 0 },
+		      "Sd/Cb":    { previsto: 1, existente: 0 },
+		      "Sgt/SubTen": { previsto: 3, existente: 1 },
 		      "Ten":      { previsto: 0, existente: 0 },
 		      "Cap":      { previsto: 0, existente: 0 },
 		      "Maj":      { previsto: 0, existente: 0 },
@@ -649,15 +732,15 @@
 		      "Ten-Cel":  { previsto: 1, existente: 1 }
 		    },
 		    "CEDEC": {
-		      "Sd/Cb":    { previsto: 1, existente: 1 },
+		      "Sd/Cb":    { previsto: 1, existente: 0 },
 		      "Sgt/SubTen": { previsto: 5, existente: 3 },
 		      "Ten":      { previsto: 2, existente: 2 },
 		      "Cap":      { previsto: 0, existente: 0 },
 		      "Maj":      { previsto: 1, existente: 1 },
-		      "Ten-Cel":  { previsto: 1, existente: 0 }
+		      "Ten-Cel":  { previsto: 1, existente: 1 }
 		    },
 		    "COORDENAÇÃO DAI/2": {
-		      "Sd/Cb":    { previsto: 1, existente: 1 },
+		      "Sd/Cb":    { previsto: 0, existente: 0 },
 		      "Sgt/SubTen": { previsto: 1, existente: 0 },
 		      "Ten":      { previsto: 0, existente: 0 },
 		      "Cap":      { previsto: 0, existente: 0 },
@@ -665,8 +748,8 @@
 		      "Ten-Cel":  { previsto: 0, existente: 0 }
 		    },
 		    "CTPM": {
-		      "Sd/Cb":    { previsto: 1, existente: 0 },
-		      "Sgt/SubTen": { previsto: 16, existente: 14 },
+		      "Sd/Cb":    { previsto: 0, existente: 0 },
+		      "Sgt/SubTen": { previsto: 17, existente: 14 },
 		      "Ten":      { previsto: 0, existente: 0 },
 		      "Cap":      { previsto: 0, existente: 0 },
 		      "Maj":      { previsto: 0, existente: 0 },
@@ -674,30 +757,30 @@
 		    },
 		    "ECIM": {
 		      "Sd/Cb":    { previsto: 1, existente: 1 },
-		      "Sgt/SubTen": { previsto: 36, existente: 25 },
-		      "Ten":      { previsto: 9, existente: 3 },
+		      "Sgt/SubTen": { previsto: 36, existente: 18 },
+		      "Ten":      { previsto: 9, existente: 9 },
 		      "Cap":      { previsto: 1, existente: 1 },
 		      "Maj":      { previsto: 0, existente: 0 },
 		      "Ten-Cel":  { previsto: 0, existente: 0 }
 		    },
 		    "Fundação SALVAR": {
 		      "Sd/Cb":    { previsto: 3, existente: 2 },
-		      "Sgt/SubTen": { previsto: 2, existente: 1 },
+		      "Sgt/SubTen": { previsto: 2, existente: 2 },
 		      "Ten":      { previsto: 1, existente: 1 },
 		      "Cap":      { previsto: 0, existente: 0 },
 		      "Maj":      { previsto: 0, existente: 0 },
 		      "Ten-Cel":  { previsto: 1, existente: 1 }
 		    },
 		    "GMG": {
-		      "Sd/Cb":    { previsto: 2, existente: 2 },
-		      "Sgt/SubTen": { previsto: 9, existente: 7 },
+		      "Sd/Cb":    { previsto: 2, existente: 0 },
+		      "Sgt/SubTen": { previsto: 9, existente: 8 },
 		      "Ten":      { previsto: 1, existente: 1 },
 		      "Cap":      { previsto: 1, existente: 1 },
-		      "Maj":      { previsto: 1, existente: 1 },
+		      "Maj":      { previsto: 1, existente: 0 },
 		      "Ten-Cel":  { previsto: 0, existente: 0 }
 		    },
 		    "Intendência": {
-		      "Sd/Cb":    { previsto: 1, existente: 1 },
+		      "Sd/Cb":    { previsto: 0, existente: 1 },
 		      "Sgt/SubTen": { previsto: 5, existente: 5 },
 		      "Ten":      { previsto: 1, existente: 0 },
 		      "Cap":      { previsto: 0, existente: 0 },
@@ -707,7 +790,7 @@
 		    "MPMG": {
 		      "Sd/Cb":    { previsto: 0, existente: 0 },
 		      "Sgt/SubTen": { previsto: 2, existente: 2 },
-		      "Ten":      { previsto: 3, existente: 2 },
+		      "Ten":      { previsto: 3, existente: 3 },
 		      "Cap":      { previsto: 2, existente: 2 },
 		      "Maj":      { previsto: 0, existente: 0 },
 		      "Ten-Cel":  { previsto: 0, existente: 0 }
@@ -729,8 +812,8 @@
 		      "Ten-Cel":  { previsto: 0, existente: 0 }
 		    },
 		    "SEJUSP": {
-		      "Sd/Cb":    { previsto: 1, existente: 1 },
-		      "Sgt/SubTen": { previsto: 1, existente: 1 },
+		      "Sd/Cb":    { previsto: 0, existente: 1 },
+		      "Sgt/SubTen": { previsto: 1, existente: 0 },
 		      "Ten":      { previsto: 0, existente: 0 },
 		      "Cap":      { previsto: 0, existente: 0 },
 		      "Maj":      { previsto: 1, existente: 1 },
@@ -762,24 +845,24 @@
 		    },
 		    "TJMG": {
 		      "Sd/Cb":    { previsto: 1, existente: 1 },
-		      "Sgt/SubTen": { previsto: 5, existente: 5 },
-		      "Ten":      { previsto: 1, existente: 0 },
+		      "Sgt/SubTen": { previsto: 5, existente: 4 },
+		      "Ten":      { previsto: 1, existente: 1 },
 		      "Cap":      { previsto: 0, existente: 0 },
 		      "Maj":      { previsto: 1, existente: 1 },
 		      "Ten-Cel":  { previsto: 0, existente: 0 }
 		    },
 		    "TJMMG": {
-		      "Sd/Cb":    { previsto: 2, existente: 2 },
-		      "Sgt/SubTen": { previsto: 7, existente: 7 },
+		      "Sd/Cb":    { previsto: 2, existente: 3 },
+		      "Sgt/SubTen": { previsto: 7, existente: 6 },
 		      "Ten":      { previsto: 1, existente: 1 },
 		      "Cap":      { previsto: 0, existente: 0 },
 		      "Maj":      { previsto: 0, existente: 0 },
-		      "Ten-Cel":  { previsto: 1, existente: 1 }
+		      "Ten-Cel":  { previsto: 0, existente: 0 }
 		    }
 		  };
-		
+		  
 		  /****************************************
-		   * 2) DADOS DE MILITARES (já existente)
+		   * 2) DADOS DE MILITARES (conforme o original)
 		   ****************************************/
 		  const data = {
 		    'AFAS': [
@@ -865,6 +948,7 @@
 		      '2º Sgt João Flávio Alves - (35) 99220-9377',
 		      '2º Sgt Olivaldo Reis Bispo - (31) 98827-9057',
 		      '2º Sgt André Fillipe Rainon Ferreira - (31) 99070-7005',
+		      '3º Sgt Almir Antônio Fiffe Neto - (31) 99330-5001',
 		      '3º Sgt Artur Luis Vinhal Nunes Souza - (31) 99922-8931'
 		    ],
 		    'Intendência': [
@@ -928,23 +1012,24 @@
 		      '1º Sgt Rinaldo Cezar Fontes Cruz - (31) 99469-2218',
 		      '2º Sgt Thiago Bruno de Albuquerque Morais - (31) 99137-8635',
 		      '2º Sgt Wagner Magno Alves dos Santos - (31) 98978-4116',
-		      '3º Sgt Lucélia Moreira Santos - (31) 99984-0225',
 		      '2º Sgt Gustavo Duarte Oliveira - (31) 97243-7139',
 		      'Cb Alexandre Polidoro - (31) 98890-7567',
+		      'Cb Giovane Antônio Fortunato Barros - (31) 98879-1065',
 		      'Cb Giovanni Tadeu B. dos Santos - (31) 99318-7722'
 		    ]
 		  };
-		
-		  // Modal
+		  
+		  /*******************************************************
+		   * 3) CONFIGURAÇÃO DO MODAL
+		   *******************************************************/
 		  const modal = document.getElementById('modal');
 		  const militaresList = document.getElementById('militares-list');
 		  const modalClose = document.getElementById('modalClose');
-		
+		  
 		  const showModal = orgao => {
 		    const militares = data[orgao];
 		    const modalTitle = document.getElementById('modalTitle');
 		    modalTitle.textContent = `Relação de Militares - ${orgao}`;
-		
 		    militaresList.innerHTML = (militares && militares.length)
 		      ? militares.map(militar => {
 		          const [nome, telefone] = militar.split(' - ');
@@ -955,20 +1040,21 @@
 		          `;
 		        }).join('')
 		      : '<p style="color: red;">Nenhum militar registrado neste órgão.</p>';
-		
 		    modal.style.display = 'flex';
 		  };
-		
+		  
 		  modalClose.addEventListener('click', () => modal.style.display = 'none');
 		  window.addEventListener('click', event => {
 		    if (event.target === modal) modal.style.display = 'none';
 		  });
-		
-		  // Pesquisa de militares (por nome)
+		  
+		  /*******************************************************
+		   * 4) PESQUISA DE MILITARES (POR NOME/POSTO)
+		   *******************************************************/
 		  const searchInput = document.getElementById('searchInput');
 		  const searchButton = document.getElementById('searchButton');
 		  const searchResult = document.getElementById('searchResult');
-		
+		  
 		  const searchMilitary = () => {
 		    const query = searchInput.value.trim().toLowerCase();
 		    let found = false;
@@ -992,14 +1078,14 @@
 		    }
 		  };
 		  searchButton.addEventListener('click', searchMilitary);
-		
-		  /**********************************************
-		   * 3) NOVA BUSCA DE "CLARO" POR POSTO/GRADUAÇÃO
-		   **********************************************/
+		  
+		  /*******************************************************
+		   * 5) PESQUISA DE "CLARO" POR POSTO/GRADUAÇÃO
+		   *******************************************************/
 		  const rankSelect = document.getElementById('rankSelect');
 		  const rankButton = document.getElementById('rankButton');
 		  const claroResult = document.getElementById('claroResult');
-		
+		  
 		  const searchClaro = () => {
 		    const selectedRank = rankSelect.value;
 		    if (!selectedRank) {
@@ -1031,8 +1117,10 @@
 		    }
 		  };
 		  rankButton.addEventListener('click', searchClaro);
-		
-		  // Criação dos gráficos Doughnut
+		  
+		  /*******************************************************
+		   * 6) CRIAÇÃO DOS GRÁFICOS DOUGHNUT (Chart.js)
+		   *******************************************************/
 		  const createChart = (canvasId, previsto, existente, claro) => {
 		    const ctx = document.getElementById(canvasId).getContext('2d');
 		    new Chart(ctx, {
@@ -1052,13 +1140,13 @@
 		      }
 		    });
 		  };
-		
-		  // Inicialização dos gráficos
+		  
+		  // Inicialização dos gráficos conforme os órgãos
 		  createChart('chart-afas', 4, 1, 3);
 		  createChart('chart-cedec', 10, 7, 3);
 		  createChart('chart-almg', 2, 2, 0);
 		  createChart('chart-ctpm', 17, 14, 3);
-		  createChart('chart-gmg', 14, 9, 5);
+		  createChart('chart-gmg', 14, 10, 4);
 		  createChart('chart-intendencia', 6, 6, 0);
 		  createChart('chart-mpmg', 7, 7, 0);
 		  createChart('chart-senasp', 2, 2, 0);
@@ -1070,15 +1158,17 @@
 		  createChart('chart-ses', 2, 2, 0);
 		  createChart('chart-tjmg', 8, 7, 1);
 		  createChart('chart-tjmmg', 11, 11, 0);
-		  createChart('chart-ecim', 47, 28, 19);
+		  createChart('chart-ecim', 47, 29, 19);
 		  createChart('chart-coordenacao-dai2', 2, 1, 1);
-		
-		  // Eventos de clique para cada bloco
+		  
+		  // ---------- Eventos de clique nos blocos (para exibir o modal) ----------
 		  document.querySelectorAll('.block').forEach(block => {
-		    block.addEventListener('click', () => showModal(block.getAttribute('data-orgao')));
+		    block.addEventListener('click', () => {
+		      showModal(block.getAttribute('data-orgao'));
+		    });
 		  });
-		
-		  // Toggle da lista de efetivo
+		  
+		  // ---------- Toggle da Lista de Efetivo ----------
 		  const showListBtn = document.getElementById('showListBtn');
 		  const militaryList = document.getElementById('militaryList');
 		  showListBtn.addEventListener('click', () => {
