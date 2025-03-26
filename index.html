@@ -24,7 +24,7 @@
 		:root {
 		  /* Ajuste da paleta para alinhar as cores das três estruturas */
 		  --primary-bg: #f8f9fa;         /* Fundo geral do corpo */
-		  --onboarding-bg: #0b3d91;     /* Fundo do Onboarding (unificado com splash) */
+		  --onboarding-bg: #4caf50;      /* Fundo do Onboarding (unificado com splash) */
 		  --secondary-bg: #ffffff;
 		  --light-bg: #f1f3f5;
 		  --primary-color: #333;
@@ -71,8 +71,10 @@
 		  left: 0;
 		  width: 100%;
 		  height: 100%;
-		  /* Fundo unificado com cor principal do Onboarding */
-		  background: var(--onboarding-bg) url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg') no-repeat center center/cover;
+		  /* Fundo com cor principal do Onboarding */
+		  background: var(--onboarding-bg)
+		              url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg')
+		              no-repeat center center/cover;
 		  display: flex;
 		  flex-direction: column;
 		  align-items: center;
@@ -104,7 +106,7 @@
 		  left: 0;
 		  width: 100%;
 		  height: 100%;
-		  /* Fundo unificado com a mesma cor do splash */
+		  /* Mesmo fundo verde do splash */
 		  background: var(--onboarding-bg);
 		  color: #fff;
 		  display: flex;
@@ -150,13 +152,16 @@
 		  cursor: pointer;
 		  transition: background-color var(--transition-speed);
 		}
+		/* Botão “Continuar” - contraste com fundo verde */
 		.btn-continue {
-		  background-color: var(--accent-green);
-		  color: #fff;
+		  background-color: #fff;
+		  color: var(--onboarding-bg);
+		  border: 2px solid var(--onboarding-bg);
 		}
 		.btn-continue:hover {
-		  background-color: #3ea44c;
+		  background-color: var(--light-bg);
 		}
+		/* Botão “Pular” - mantém estilo translúcido */
 		.btn-skip {
 		  background: transparent;
 		  border: 2px solid #fff;
@@ -488,16 +493,16 @@
 		<!-- Etapa 1: Boas-vindas -->
 		<div class="onboarding-step" data-step="1">
 			<h2>Bem-vindo ao Portal DAI/2</h2>
-			<p>Aqui você pode visualizar a distribuição do efetivo dos órgãos externos e acessar informações detalhadas de cada unidade.</p>
+			<p> Aqui você tem uma visão geral da distribuição do efetivo dos órgãos externos, com acesso rápido aos detalhes de cada unidade. </p>
 			<div class="onboarding-controls">
 				<button class="btn-continue">Continuar</button>
 				<button class="btn-skip">Pular</button>
 			</div>
 		</div>
-		<!-- Etapa 2: Pesquisa -->
+		<!-- Etapa 2: Pesquisa e Verificação de “Claro” -->
 		<div class="onboarding-step hidden" data-step="2">
-			<h2>Pesquisa de Militares</h2>
-			<p>Utilize os campos de pesquisa para encontrar militares por nome ou por posto/graduação. Essa função permite identificar rapidamente os dados desejados.</p>
+			<h2>Pesquisa e “Claro”</h2>
+			<p> Encontre militares por nome ou posto/graduação e verifique rapidamente o “claro” (vagas disponíveis) em cada posto. </p>
 			<div class="onboarding-controls">
 				<button class="btn-continue">Continuar</button>
 				<button class="btn-skip">Pular</button>
@@ -506,16 +511,16 @@
 		<!-- Etapa 3: Gráficos Interativos -->
 		<div class="onboarding-step hidden" data-step="3">
 			<h2>Gráficos Interativos</h2>
-			<p>Os gráficos mostram a relação entre os valores previsto, existente e o “claro” de cada órgão.</p>
+			<p> Veja de forma visual os dados de previsto, existente e “claro” de cada órgão. Clique no gráfico para conferir a lista nominal dos militares. </p>
 			<div class="onboarding-controls">
 				<button class="btn-continue">Continuar</button>
 				<button class="btn-skip">Pular</button>
 			</div>
 		</div>
-		<!-- Etapa 4: Lista de Efetivo -->
+		<!-- Etapa 4: Previsão de Efetivo -->
 		<div class="onboarding-step hidden" data-step="4">
 			<h2>Previsão de Efetivo</h2>
-			<p>Visualize a previsão de efetivo pelo DDQOD clicando no botão correspondente. Todas as funções foram pensadas para facilitar sua consulta.</p>
+			<p> Confira a previsão de efetivo pelo DDQOD ao clicar no botão. Explore todas as funcionalidades para facilitar sua consulta. </p>
 			<div class="onboarding-controls">
 				<button class="btn-continue">Finalizar</button>
 				<button class="btn-skip">Pular</button>
