@@ -22,7 +22,9 @@
 	<!-- CSS Consolidado -->
 	<style>
 		:root {
-		  --primary-bg: #f8f9fa;
+		  /* Ajuste da paleta para alinhar as cores das três estruturas */
+		  --primary-bg: #f8f9fa;         /* Fundo geral do corpo */
+		  --onboarding-bg: #0b3d91;     /* Fundo do Onboarding (unificado com splash) */
 		  --secondary-bg: #ffffff;
 		  --light-bg: #f1f3f5;
 		  --primary-color: #333;
@@ -69,7 +71,8 @@
 		  left: 0;
 		  width: 100%;
 		  height: 100%;
-		  background: #0b3d91 url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg') no-repeat center center/cover;
+		  /* Fundo unificado com cor principal do Onboarding */
+		  background: var(--onboarding-bg) url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg') no-repeat center center/cover;
 		  display: flex;
 		  flex-direction: column;
 		  align-items: center;
@@ -85,9 +88,13 @@
 		#splash h1 {
 		  font-size: 2rem;
 		  margin-bottom: 0.5rem;
+		  text-align: center;
+		  padding: 0 10px;
 		}
 		#splash p {
 		  font-size: 1rem;
+		  text-align: center;
+		  padding: 0 10px;
 		}
 		
 		/* ---------- ONBOARDING ---------- */
@@ -97,7 +104,8 @@
 		  left: 0;
 		  width: 100%;
 		  height: 100%;
-		  background: var(--accent-green);
+		  /* Fundo unificado com a mesma cor do splash */
+		  background: var(--onboarding-bg);
 		  color: #fff;
 		  display: flex;
 		  justify-content: center;
@@ -143,11 +151,11 @@
 		  transition: background-color var(--transition-speed);
 		}
 		.btn-continue {
-		  background-color: var(--secondary-bg);
-		  color: var(--accent-green);
+		  background-color: var(--accent-green);
+		  color: #fff;
 		}
 		.btn-continue:hover {
-		  background-color: #e0e0e0;
+		  background-color: #3ea44c;
 		}
 		.btn-skip {
 		  background: transparent;
@@ -221,6 +229,33 @@
 		  margin: 10px 0;
 		  font-weight: 600;
 		  color: var(--secondary-color);
+		}
+		
+		/* ---------- LEGENDA DE CORES ---------- */
+		.color-legend {
+		  margin: 20px 0;
+		}
+		.color-legend h2 {
+		  text-align: center;
+		  margin-bottom: 10px;
+		}
+		.legend-grid {
+		  display: grid;
+		  grid-template-columns: repeat(3, 1fr);
+		  gap: 20px;
+		  justify-items: center;
+		  align-items: center;
+		}
+		.legend-item {
+		  display: flex;
+		  align-items: center;
+		  gap: 8px;
+		}
+		.legend-color {
+		  width: 20px;
+		  height: 20px;
+		  display: inline-block;
+		  border-radius: 4px;
 		}
 		
 		/* ---------- ÁREA DE PESQUISA ---------- */
@@ -301,10 +336,11 @@
 		  max-height: 150px;
 		}
 		.block .numbers {
-		  font-size: 18px;
+		  font-size: 16px;
 		  color: #6c757d;
 		  margin-top: 10px;
 		  font-weight: 500;
+		  line-height: 1.4;
 		}
 		
 		/* ---------- LISTA DE EFETIVO E BOTÃO ---------- */
@@ -421,6 +457,9 @@
 		    padding: 10px;
 		    font-size: 14px;
 		  }
+		  .legend-grid {
+		    grid-template-columns: 1fr;
+		  }
 		}
 		@media (min-width: 577px) and (max-width: 768px) {
 		  .block {
@@ -497,6 +536,24 @@
 				<p>Total Existente: 116</p>
 				<p>Total Claro: 40</p>
 			</section>
+			<!-- Legenda de Cores -->
+			<section class="color-legend" aria-label="Legenda de Cores">
+				<h2>Legenda de Cores</h2>
+				<div class="legend-grid">
+					<div class="legend-item">
+						<span class="legend-color" style="background-color: var(--accent-yellow);"></span>
+						<span>Efetivo Previsto</span>
+					</div>
+					<div class="legend-item">
+						<span class="legend-color" style="background-color: var(--accent-green);"></span>
+						<span>Efetivo Existente</span>
+					</div>
+					<div class="legend-item">
+						<span class="legend-color" style="background-color: var(--accent-red);"></span>
+						<span>Claro</span>
+					</div>
+				</div>
+			</section>
 			<!-- Área de Pesquisa (por nome) -->
 			<section class="search-container" aria-label="Pesquisar Militar">
 				<input type="text" id="searchInput" placeholder="Pesquisar militar por nome ou posto..." />
@@ -517,107 +574,107 @@
 				<button id="rankButton">Pesquisar Claro</button>
 			</section>
 			<div id="claroResult"></div>
-			<!-- Blocos dos Órgãos Externos -->
+			<!-- Blocos dos Órgãos Externos (com dados Previsto, Existente e Claro) -->
 			<section class="row" aria-label="Blocos dos Órgãos Externos">
 				<div class="block" data-orgao="AFAS">
 					<h3>AFAS</h3>
 					<canvas id="chart-afas"></canvas>
-					<div class="numbers">Existente: 1</div>
+					<div class="numbers"> Previsto: 4<br> Existente: 1<br> Claro: 3 </div>
 				</div>
 				<div class="block" data-orgao="ALMG">
 					<h3>ALMG</h3>
 					<canvas id="chart-almg"></canvas>
-					<div class="numbers">Existente: 2</div>
+					<div class="numbers"> Previsto: 2<br> Existente: 2<br> Claro: 0 </div>
 				</div>
 				<div class="block" data-orgao="CEDEC">
 					<h3>CEDEC</h3>
 					<canvas id="chart-cedec"></canvas>
-					<div class="numbers">Existente: 7</div>
+					<div class="numbers"> Previsto: 10<br> Existente: 7<br> Claro: 3 </div>
 				</div>
 			</section>
 			<section class="row">
 				<div class="block" data-orgao="COORDENAÇÃO DAI/2">
 					<h3>COORDENAÇÃO DAI/2</h3>
 					<canvas id="chart-coordenacao-dai2"></canvas>
-					<div class="numbers">Existente: 1</div>
+					<div class="numbers"> Previsto: 2<br> Existente: 1<br> Claro: 1 </div>
 				</div>
 				<div class="block" data-orgao="CTPM">
 					<h3>Colégio Tiradentes RMBH</h3>
 					<canvas id="chart-ctpm"></canvas>
-					<div class="numbers">Existente: 14</div>
+					<div class="numbers"> Previsto: 17<br> Existente: 14<br> Claro: 3 </div>
 				</div>
 				<div class="block" data-orgao="ECIM">
 					<h3>Escola Cívico-Militar</h3>
 					<canvas id="chart-ecim"></canvas>
-					<div class="numbers">Existente: 28</div>
+					<div class="numbers"> Previsto: 47<br> Existente: 28<br> Claro: 19 </div>
 				</div>
 			</section>
 			<section class="row">
 				<div class="block" data-orgao="Fundação SALVAR">
 					<h3>Assessoria Fundacional</h3>
 					<canvas id="chart-salvar"></canvas>
-					<div class="numbers">Existente: 6</div>
+					<div class="numbers"> Previsto: 7<br> Existente: 6<br> Claro: 1 </div>
 				</div>
 				<div class="block" data-orgao="GMG">
 					<h3>GMG</h3>
 					<canvas id="chart-gmg"></canvas>
-					<div class="numbers">Existente: 10</div>
+					<div class="numbers"> Previsto: 14<br> Existente: 10<br> Claro: 4 </div>
 				</div>
 				<div class="block" data-orgao="Intendência">
 					<h3>Intendência CAMG</h3>
 					<canvas id="chart-intendencia"></canvas>
-					<div class="numbers">Existente: 6</div>
+					<div class="numbers"> Previsto: 6<br> Existente: 6<br> Claro: 0 </div>
 				</div>
 			</section>
 			<section class="row">
 				<div class="block" data-orgao="MPMG">
 					<h3>MPMG</h3>
 					<canvas id="chart-mpmg"></canvas>
-					<div class="numbers">Existente: 7</div>
+					<div class="numbers"> Previsto: 7<br> Existente: 7<br> Claro: 0 </div>
 				</div>
 				<div class="block" data-orgao="OGE">
 					<h3>OGE</h3>
 					<canvas id="chart-oge"></canvas>
-					<div class="numbers">Existente: 5</div>
+					<div class="numbers"> Previsto: 5<br> Existente: 5<br> Claro: 0 </div>
 				</div>
 				<div class="block" data-orgao="Secretaria Parlamentar">
 					<h3>Secretaria Parlamentar</h3>
 					<canvas id="chart-secretaria-parlamentar"></canvas>
-					<div class="numbers">Existente: 3</div>
+					<div class="numbers"> Previsto: 3<br> Existente: 3<br> Claro: 0 </div>
 				</div>
 			</section>
 			<section class="row">
 				<div class="block" data-orgao="SEE">
 					<h3>SEE</h3>
 					<canvas id="chart-see"></canvas>
-					<div class="numbers">Existente: 1</div>
+					<div class="numbers"> Previsto: 1<br> Existente: 1<br> Claro: 0 </div>
 				</div>
 				<div class="block" data-orgao="SEJUSP">
 					<h3>SEJUSP</h3>
 					<canvas id="chart-sejusp"></canvas>
-					<div class="numbers">Existente: 3</div>
+					<div class="numbers"> Previsto: 3<br> Existente: 3<br> Claro: 0 </div>
 				</div>
 				<div class="block" data-orgao="SENASP">
 					<h3>SENASP/MJ</h3>
 					<canvas id="chart-senasp"></canvas>
-					<div class="numbers">Existente: 2</div>
+					<div class="numbers"> Previsto: 2<br> Existente: 2<br> Claro: 0 </div>
 				</div>
 			</section>
 			<section class="row">
 				<div class="block" data-orgao="SES">
 					<h3>SES</h3>
 					<canvas id="chart-ses"></canvas>
-					<div class="numbers">Existente: 2</div>
+					<div class="numbers"> Previsto: 2<br> Existente: 2<br> Claro: 0 </div>
 				</div>
 				<div class="block" data-orgao="TJMG">
 					<h3>TJMG</h3>
 					<canvas id="chart-tjmg"></canvas>
-					<div class="numbers">Existente: 7</div>
+					<div class="numbers"> Previsto: 8<br> Existente: 7<br> Claro: 1 </div>
 				</div>
 				<div class="block" data-orgao="TJMMG">
 					<h3>TJMMG</h3>
 					<canvas id="chart-tjmmg"></canvas>
-					<div class="numbers">Existente: 11</div>
+					<div class="numbers"> Previsto: 11<br> Existente: 11<br> Claro: 0 </div>
 				</div>
 			</section>
 			<!-- Botão e Lista de Efetivo -->
@@ -1158,7 +1215,7 @@
 		  createChart('chart-ses', 2, 2, 0);
 		  createChart('chart-tjmg', 8, 7, 1);
 		  createChart('chart-tjmmg', 11, 11, 0);
-		  createChart('chart-ecim', 47, 29, 19);
+		  createChart('chart-ecim', 47, 28, 19);
 		  createChart('chart-coordenacao-dai2', 2, 1, 1);
 		  
 		  // ---------- Eventos de clique nos blocos (para exibir o modal) ----------
