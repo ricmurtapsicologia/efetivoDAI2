@@ -1,1243 +1,1387 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Distribuição de Efetivo DAI/2</title>
-	<!-- Metadados para SEO e redes sociais -->
-	<meta property="og:title" content="Distribuição de Efetivo DAI/2" />
-	<meta property="og:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
-	<meta property="og:image" content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg" />
-	<meta property="og:url" content="https://ricmurtapsicologia.github.io/efetivoDAI2/" />
-	<meta property="og:type" content="website" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Distribuição de Efetivo DAI/2" />
-	<meta name="twitter:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
-	<meta name="twitter:image" content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg" />
-	<!-- Favicon -->
-	<link rel="icon" href="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg" />
-	<!-- Chart.js -->
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<!-- CSS Consolidado -->
-	<style>
-		:root {
-				  /* Ajuste da paleta para alinhar as cores das três estruturas */
-				  --primary-bg: #f8f9fa;         /* Fundo geral do corpo */
-				  --onboarding-bg: #4caf50;      /* Fundo do Onboarding (unificado com splash) */
-				  --secondary-bg: #ffffff;
-				  --light-bg: #f1f3f5;
-				  --primary-color: #333;
-				  --secondary-color: #212529;
-				  --accent-green: #4caf50;
-				  --accent-yellow: #ffeb3b;
-				  --accent-red: #f44336;
-				  --border-color: #e0e0e0;
-				  --shadow-color: rgba(0, 0, 0, 0.1);
-				  --shadow-hover: rgba(0, 0, 0, 0.15);
-				  --transition-speed: 0.3s;
-				}
-				
-				/* Reset e base */
-				*, *::before, *::after {
-				  margin: 0;
-				  padding: 0;
-				  box-sizing: border-box;
-				}
-				
-				html {
-				  scroll-behavior: smooth;
-				}
-				
-				body {
-				  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-				  background-color: var(--primary-bg);
-				  color: var(--primary-color);
-				  line-height: 1.6;
-				  overflow-x: hidden;
-				  /* Fade-in geral */
-				  opacity: 0;
-				  animation: fadeIn 0.6s forwards ease-in-out;
-				}
-				
-				@keyframes fadeIn {
-				  to { opacity: 1; }
-				}
-				
-				/* ---------- SPLASH SCREEN ---------- */
-				#splash {
-				  position: fixed;
-				  top: 0;
-				  left: 0;
-				  width: 100%;
-				  height: 100%;
-				  /* Fundo com cor principal do Onboarding */
-				  background: var(--onboarding-bg)
-				              url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg')
-				              no-repeat center center/cover;
-				  display: flex;
-				  flex-direction: column;
-				  align-items: center;
-				  justify-content: center;
-				  color: #fff;
-				  z-index: 9999;
-				  transition: opacity 1s ease;
-				}
-				#splash.hidden {
-				  opacity: 0;
-				  pointer-events: none;
-				}
-				#splash h1 {
-				  font-size: 2rem;
-				  margin-bottom: 0.5rem;
-				  text-align: center;
-				  padding: 0 10px;
-				}
-				#splash p {
-				  font-size: 1rem;
-				  text-align: center;
-				  padding: 0 10px;
-				}
-				
-				/* ---------- ONBOARDING ---------- */
-				#onboarding {
-				  position: fixed;
-				  top: 0;
-				  left: 0;
-				  width: 100%;
-				  height: 100%;
-				  /* Mesmo fundo verde do splash */
-				  background: var(--onboarding-bg);
-				  color: #fff;
-				  display: flex;
-				  justify-content: center;
-				  align-items: center;
-				  z-index: 9000;
-				  padding: 20px;
-				}
-				#onboarding.hidden {
-				  display: none;
-				}
-				.onboarding-step {
-				  max-width: 600px;
-				  text-align: center;
-				  animation: slideIn 0.5s ease-out;
-				}
-				.onboarding-step.hidden {
-				  display: none;
-				}
-				@keyframes slideIn {
-				  from { transform: translateY(20px); opacity: 0; }
-				  to { transform: translateY(0); opacity: 1; }
-				}
-				.onboarding-step h2 {
-				  font-size: 1.75rem;
-				  margin-bottom: 10px;
-				}
-				.onboarding-step p {
-				  font-size: 1rem;
-				  margin-bottom: 20px;
-				}
-				.onboarding-controls {
-				  display: flex;
-				  justify-content: center;
-				  gap: 20px;
-				  flex-wrap: wrap;
-				}
-				.onboarding-controls button {
-				  padding: 10px 20px;
-				  border: none;
-				  border-radius: 8px;
-				  font-size: 1rem;
-				  cursor: pointer;
-				  transition: background-color var(--transition-speed);
-				}
-				/* Botão “Continuar” - contraste com fundo verde */
-				.btn-continue {
-				  background-color: #fff;
-				  color: var(--onboarding-bg);
-				  border: 2px solid var(--onboarding-bg);
-				}
-				.btn-continue:hover {
-				  background-color: var(--light-bg);
-				}
-				/* Botão “Pular” - mantém estilo translúcido */
-				.btn-skip {
-				  background: transparent;
-				  border: 2px solid #fff;
-				  color: #fff;
-				}
-				.btn-skip:hover {
-				  background: rgba(255,255,255,0.2);
-				}
-				
-				/* ---------- CABEÇALHO E BANNER ---------- */
-				header.banner {
-				  width: 100%;
-				  height: 400px;
-				  position: relative;
-				  background: url('https://images.unsplash.com/photo-1511649475669-e288648b2339?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3')
-				              no-repeat center 93%;
-				  background-size: cover;
-				  transition: background-position 0.6s ease-in-out;
-				}
-				header.banner:hover {
-				  background-position: center 60%;
-				}
-				header.banner .banner-text {
-				  position: absolute;
-				  top: 50%;
-				  left: 50%;
-				  transform: translate(-50%, -50%);
-				  color: #fff;
-				  font-size: 2.5rem;
-				  font-weight: 600;
-				  text-align: center;
-				  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-				  width: 90%;
-				  max-width: 600px;
-				  line-height: 1.2;
-				}
-				
-				/* ---------- CONTEÚDO PRINCIPAL ---------- */
-				#mainContent.hidden {
-				  display: none;
-				}
-				main.container {
-				  max-width: 1200px;
-				  margin: 20px auto;
-				  padding: 20px;
-				  background-color: var(--secondary-bg);
-				  border-radius: 12px;
-				  box-shadow: 0 4px 20px var(--shadow-color);
-				}
-				.title {
-				  text-align: center;
-				  margin: 10px 0 20px;
-				  font-size: 32px;
-				  font-weight: bold;
-				  color: var(--secondary-color);
-				  border-bottom: 2px solid var(--border-color);
-				  padding-bottom: 10px;
-				}
-				.general-data {
-				  background-color: var(--light-bg);
-				  padding: 20px;
-				  border-radius: 12px;
-				  margin-bottom: 30px;
-				  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-				  text-align: center;
-				  font-size: 18px;
-				  color: #495057;
-				}
-				.general-data p {
-				  margin: 10px 0;
-				  font-weight: 600;
-				  color: var(--secondary-color);
-				}
-				
-				/* ---------- LEGENDA DE CORES ---------- */
-				.color-legend {
-				  margin: 20px 0;
-				}
-				.color-legend h2 {
-				  text-align: center;
-				  margin-bottom: 10px;
-				}
-				.legend-grid {
-				  display: grid;
-				  grid-template-columns: repeat(3, 1fr);
-				  gap: 20px;
-				  justify-items: center;
-				  align-items: center;
-				}
-				.legend-item {
-				  display: flex;
-				  align-items: center;
-				  gap: 8px;
-				}
-				.legend-color {
-				  width: 20px;
-				  height: 20px;
-				  display: inline-block;
-				  border-radius: 4px;
-				}
-				
-				/* ---------- ÁREA DE PESQUISA ---------- */
-				.search-container {
-				  text-align: center;
-				  margin-top: 10px;
-				  display: flex;
-				  justify-content: center;
-				  gap: 20px;
-				  align-items: center;
-				  flex-wrap: wrap;
-				}
-				.search-container input[type="text"],
-				.search-container select {
-				  width: 60%;
-				  padding: 10px;
-				  border-radius: 8px;
-				  border: 1px solid #ccc;
-				  margin-bottom: 10px;
-				}
-				.search-container button {
-				  padding: 10px 20px;
-				  border-radius: 8px;
-				  border: none;
-				  background-color: var(--accent-green);
-				  color: #fff;
-				  cursor: pointer;
-				  transition: background-color var(--transition-speed);
-				}
-				.search-container button:hover {
-				  background-color: #3ea44c;
-				}
-				#searchResult, #claroResult {
-				  margin-top: 20px;
-				  font-size: 18px;
-				  color: var(--primary-color);
-				  text-align: center;
-				}
-				
-				/* ---------- GRID DOS BLOCOS (USANDO FLEX) ---------- */
-				.row {
-				  display: flex;
-				  flex-wrap: wrap;
-				  justify-content: space-between;
-				  margin-bottom: 20px;
-				}
-				.block {
-				  background-color: var(--secondary-bg);
-				  width: 32%;
-				  padding: 20px;
-				  border-radius: 12px;
-				  position: relative;
-				  cursor: pointer;
-				  transition: transform var(--transition-speed), box-shadow var(--transition-speed), background-color var(--transition-speed);
-				  display: flex;
-				  flex-direction: column;
-				  justify-content: center;
-				  align-items: center;
-				  text-align: center;
-				  margin-bottom: 20px;
-				  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-				}
-				.block:hover {
-				  transform: scale(1.03);
-				  box-shadow: 0 4px 15px var(--shadow-hover);
-				  background-color: var(--primary-bg);
-				}
-				.block h3 {
-				  margin: 0;
-				  font-size: 22px;
-				  color: #495057;
-				  font-weight: 600;
-				}
-				.block canvas {
-				  margin-top: 10px;
-				  width: 100%;
-				  height: auto;
-				  max-height: 150px;
-				}
-				.block .numbers {
-				  font-size: 16px;
-				  color: #6c757d;
-				  margin-top: 10px;
-				  font-weight: 500;
-				  line-height: 1.4;
-				}
-				
-				/* ---------- LISTA DE EFETIVO E BOTÃO ---------- */
-				.list-toggle {
-				  display: flex;
-				  justify-content: center;
-				  margin-top: 20px;
-				}
-				.list-toggle button {
-				  padding: 10px 20px;
-				  border-radius: 8px;
-				  border: none;
-				  background-color: var(--accent-green);
-				  color: #fff;
-				  font-size: 16px;
-				  cursor: pointer;
-				  width: 60%;
-				  text-align: center;
-				  transition: background-color var(--transition-speed);
-				}
-				.list-toggle button:hover {
-				  background-color: #3ea44c;
-				}
-				.military-list {
-				  margin-top: 20px;
-				  display: none;
-				  text-align: center;
-				}
-				.military-list ul {
-				  list-style-type: none;
-				  padding: 0;
-				  font-size: 16px;
-				  line-height: 1.8;
-				}
-				
-				/* ---------- MODAL ---------- */
-				.modal {
-				  display: none;
-				  position: fixed;
-				  z-index: 1000;
-				  left: 0;
-				  top: 0;
-				  width: 100%;
-				  height: 100%;
-				  overflow: auto;
-				  background-color: rgba(0, 0, 0, 0.5);
-				  justify-content: center;
-				  align-items: center;
-				}
-				.modal-content {
-				  background-color: var(--secondary-bg);
-				  padding: 20px;
-				  border-radius: 12px;
-				  max-width: 500px;
-				  width: 90%;
-				  text-align: center;
-				  max-height: 80%;
-				  overflow-y: auto;
-				  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-				  position: relative;
-				}
-				.modal-content h4 {
-				  margin-top: 0;
-				  color: var(--secondary-color);
-				  font-weight: 600;
-				}
-				.modal-content .close {
-				  color: #6c757d;
-				  font-size: 28px;
-				  font-weight: bold;
-				  cursor: pointer;
-				  position: absolute;
-				  top: 10px;
-				  right: 20px;
-				}
-				.modal-content .close:hover {
-				  color: var(--secondary-color);
-				}
-				
-				/* ---------- RODAPÉ ---------- */
-				footer {
-				  text-align: center;
-				  padding: 20px;
-				  font-size: 14px;
-				  color: #666;
-				  background-color: var(--light-bg);
-				  margin-top: 20px;
-				}
-				
-				/* ---------- RESPONSIVIDADE ---------- */
-				@media (max-width: 576px) {
-				  .block {
-				    width: 100%;
-				  }
-				  #splash h1 {
-				    font-size: 1.5rem;
-				  }
-				  #splash p {
-				    font-size: 0.875rem;
-				  }
-				  header.banner {
-				    height: 180px;
-				    background-position: center 30%;
-				  }
-				  header.banner .banner-text {
-				    font-size: 1.75rem;
-				    width: 80%;
-				  }
-				  .search-container input[type="text"],
-				  .search-container select {
-				    width: 80%;
-				  }
-				  .search-container button {
-				    padding: 10px;
-				    font-size: 14px;
-				  }
-				  .legend-grid {
-				    grid-template-columns: 1fr;
-				  }
-				}
-				@media (min-width: 577px) and (max-width: 768px) {
-				  .block {
-				    width: 48%;
-				  }
-				}
-				@media (min-width: 993px) {
-				  .block {
-				    width: 30%;
-				  }
-				  .block h3 {
-				    font-size: 20px;
-				  }
-				}
-	</style>
-</head>
-
-<body>
-	<!-- SPLASH SCREEN -->
-	<div id="splash">
-		<h1>Distribuição de Efetivo DAI/2</h1>
-		<p>Carregando dados...</p>
-	</div>
-	<!-- ONBOARDING (Multi-etapas) -->
-	<div id="onboarding" class="hidden">
-		<!-- Etapa 1: Boas-vindas -->
-		<div class="onboarding-step" data-step="1">
-			<h2>Bem-vindo ao Portal DAI/2</h2>
-			<p> Aqui você tem uma visão geral da distribuição do efetivo dos órgãos externos, com acesso rápido aos detalhes de cada unidade. </p>
-			<div class="onboarding-controls">
-				<button class="btn-continue">Continuar</button>
-				<button class="btn-skip">Pular</button>
-			</div>
-		</div>
-		<!-- Etapa 2: Pesquisa e Verificação de “Claro” -->
-		<div class="onboarding-step hidden" data-step="2">
-			<h2>Pesquisa e “Claro”</h2>
-			<p> Encontre militares por nome ou posto/graduação e verifique rapidamente o “claro” (vagas disponíveis) em cada posto. </p>
-			<div class="onboarding-controls">
-				<button class="btn-continue">Continuar</button>
-				<button class="btn-skip">Pular</button>
-			</div>
-		</div>
-		<!-- Etapa 3: Gráficos Interativos -->
-		<div class="onboarding-step hidden" data-step="3">
-			<h2>Gráficos Interativos</h2>
-			<p> Veja de forma visual os dados de previsto, existente e “claro” de cada órgão. Clique no gráfico para conferir a lista nominal dos militares. </p>
-			<div class="onboarding-controls">
-				<button class="btn-continue">Continuar</button>
-				<button class="btn-skip">Pular</button>
-			</div>
-		</div>
-		<!-- Etapa 4: Previsão de Efetivo -->
-		<div class="onboarding-step hidden" data-step="4">
-			<h2>Previsão de Efetivo</h2>
-			<p> Confira a previsão de efetivo pelo DDQOD ao clicar no botão. Explore todas as funcionalidades para facilitar sua consulta. </p>
-			<div class="onboarding-controls">
-				<button class="btn-continue">Finalizar</button>
-				<button class="btn-skip">Pular</button>
-			</div>
-		</div>
-	</div>
-	<!-- CONTEÚDO PRINCIPAL -->
-	<main id="mainContent" class="hidden">
-		<!-- Cabeçalho com Banner -->
-		<header class="banner" role="banner">
-			<div class="banner-text">Distribuição de Efetivo DAI/2</div>
-		</header>
-		<!-- Container Principal -->
-		<main class="container">
-			<h1 class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</h1>
-			<section class="general-data" aria-label="Dados Gerais">
-				<p>Total Previsto: 156</p>
-				<p>Total Existente: 116</p>
-				<p>Total Claro: 40</p>
-			</section>
-			<!-- Legenda de Cores -->
-			<section class="color-legend" aria-label="Legenda de Cores">
-				<h2>Legenda de Cores</h2>
-				<div class="legend-grid">
-					<div class="legend-item">
-						<span class="legend-color" style="background-color: var(--accent-yellow);"></span>
-						<span>Efetivo Previsto</span>
-					</div>
-					<div class="legend-item">
-						<span class="legend-color" style="background-color: var(--accent-green);"></span>
-						<span>Efetivo Existente</span>
-					</div>
-					<div class="legend-item">
-						<span class="legend-color" style="background-color: var(--accent-red);"></span>
-						<span>Claro</span>
-					</div>
-				</div>
-			</section>
-			<!-- Área de Pesquisa (por nome) -->
-			<section class="search-container" aria-label="Pesquisar Militar">
-				<input type="text" id="searchInput" placeholder="Pesquisar militar por nome ou posto..." />
-				<button id="searchButton">Pesquisar Militar</button>
-			</section>
-			<div id="searchResult"></div>
-			<!-- Pesquisa de CLARO por posto/graduação -->
-			<section class="search-container" aria-label="Pesquisar Claro por Posto/Graduação">
-				<select id="rankSelect">
-					<option value="">Selecione o Posto/Graduação</option>
-					<option value="Sd/Cb">Sd/Cb</option>
-					<option value="Sgt/SubTen">Sgt/SubTen</option>
-					<option value="Ten">Ten</option>
-					<option value="Cap">Cap</option>
-					<option value="Maj">Maj</option>
-					<option value="Ten-Cel">Ten-Cel</option>
-				</select>
-				<button id="rankButton">Pesquisar Claro</button>
-			</section>
-			<div id="claroResult"></div>
-			<!-- Blocos dos Órgãos Externos (com dados Previsto, Existente e Claro) -->
-			<section class="row" aria-label="Blocos dos Órgãos Externos">
-				<div class="block" data-orgao="AFAS">
-					<h3>AFAS</h3>
-					<canvas id="chart-afas"></canvas>
-					<div class="numbers"> Previsto: 4 <br> Existente: 1 <br> Claro: 3 </div>
-				</div>
-				<div class="block" data-orgao="ALMG">
-					<h3>ALMG</h3>
-					<canvas id="chart-almg"></canvas>
-					<div class="numbers"> Previsto: 2 <br> Existente: 2 <br> Claro: 0 </div>
-				</div>
-				<div class="block" data-orgao="CEDEC">
-					<h3>CEDEC</h3>
-					<canvas id="chart-cedec"></canvas>
-					<div class="numbers"> Previsto: 10 <br> Existente: 8 <br> Claro: 2 </div>
-				</div>
-			</section>
-			<section class="row">
-				<div class="block" data-orgao="COORDENAÇÃO DAI/2">
-					<h3>COORDENAÇÃO DAI/2</h3>
-					<canvas id="chart-coordenacao-dai2"></canvas>
-					<div class="numbers"> Previsto: 2 <br> Existente: 1 <br> Claro: 1 </div>
-				</div>
-				<div class="block" data-orgao="CTPM">
-					<h3>Colégio Tiradentes RMBH</h3>
-					<canvas id="chart-ctpm"></canvas>
-					<div class="numbers"> Previsto: 17 <br> Existente: 13 <br> Claro: 4 </div>
-				</div>
-				<div class="block" data-orgao="ECIM">
-					<h3>Escola Cívico-Militar</h3>
-					<canvas id="chart-ecim"></canvas>
-					<div class="numbers"> Previsto: 47 <br> Existente: 28 <br> Claro: 19 </div>
-				</div>
-			</section>
-			<section class="row">
-				<div class="block" data-orgao="Fundação SALVAR">
-					<h3>Assessoria Fundacional</h3>
-					<canvas id="chart-salvar"></canvas>
-					<div class="numbers"> Previsto: 7 <br> Existente: 6 <br> Claro: 1 </div>
-				</div>
-				<div class="block" data-orgao="GMG">
-					<h3>GMG</h3>
-					<canvas id="chart-gmg"></canvas>
-					<div class="numbers"> Previsto: 14 <br> Existente: 10 <br> Claro: 4 </div>
-				</div>
-				<div class="block" data-orgao="Intendência">
-					<h3>Intendência CAMG</h3>
-					<canvas id="chart-intendencia"></canvas>
-					<div class="numbers"> Previsto: 6 <br> Existente: 6 <br> Claro: 0 </div>
-				</div>
-			</section>
-			<section class="row">
-				<div class="block" data-orgao="MPMG">
-					<h3>MPMG</h3>
-					<canvas id="chart-mpmg"></canvas>
-					<div class="numbers"> Previsto: 7 <br> Existente: 7 <br> Claro: 0 </div>
-				</div>
-				<div class="block" data-orgao="OGE">
-					<h3>OGE</h3>
-					<canvas id="chart-oge"></canvas>
-					<div class="numbers"> Previsto: 5 <br> Existente: 5 <br> Claro: 0 </div>
-				</div>
-				<div class="block" data-orgao="Secretaria Parlamentar">
-					<h3>Secretaria Parlamentar</h3>
-					<canvas id="chart-secretaria-parlamentar"></canvas>
-					<div class="numbers"> Previsto: 3 <br> Existente: 3 <br> Claro: 0 </div>
-				</div>
-			</section>
-			<section class="row">
-				<div class="block" data-orgao="SEE">
-					<h3>SEE</h3>
-					<canvas id="chart-see"></canvas>
-					<div class="numbers"> Previsto: 1 <br> Existente: 1 <br> Claro: 0 </div>
-				</div>
-				<div class="block" data-orgao="SEJUSP">
-					<h3>SEJUSP</h3>
-					<canvas id="chart-sejusp"></canvas>
-					<div class="numbers"> Previsto: 3 <br> Existente: 3 <br> Claro: 0 </div>
-				</div>
-				<div class="block" data-orgao="SENASP">
-					<h3>SENASP/MJ</h3>
-					<canvas id="chart-senasp"></canvas>
-					<div class="numbers"> Previsto: 2 <br> Existente: 2 <br> Claro: 0 </div>
-				</div>
-			</section>
-			<section class="row">
-				<div class="block" data-orgao="SES">
-					<h3>SES</h3>
-					<canvas id="chart-ses"></canvas>
-					<div class="numbers"> Previsto: 2 <br> Existente: 2 <br> Claro: 0 </div>
-				</div>
-				<div class="block" data-orgao="TJMG">
-					<h3>TJMG</h3>
-					<canvas id="chart-tjmg"></canvas>
-					<div class="numbers"> Previsto: 8 <br> Existente: 7 <br> Claro: 1 </div>
-				</div>
-				<div class="block" data-orgao="TJMMG">
-					<h3>TJMMG</h3>
-					<canvas id="chart-tjmmg"></canvas>
-					<div class="numbers"> Previsto: 11 <br> Existente: 11 <br> Claro: 0 </div>
-				</div>
-			</section>
-			<!-- Botão e Lista de Efetivo -->
-			<section class="list-toggle">
-				<button id="showListBtn">Clique aqui para visualizar a Previsão de Efetivo pelo DDQOD</button>
-			</section>
-			<section class="military-list" id="militaryList">
-				<ul>
-					<li><strong>AFAS:</strong> 3 SubTen/Sgt, 1 Cb/Sd <strong>Total: 4</strong></li>
-					<li><strong>ALMG:</strong> 1 Ten-Cel, 1 SubTen/Sgt <strong>Total: 2</strong></li>
-					<li><strong>Assessoria Fundacional:</strong> 1 Ten-Cel, 1 Ten, 2 SubTen/Sgt, 3 Cb/Sd <strong>Total: 7</strong></li>
-					<li><strong>CEDEC:</strong> 1 Ten-Cel, 1 Maj, 2 Ten, 5 SubTen/Sgt, 1 Cb/Sd <strong>Total: 10</strong></li>
-					<li><strong>Colégio Tiradentes RMBH:</strong> 16 SubTen/Sgt, 1 Especialista <strong>Total: 17</strong></li>
-					<li><strong>Coordenação:</strong> 1 Maj, 1 SubTen/Sgt <strong>Total: 2</strong></li>
-					<li><strong>Escola Cívico-Militar:</strong> 1 Cap, 9 Ten, 36 SubTen/Sgt, 1 Cb/Sd <strong>Total: 47</strong></li>
-					<li><strong>GMG:</strong> 1 Maj, 1 Cap, 1 Ten, 9 SubTen/Sgt, 2 Cb/Sd <strong>Total: 14</strong></li>
-					<li><strong>Intendência CAMG:</strong> 1 Ten, 5 SubTen/Sgt <strong>Total: 6</strong></li>
-					<li><strong>MPMG:</strong> 2 Cap, 3 Ten, 2 SubTen/Sgt <strong>Total: 7</strong></li>
-					<li><strong>OGE:</strong> 1 Maj, 1 Cap, 2 SubTen/Sgt, 1 Cb/Sd <strong>Total: 5</strong></li>
-					<li><strong>SEJUSP:</strong> 1 Ten-Cel, 1 Maj, 1 SubTen/Sgt <strong>Total: 3</strong></li>
-					<li><strong>Secretaria Parlamentar:</strong> 1 Ten, 2 Cb/Sd <strong>Total: 3</strong></li>
-					<li><strong>SEE:</strong> 1 Maj <strong>Total: 1</strong></li>
-					<li><strong>SES:</strong> 1 Maj, 1 Ten <strong>Total: 2</strong></li>
-					<li><strong>SENASP/MJ:</strong> 2 SubTen/Sgt <strong>Total: 2</strong></li>
-					<li><strong>TJMG:</strong> 1 Maj, 1 Ten, 5 SubTen/Sgt, 1 Cb/Sd <strong>Total: 8</strong></li>
-					<li><strong>TJMMG:</strong> 1 Cel, 1 Ten, 7 SubTen/Sgt, 2 Cb/Sd <strong>Total: 11</strong></li>
-				</ul>
-			</section>
-		</main>
-	</main>
-	<!-- MODAL DE MILITARES -->
-	<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-		<div class="modal-content">
-			<span class="close" id="modalClose">&times;</span>
-			<h4 id="modalTitle">Relação de Militares</h4>
-			<div id="militares-list"></div>
-		</div>
-	</div>
-	<!-- RODAPÉ -->
-	<footer>
-		<p>Corpo de Bombeiros Militar de Minas Gerais - Diretoria de Assuntos Institucionais - Órgãos Externos</p>
-		<p>Compromisso e Excelência no serviço público.</p>
-		<p>&copy; 2025 Todos os Direitos Reservados</p>
-	</footer>
-	<!-- JavaScript -->
-	<script>
-		/* ---------- CONTROLE DA SPLASH E DO ONBOARDING ---------- */
-				document.addEventListener('DOMContentLoaded', () => {
-				  // Exibe a splash por 2 segundos e depois inicia o onboarding
-				  setTimeout(() => {
-				    document.getElementById('splash').classList.add('hidden');
-				    document.getElementById('onboarding').classList.remove('hidden');
-				    currentOnboardingStep = 1;
-				    showOnboardingStep(currentOnboardingStep);
-				  }, 2000);
-				});
-				
-				let currentOnboardingStep = 1;
-				const totalOnboardingSteps = 4;
-				
-				function showOnboardingStep(step) {
-				  document.querySelectorAll('.onboarding-step').forEach(stepEl => {
-				    stepEl.classList.add('hidden');
-				  });
-				  const currentStepEl = document.querySelector(`.onboarding-step[data-step="${step}"]`);
-				  if (currentStepEl) {
-				    currentStepEl.classList.remove('hidden');
-				  }
-				}
-				
-				function finishOnboarding() {
-				  document.getElementById('onboarding').classList.add('hidden');
-				  document.getElementById('mainContent').classList.remove('hidden');
-				  initPageLogic();
-				}
-				
-				// Delegação de eventos para os botões do onboarding
-				document.addEventListener('click', (e) => {
-				  if(e.target.classList.contains('btn-continue')){
-				    currentOnboardingStep++;
-				    if(currentOnboardingStep <= totalOnboardingSteps){
-				      showOnboardingStep(currentOnboardingStep);
-				    } else {
-				      finishOnboarding();
-				    }
-				  }
-				  if(e.target.classList.contains('btn-skip')){
-				    finishOnboarding();
-				  }
-				});
-				
-				/* ---------- LÓGICA DA PÁGINA (mantida conforme o original) ---------- */
-				const initPageLogic = () => {
-				  /*******************************************************
-				   * 1) ESTRUTURA DE DADOS PARA PREVISTO/EXISTENTE POR POSTO
-				   *******************************************************/
-				  const distribuicao = {
-				    "AFAS": {
-				      "Sd/Cb":    { previsto: 1, existente: 0 },
-				      "Sgt/SubTen": { previsto: 3, existente: 1 },
-				      "Ten":      { previsto: 0, existente: 0 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 0, existente: 0 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "ALMG": {
-				      "Sd/Cb":    { previsto: 0, existente: 0 },
-				      "Sgt/SubTen": { previsto: 1, existente: 1 },
-				      "Ten":      { previsto: 0, existente: 0 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 0, existente: 0 },
-				      "Ten-Cel":  { previsto: 1, existente: 1 }
-				    },
-				    "CEDEC": {
-				      "Sd/Cb":    { previsto: 1, existente: 0 },
-				      "Sgt/SubTen": { previsto: 5, existente: 4 },
-				      "Ten":      { previsto: 2, existente: 2 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 1, existente: 1 },
-				      "Ten-Cel":  { previsto: 1, existente: 1 }
-				    },
-				    "COORDENAÇÃO DAI/2": {
-				      "Sd/Cb":    { previsto: 0, existente: 0 },
-				      "Sgt/SubTen": { previsto: 1, existente: 0 },
-				      "Ten":      { previsto: 0, existente: 0 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 1, existente: 1 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "CTPM": {
-				      "Sd/Cb":    { previsto: 0, existente: 0 },
-				      "Sgt/SubTen": { previsto: 17, existente: 13 },
-				      "Ten":      { previsto: 0, existente: 0 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 0, existente: 0 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "ECIM": {
-				      "Sd/Cb":    { previsto: 1, existente: 1 },
-				      "Sgt/SubTen": { previsto: 36, existente: 18 },
-				      "Ten":      { previsto: 9, existente: 9 },
-				      "Cap":      { previsto: 1, existente: 1 },
-				      "Maj":      { previsto: 0, existente: 0 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "Fundação SALVAR": {
-				      "Sd/Cb":    { previsto: 3, existente: 2 },
-				      "Sgt/SubTen": { previsto: 2, existente: 2 },
-				      "Ten":      { previsto: 1, existente: 1 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 0, existente: 0 },
-				      "Ten-Cel":  { previsto: 1, existente: 1 }
-				    },
-				    "GMG": {
-				      "Sd/Cb":    { previsto: 2, existente: 0 },
-				      "Sgt/SubTen": { previsto: 9, existente: 8 },
-				      "Ten":      { previsto: 1, existente: 1 },
-				      "Cap":      { previsto: 1, existente: 1 },
-				      "Maj":      { previsto: 1, existente: 0 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "Intendência": {
-				      "Sd/Cb":    { previsto: 0, existente: 1 },
-				      "Sgt/SubTen": { previsto: 5, existente: 5 },
-				      "Ten":      { previsto: 1, existente: 0 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 0, existente: 0 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "MPMG": {
-				      "Sd/Cb":    { previsto: 0, existente: 0 },
-				      "Sgt/SubTen": { previsto: 2, existente: 2 },
-				      "Ten":      { previsto: 3, existente: 3 },
-				      "Cap":      { previsto: 2, existente: 2 },
-				      "Maj":      { previsto: 0, existente: 0 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "OGE": {
-				      "Sd/Cb":    { previsto: 1, existente: 1 },
-				      "Sgt/SubTen": { previsto: 2, existente: 2 },
-				      "Ten":      { previsto: 0, existente: 0 },
-				      "Cap":      { previsto: 1, existente: 1 },
-				      "Maj":      { previsto: 1, existente: 1 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "Secretaria Parlamentar": {
-				      "Sd/Cb":    { previsto: 2, existente: 2 },
-				      "Sgt/SubTen": { previsto: 0, existente: 0 },
-				      "Ten":      { previsto: 1, existente: 1 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 0, existente: 0 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "SEJUSP": {
-				      "Sd/Cb":    { previsto: 0, existente: 1 },
-				      "Sgt/SubTen": { previsto: 1, existente: 0 },
-				      "Ten":      { previsto: 0, existente: 0 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 1, existente: 1 },
-				      "Ten-Cel":  { previsto: 1, existente: 1 }
-				    },
-				    "SENASP": {
-				      "Sd/Cb":    { previsto: 0, existente: 0 },
-				      "Sgt/SubTen": { previsto: 2, existente: 2 },
-				      "Ten":      { previsto: 0, existente: 0 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 0, existente: 0 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "SES": {
-				      "Sd/Cb":    { previsto: 0, existente: 0 },
-				      "Sgt/SubTen": { previsto: 0, existente: 0 },
-				      "Ten":      { previsto: 1, existente: 1 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 1, existente: 1 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "SEE": {
-				      "Sd/Cb":    { previsto: 0, existente: 0 },
-				      "Sgt/SubTen": { previsto: 0, existente: 0 },
-				      "Ten":      { previsto: 0, existente: 0 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 1, existente: 1 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "TJMG": {
-				      "Sd/Cb":    { previsto: 1, existente: 1 },
-				      "Sgt/SubTen": { previsto: 5, existente: 4 },
-				      "Ten":      { previsto: 1, existente: 1 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 1, existente: 1 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    },
-				    "TJMMG": {
-				      "Sd/Cb":    { previsto: 2, existente: 3 },
-				      "Sgt/SubTen": { previsto: 7, existente: 6 },
-				      "Ten":      { previsto: 1, existente: 1 },
-				      "Cap":      { previsto: 0, existente: 0 },
-				      "Maj":      { previsto: 0, existente: 0 },
-				      "Ten-Cel":  { previsto: 0, existente: 0 }
-				    }
-				  };
-				  
-				  /****************************************
-				   * 2) DADOS DE MILITARES (conforme o original)
-				   ****************************************/
-				  const data = {
-				    'AFAS': [
-				      '1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704'
-				    ],
-				    'ALMG': [
-				      'Ten Cel Cléia Gonçalves Mota - (31) 98527-7579',
-				      '2º Sgt Pedro Henrique Garcia Pinto - (31) 99791-7322'
-				    ],
-				    'CEDEC': [
-				      'Ten Cel Wenderson Duarte Marcelino - (31) 98876-3781',
-				      'Maj Mardell da Silva Alves - (31) 98525-1628',
-				      '1º Ten Douglas Constantino Fernandes - (31) 98576-2386',
-				      '2º Ten Rogério Silva de Paula - (31) 98769-8364',
-		                      'SubTen Anderson Pereira dos  Passos - (31) 98025-1721',
-				      '3º Sgt Luiz Ricardo Vago Lima - (31) 99835-4229',
-				      '3º Sgt Felipe Vaz de Sá - (31) 99086-3250',
-				      '3º Sgt Deivison Queiroz de Souza - (31) 98305-7477'
-				    ],
-				    'COORDENAÇÃO DAI/2': [
-				      'Maj Richelmy Murta Pinto - (35) 98464-0729',
-				      'Sd Larissa Elias Diana Vieira - (31) 99816-2524'
-				    ],
-				    'CTPM': [
-				      'Sub Ten Davidson dos Santos da Rocha - (31) 98687-2095',
-				      'Sub Ten Wagner Luiz Gonçalves - (31) 98746-1155',
-				      '1º Sgt Dionísio Rosa Dias - (31) 98733-9992',
-				      '1º Sgt Wanderson Moreira Luiz - (31) 98503-2098',
-				      '2º Sgt Adilson Alves de Souza - (31) 99744-7210',
-				      '2º Sgt Emerson Alexandre Pereira de Mello - (31) 99971-4985',
-				      '2º Sgt Ângelo Rodrigo Siqueira - (31) 99618-1447',
-				      '2º Sgt Ismael Camilo dos Santos - (31) 98885-9318',
-				      '2º Sgt Alisson Alves Amorim - (31) 99208-1458',
-				      '2º Sgt Kleiris Marcus H. do Nascimento - (31) 99141-1913',
-				      '2º Sgt Pérsio Soares de Carvalho - (31) 98978-5139',
-				      '2º Sgt Reginaldo Reis Bazílio - (31) 99233-0573',
-				      '2º Sgt Geraldo Doroterio Ferreira - (31) 99689-0234'
-				    ],
-				    'ECIM': [
-				      'Cap Robson Leopoldino dos Reis - (31) 99711-8778',
-				      '2º Ten Edmar Daltro Coutinho Júnior - (31) 99363-0606',
-				      '2º Ten Hebert do Carmo Nonato - (31) 99612-4403',
-				      '2º Ten Cristian Anderson de Freitas - (31) 98469-7837',
-				      '2º Ten Marcelo Cardoso da Silva - (31) 98546-1811',
-				      '2º Ten Renato Maia da Silva - (32) 98852-8883',
-				      '2º Ten Fernando César Cardoso - (32) 98834-7941',
-				      '2º Ten José Edson Alves da Costa - (35) 99972-2204',
-				      '2º Ten Jairo Monteiro dos Santos - (31) 98594-9982',
-				      '2º Ten Adailton Rogério da Cruz - (35) 98424-3270',
-				      'Sub Ten Helton Luiz Dias de Sá - (32) 98867-9481',
-				      'Sub Ten Eva Efigênia da Cruz - (31) 97516-5093',
-				      'Sub Ten Marcio Edson Guimarães - (32) 98856-2957',
-				      '1º Sgt Gilderson Tomé de Souza - (31) 99753-5100',
-				      '1º Sgt Célio Alves Evangelista - (31) 98889-6464',
-				      '1º Sgt Luiz Fernandes de Oliveira - (31) 99686-4949',
-				      '1º Sgt Alessandro Eduardo de Souza Rafael - (35) 98817-7012',
-				      '1º Sgt Edson Alves da Silva - (31) 98538-5249',
-				      '1º Sgt Paulo Sérgio dos Santos - (35) 99970-2806',
-				      '1º Sgt José Ronaldo Ferrarezi - (32) 99167-1868',
-				      '1º Sgt Paulo Henrique de Oliveira - (31) 98979-0807',
-				      '1º Sgt Eduardo Luiz Trindade - (32) 98423-5803',
-				      '1º Sgt Denisson Diane da Silva - (32) 99341-0260',
-				      '1º Sgt Heraldo de Campos Prado Júnior - (35) 99946-6032',
-				      '1º Sgt Francisco Daniel da Costa - (31) 99988-8055',
-				      '2º Sgt Edwaldo Elias Nunes - (31) 98567-2633',
-				      '2º Sgt Ivair Batista - (31) 99785-5435',
-				      '2º Sgt Cláudio Aristides Costa - (31) 97524-1867'
-				    ],
-				    'Fundação SALVAR': [
-				      'Ten Cel Fellipe Augusto M. de Faria Mota - (31) 8726-0898',
-				      '1º Ten Sandro Aloísio Matilde Junior - (31) 98525-1319',
-				      'Sub Ten Carlos Martins de Freitas - (31) 99141-7224',
-				      '3º Sgt Glauber Miguel Gonçalves - (31) 98451-6417',
-				      'Sd Jéssica Rojas Silva - (31) 99172-4692',
-				      'Sd Thais Firmato Fortes - (31) 97101-2689'
-				    ],
-				    'GMG': [
-				      'Cap Adriane Cristina da Silva - (31) 98873-1095',
-				      '2º Ten Guilherme de Castro Quírico - (32) 98813-3965',
-				      '1º Sgt Giovanni Batista Bento - (31) 98837-7293',
-				      '1º Sgt Bruno Eustáquio de Souza Gomes - (31) 98638-9798',
-				      '2º Sgt Heyder Alves Cangussu - (31) 97338-1542',
-				      '2º Sgt João Flávio Alves - (35) 99220-9377',
-				      '2º Sgt Olivaldo Reis Bispo - (31) 98827-9057',
-				      '2º Sgt André Fillipe Rainon Ferreira - (31) 99070-7005',
-				      '3º Sgt Almir Antônio Fiffe Neto - (31) 99330-5001',
-				      '3º Sgt Artur Luis Vinhal Nunes Souza - (31) 99922-8931'
-				    ],
-				    'Intendência': [
-				      '1º Sgt Jayme Araujo dos Santos Filho - (31) 99247-0193',
-				      '1º Sgt Carlos Antônio Ferreira Santana - (31) 98809-6982',
-				      '1º Sgt Edson Silva Filho - (31) 98664-4113',
-				      '1º Sgt Gilson Ribeiro da Silva - (31) 97592-5018',
-				      '1º Sgt Washington Miguel de Andrade Souza - (31) 98412-5897',
-				      'Cb Lucas Barbosa Aguiar - (31) 98481-8314'
-				    ],
-				    'MPMG': [
-				      'Cap Adler Augusto Dias da Silva - (31) 98760-4641',
-				      'Cap Paulo Henrique Camargos Firme - (31) 98876-1423',
-				      '1º Ten Thiago Alves da Silva Magalhães Campos - (31) 98481-9767',
-				      '1º Ten Julio Cesar Ferreira dos Santos - (31) 99521-4155',
-				      '2º Ten Samuel Márcio da Luz - (31) 97508-4950',
-				      '2º Sgt Thiago Faria de Araujo - (31) 99211-3577',
-				      '3º Sgt João Paulo Vieira Cotta - (31) 99570-5544'
-				    ],
-				    'OGE': [
-				      'Maj Wendell Hoover Gonçalves de Rezende - (31) 98985-7081',
-				      'Cap Carlos Alberto Ferreira da Silva - (31) 99473-1072',
-				      '2º Sgt Julio Cesar Alves Fonseca - (31) 98765-7876',
-				      '2º Sgt Suzana de Souza Braga - (31) 99180-6378',
-				      'Cb Vinícius da Costa Gomes - (31) 99644-2415'
-				    ],
-				    'Secretaria Parlamentar': [
-				      '1º Ten Andresa Vicente Amante - (31) 99127-9068',
-				      'Cb Cristiano Lages Wardil - (31) 99392-0732',
-				      'Cb Lúcio Marcos Oliveira Hortêncio - (31) 97175-4554'
-				    ],
-				    'SEJUSP': [
-				      'Ten Cel Peterson José Paiva Monteiro - (31) 98709-2550',
-				      'Maj Leandro de Oliveira Pereira - (31) 98709-3033',
-				      'Cb Gefte da Silva Lemos - (31) 99343-8377'
-				    ],
-				    'SENASP': [
-				      '3º Sgt Emília Tainá Couto Viana e Sousa - (31) 98343-6808',
-				      '3º Sgt André Ferreira de Oliveira - (38) 99816-3930'
-				    ],
-				    'SES': [
-				      'Maj Sílvia Amélia de Souza Paula - (31) 99122-5100',
-				      '2º Ten Aline de Barros Souza Silveira - (31) 97167-7886'
-				    ],
-				    'SEE': [
-				      'Maj Andiara Beatriz Ribeiro Miranda - (31) 97153-9897'
-				    ],
-				    'TJMG': [
-				      'Maj Marcus Vinícius Siqueira Flores - (31) 98659-5707',
-				      '1º Ten Carlos Eduardo de Oliveira - (31) 98600-2512',
-				      'Sub Ten Fernando Eustáquio dos Santos - (31) 98801-1710',
-				      '1º Sgt José Zito da Silva Filho - (31) 98781-7435',
-				      '1º Sgt Fernando Iglésias Gonçalves - (31) 99871-2536',
-				      '1º Sgt Jovane Jonatas Passos - (31) 98861-2326',
-				      'Sd Igor Cláver Coelho de Resende - (31) 97530-8845'
-				    ],
-				    'TJMMG': [
-				      '1º Ten Flávio de Oliveira Barbosa - (35) 99727-1810',
-				      'Sub Ten Carlos Rodrigues Gomes - (31) 98854-4380',
-				      '1º Sgt Josaine Thais do Carmo - (31) 98788-1588',
-				      '1º Sgt Rinaldo Cezar Fontes Cruz - (31) 99469-2218',
-				      '2º Sgt Thiago Bruno de Albuquerque Morais - (31) 99137-8635',
-				      '2º Sgt Wagner Magno Alves dos Santos - (31) 98978-4116',
-				      '2º Sgt Gustavo Duarte Oliveira - (31) 97243-7139',
-				      'Cb Alexandre Polidoro - (31) 98890-7567',
-				      'Cb Giovane Antônio Fortunato Barros - (31) 98879-1065',
-				      'Cb Giovanni Tadeu B. dos Santos - (31) 99318-7722'
-				    ]
-				  };
-				  
-				  /*******************************************************
-				   * 3) CONFIGURAÇÃO DO MODAL
-				   *******************************************************/
-				  const modal = document.getElementById('modal');
-				  const militaresList = document.getElementById('militares-list');
-				  const modalClose = document.getElementById('modalClose');
-				  
-				  const showModal = orgao => {
-				    const militares = data[orgao];
-				    const modalTitle = document.getElementById('modalTitle');
-				    modalTitle.textContent = `Relação de Militares - ${orgao}`;
-				    militaresList.innerHTML = (militares && militares.length)
-				      ? militares.map(militar => {
-				          const [nome, telefone] = militar.split(' - ');
-				          return `
-				            <p><strong>Nome:</strong> ${nome}</p>
-				            <p><strong>Telefone:</strong> ${telefone}</p>
-				            <hr style="border: 1px solid #ddd;">
-				          `;
-				        }).join('')
-				      : '<p style="color: red;">Nenhum militar registrado neste órgão.</p>';
-				    modal.style.display = 'flex';
-				  };
-				  
-				  modalClose.addEventListener('click', () => modal.style.display = 'none');
-				  window.addEventListener('click', event => {
-				    if (event.target === modal) modal.style.display = 'none';
-				  });
-				  
-				  /*******************************************************
-				   * 4) PESQUISA DE MILITARES (POR NOME/POSTO)
-				   *******************************************************/
-				  const searchInput = document.getElementById('searchInput');
-				  const searchButton = document.getElementById('searchButton');
-				  const searchResult = document.getElementById('searchResult');
-				  
-				  const searchMilitary = () => {
-				    const query = searchInput.value.trim().toLowerCase();
-				    let found = false;
-				    searchResult.innerHTML = '';
-				    Object.entries(data).forEach(([orgao, militares]) => {
-				      militares.forEach(militar => {
-				        if (militar.toLowerCase().includes(query)) {
-				          found = true;
-				          const [nome, telefone] = militar.split(' - ');
-				          searchResult.innerHTML += `
-				            <p><strong>Nome:</strong> ${nome}</p>
-				            <p><strong>Telefone:</strong> ${telefone}</p>
-				            <p><strong>Órgão Externo:</strong> ${orgao}</p>
-				            <hr style="border: 1px solid #ddd;">
-				          `;
-				        }
-				      });
-				    });
-				    if (!found) {
-				      searchResult.innerHTML = '<p style="color: red;">Nenhum militar encontrado.</p>';
-				    }
-				  };
-				  searchButton.addEventListener('click', searchMilitary);
-				  
-				  /*******************************************************
-				   * 5) PESQUISA DE "CLARO" POR POSTO/GRADUAÇÃO
-				   *******************************************************/
-				  const rankSelect = document.getElementById('rankSelect');
-				  const rankButton = document.getElementById('rankButton');
-				  const claroResult = document.getElementById('claroResult');
-				  
-				  const searchClaro = () => {
-				    const selectedRank = rankSelect.value;
-				    if (!selectedRank) {
-				      claroResult.innerHTML = '<p style="color: red;">Selecione um posto/graduação!</p>';
-				      return;
-				    }
-				    claroResult.innerHTML = '';
-				    let foundAny = false;
-				    Object.keys(distribuicao).forEach(orgao => {
-				      const postoGrad = distribuicao[orgao][selectedRank];
-				      if (postoGrad) {
-				        const { previsto, existente } = postoGrad;
-				        const claro = previsto - (existente || 0);
-				        if (claro > 0) {
-				          foundAny = true;
-				          claroResult.innerHTML += `
-				            <p>
-				              <strong>${orgao}</strong>: 
-				              Previsto = ${previsto}, 
-				              Existente = ${existente}, 
-				              <span style="color: red;">Claro = ${claro}</span>
-				            </p>
-				          `;
-				        }
-				      }
-				    });
-				    if (!foundAny) {
-				      claroResult.innerHTML = '<p style="color: red;">Nenhum órgão possui claro para este posto/graduação.</p>';
-				    }
-				  };
-				  rankButton.addEventListener('click', searchClaro);
-				  
-				  /*******************************************************
-				   * 6) CRIAÇÃO DOS GRÁFICOS DOUGHNUT (Chart.js)
-				   *******************************************************/
-				  const createChart = (canvasId, previsto, existente, claro) => {
-				    const ctx = document.getElementById(canvasId).getContext('2d');
-				    new Chart(ctx, {
-				      type: 'doughnut',
-				      data: {
-				        labels: ['Previsto', 'Existente', 'Claro'],
-				        datasets: [{
-				          data: [previsto, existente, claro],
-				          backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'],
-				          borderWidth: 1
-				        }]
-				      },
-				      options: {
-				        responsive: true,
-				        maintainAspectRatio: false,
-				        plugins: { legend: { display: false } }
-				      }
-				    });
-				  };
-				  
-				  // Inicialização dos gráficos conforme os órgãos
-				  createChart('chart-afas', 4, 1, 3);
-				  createChart('chart-cedec', 10, 8, 2);
-				  createChart('chart-almg', 2, 2, 0);
-				  createChart('chart-ctpm', 17, 13, 4);
-				  createChart('chart-gmg', 14, 10, 4);
-				  createChart('chart-intendencia', 6, 6, 0);
-				  createChart('chart-mpmg', 7, 7, 0);
-				  createChart('chart-senasp', 2, 2, 0);
-				  createChart('chart-oge', 5, 5, 0);
-				  createChart('chart-salvar', 7, 6, 1);
-				  createChart('chart-see', 1, 1, 0);
-				  createChart('chart-secretaria-parlamentar', 3, 3, 0);
-				  createChart('chart-sejusp', 3, 3, 0);
-				  createChart('chart-ses', 2, 2, 0);
-				  createChart('chart-tjmg', 8, 7, 1);
-				  createChart('chart-tjmmg', 11, 11, 0);
-				  createChart('chart-ecim', 47, 28, 19);
-				  createChart('chart-coordenacao-dai2', 2, 1, 1);
-				  
-				  // ---------- Eventos de clique nos blocos (para exibir o modal) ----------
-				  document.querySelectorAll('.block').forEach(block => {
-				    block.addEventListener('click', () => {
-				      showModal(block.getAttribute('data-orgao'));
-				    });
-				  });
-				  
-				  // ---------- Toggle da Lista de Efetivo ----------
-				  const showListBtn = document.getElementById('showListBtn');
-				  const militaryList = document.getElementById('militaryList');
-				  showListBtn.addEventListener('click', () => {
-				    militaryList.style.display = (!militaryList.style.display || militaryList.style.display === 'none') ? 'block' : 'none';
-				  });
-				};
-	</script>
-</body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Distribuição de Efetivo DAI/2</title>
+    <!-- Metadados para SEO e redes sociais -->
+    <meta property="og:title" content="Distribuição de Efetivo DAI/2" />
+    <meta
+      property="og:description"
+      content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos."
+    />
+    <meta
+      property="og:image"
+      content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg"
+    />
+    <meta
+      property="og:url"
+      content="https://ricmurtapsicologia.github.io/efetivoDAI2/"
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Distribuição de Efetivo DAI/2" />
+    <meta
+      name="twitter:description"
+      content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos."
+    />
+    <meta
+      name="twitter:image"
+      content="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg"
+    />
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      href="https://i.pinimg.com/736x/27/dc/3d/27dc3d4d82cb890215fd360273873ceb.jpg"
+    />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- CSS Consolidado -->
+    <style>
+      :root {
+        /* Paleta de Cores para Acessibilidade Emocional */
+        --primary-bg: #f8f9fa;
+        --onboarding-bg: #4caf50;
+        --secondary-bg: #ffffff;
+        --light-bg: #f1f3f5;
+        --primary-color: #333;
+        --secondary-color: #212529;
+        --accent-green: #4caf50;
+        --accent-yellow: #ffeb3b;
+        --accent-red: #f44336;
+        --border-color: #e0e0e0;
+        --shadow-color: rgba(0, 0, 0, 0.1);
+        --shadow-hover: rgba(0, 0, 0, 0.15);
+        --transition-speed: 0.3s;
+      }
+      /* Reset e base */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--primary-bg);
+        color: var(--primary-color);
+        line-height: 1.6;
+        overflow-x: hidden;
+        opacity: 0;
+        animation: fadeIn 0.6s forwards ease-in-out;
+      }
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+      /* SPLASH SCREEN */
+      #splash {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--onboarding-bg)
+          url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg')
+          no-repeat center center/cover;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        z-index: 9999;
+        transition: opacity 1s ease;
+      }
+      #splash.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #splash h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+        padding: 0 10px;
+      }
+      #splash p {
+        font-size: 1rem;
+        text-align: center;
+        padding: 0 10px;
+      }
+      /* ONBOARDING */
+      #onboarding {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--onboarding-bg);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9000;
+        padding: 20px;
+      }
+      #onboarding.hidden {
+        display: none;
+      }
+      .onboarding-step {
+        max-width: 600px;
+        text-align: center;
+        animation: slideIn 0.5s ease-out;
+      }
+      .onboarding-step.hidden {
+        display: none;
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      .onboarding-step h2 {
+        font-size: 1.75rem;
+        margin-bottom: 10px;
+      }
+      .onboarding-step p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+      }
+      .onboarding-controls {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .onboarding-controls button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color var(--transition-speed);
+      }
+      .btn-continue {
+        background-color: #fff;
+        color: var(--onboarding-bg);
+        border: 2px solid var(--onboarding-bg);
+      }
+      .btn-continue:hover {
+        background-color: var(--light-bg);
+      }
+      .btn-skip {
+        background: transparent;
+        border: 2px solid #fff;
+        color: #fff;
+      }
+      .btn-skip:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      /* CABEÇALHO E BANNER */
+      header.banner {
+        width: 100%;
+        height: 400px;
+        position: relative;
+        background: url('https://images.unsplash.com/photo-1511649475669-e288648b2339?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3')
+          no-repeat center 93%;
+        background-size: cover;
+        transition: background-position 0.6s ease-in-out;
+      }
+      header.banner:hover {
+        background-position: center 60%;
+      }
+      header.banner .banner-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+        font-size: 2.5rem;
+        font-weight: 600;
+        text-align: center;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        width: 90%;
+        max-width: 600px;
+        line-height: 1.2;
+      }
+      /* CONTEÚDO PRINCIPAL */
+      #mainContent.hidden {
+        display: none;
+      }
+      main#mainContent {
+        /* Mantém semântica de main para conteúdo principal */
+      }
+      section.container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: var(--secondary-bg);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px var(--shadow-color);
+      }
+      .title {
+        text-align: center;
+        margin: 10px 0 20px;
+        font-size: 32px;
+        font-weight: bold;
+        color: var(--secondary-color);
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 10px;
+      }
+      .general-data {
+        background-color: var(--light-bg);
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        font-size: 18px;
+        color: #495057;
+      }
+      .general-data p {
+        margin: 10px 0;
+        font-weight: 600;
+        color: var(--secondary-color);
+      }
+      /* LEGENDA DE CORES */
+      .color-legend {
+        margin: 20px 0;
+      }
+      .color-legend h2 {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .legend-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        justify-items: center;
+        align-items: center;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .legend-color {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        border-radius: 4px;
+      }
+      /* ÁREA DE PESQUISA */
+      .search-container {
+        text-align: center;
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .search-container input[type='text'],
+      .search-container select {
+        width: 60%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+      }
+      .search-container button {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: none;
+        background-color: var(--accent-green);
+        color: #fff;
+        cursor: pointer;
+        transition: background-color var(--transition-speed);
+      }
+      .search-container button:hover {
+        background-color: #3ea44c;
+      }
+      #searchResult,
+      #claroResult {
+        margin-top: 20px;
+        font-size: 18px;
+        color: var(--primary-color);
+        text-align: center;
+      }
+      /* GRID DOS BLOCOS */
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .block {
+        background-color: var(--secondary-bg);
+        width: 32%;
+        padding: 20px;
+        border-radius: 12px;
+        position: relative;
+        cursor: pointer;
+        transition: transform var(--transition-speed),
+          box-shadow var(--transition-speed),
+          background-color var(--transition-speed);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      }
+      .block:hover {
+        transform: scale(1.03);
+        box-shadow: 0 4px 15px var(--shadow-hover);
+        background-color: var(--primary-bg);
+      }
+      .block h3 {
+        margin: 0;
+        font-size: 22px;
+        color: #495057;
+        font-weight: 600;
+      }
+      .block canvas {
+        margin-top: 10px;
+        width: 100%;
+        height: auto;
+        max-height: 150px;
+      }
+      .block .numbers {
+        font-size: 16px;
+        color: #6c757d;
+        margin-top: 10px;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+      /* LISTA DE EFETIVO E BOTÃO */
+      .list-toggle {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .list-toggle button {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: none;
+        background-color: var(--accent-green);
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        width: 60%;
+        text-align: center;
+        transition: background-color var(--transition-speed);
+      }
+      .list-toggle button:hover {
+        background-color: #3ea44c;
+      }
+      .military-list {
+        margin-top: 20px;
+        display: none;
+        text-align: center;
+      }
+      .military-list ul {
+        list-style-type: none;
+        padding: 0;
+        font-size: 16px;
+        line-height: 1.8;
+      }
+      /* MODAL */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-content {
+        background-color: var(--secondary-bg);
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        max-height: 80%;
+        overflow-y: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+      .modal-content h4 {
+        margin-top: 0;
+        color: var(--secondary-color);
+        font-weight: 600;
+      }
+      .modal-content .close {
+        color: #6c757d;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+      }
+      .modal-content .close:hover {
+        color: var(--secondary-color);
+      }
+      /* RODAPÉ */
+      footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 14px;
+        color: #666;
+        background-color: var(--light-bg);
+        margin-top: 20px;
+      }
+      /* RESPONSIVIDADE */
+      @media (max-width: 576px) {
+        .block {
+          width: 100%;
+        }
+        #splash h1 {
+          font-size: 1.5rem;
+        }
+        #splash p {
+          font-size: 0.875rem;
+        }
+        header.banner {
+          height: 180px;
+          background-position: center 30%;
+        }
+        header.banner .banner-text {
+          font-size: 1.75rem;
+          width: 80%;
+        }
+        .search-container input[type='text'],
+        .search-container select {
+          width: 80%;
+        }
+        .search-container button {
+          padding: 10px;
+          font-size: 14px;
+        }
+        .legend-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (min-width: 577px) and (max-width: 768px) {
+        .block {
+          width: 48%;
+        }
+      }
+      @media (min-width: 993px) {
+        .block {
+          width: 30%;
+        }
+        .block h3 {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SPLASH SCREEN -->
+    <div id="splash">
+      <h1>Distribuição de Efetivo DAI/2</h1>
+      <p>Carregando dados...</p>
+    </div>
+    <!-- ONBOARDING -->
+    <div id="onboarding" class="hidden">
+      <div class="onboarding-step" data-step="1">
+        <h2>Bem-vindo ao Portal DAI/2</h2>
+        <p>
+          Aqui você tem uma visão geral da distribuição do efetivo dos órgãos
+          externos, com acesso rápido aos detalhes de cada unidade.
+        </p>
+        <div class="onboarding-controls">
+          <button class="btn-continue">Continuar</button>
+          <button class="btn-skip">Pular</button>
+        </div>
+      </div>
+      <div class="onboarding-step hidden" data-step="2">
+        <h2>Pesquisa e “Claro”</h2>
+        <p>
+          Encontre militares por nome ou posto/graduação e verifique rapidamente
+          o “claro” (vagas disponíveis) em cada posto.
+        </p>
+        <div class="onboarding-controls">
+          <button class="btn-continue">Continuar</button>
+          <button class="btn-skip">Pular</button>
+        </div>
+      </div>
+      <div class="onboarding-step hidden" data-step="3">
+        <h2>Gráficos Interativos</h2>
+        <p>
+          Veja de forma visual os dados de previsto, existente e “claro” de cada
+          órgão. Clique no gráfico para conferir a lista nominal dos militares.
+        </p>
+        <div class="onboarding-controls">
+          <button class="btn-continue">Continuar</button>
+          <button class="btn-skip">Pular</button>
+        </div>
+      </div>
+      <div class="onboarding-step hidden" data-step="4">
+        <h2>Previsão de Efetivo</h2>
+        <p>
+          Confira a previsão de efetivo pelo DDQOD ao clicar no botão. Explore
+          todas as funcionalidades para facilitar sua consulta.
+        </p>
+        <div class="onboarding-controls">
+          <button class="btn-continue">Finalizar</button>
+          <button class="btn-skip">Pular</button>
+        </div>
+      </div>
+    </div>
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main id="mainContent" class="hidden">
+      <!-- Cabeçalho com Banner -->
+      <header class="banner" role="banner">
+        <div class="banner-text">Distribuição de Efetivo DAI/2</div>
+      </header>
+      <!-- Container Principal -->
+      <section class="container">
+        <h1 class="title">
+          Distribuição de Efetivo da DAI/2 Órgãos Externos
+        </h1>
+        <section class="general-data" aria-label="Dados Gerais">
+          <p>Total Previsto: 156</p>
+          <p>Total Existente: 116</p>
+          <p>Total Claro: 40</p>
+        </section>
+        <!-- Legenda de Cores -->
+        <section class="color-legend" aria-label="Legenda de Cores">
+          <h2>Legenda de Cores</h2>
+          <div class="legend-grid">
+            <div class="legend-item">
+              <span
+                class="legend-color"
+                style="background-color: var(--accent-yellow);"
+              ></span>
+              <span>Efetivo Previsto</span>
+            </div>
+            <div class="legend-item">
+              <span
+                class="legend-color"
+                style="background-color: var(--accent-green);"
+              ></span>
+              <span>Efetivo Existente</span>
+            </div>
+            <div class="legend-item">
+              <span
+                class="legend-color"
+                style="background-color: var(--accent-red);"
+              ></span>
+              <span>Claro</span>
+            </div>
+          </div>
+        </section>
+        <!-- Área de Pesquisa (por nome) -->
+        <section class="search-container" aria-label="Pesquisar Militar">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Pesquisar militar por nome ou posto..."
+          />
+          <button id="searchButton">Pesquisar Militar</button>
+        </section>
+        <div id="searchResult"></div>
+        <!-- Pesquisa de CLARO por posto/graduação -->
+        <section
+          class="search-container"
+          aria-label="Pesquisar Claro por Posto/Graduação"
+        >
+          <select id="rankSelect">
+            <option value="">Selecione o Posto/Graduação</option>
+            <option value="Sd/Cb">Sd/Cb</option>
+            <option value="Sgt/SubTen">Sgt/SubTen</option>
+            <option value="Ten">Ten</option>
+            <option value="Cap">Cap</option>
+            <option value="Maj">Maj</option>
+            <option value="Ten-Cel">Ten-Cel</option>
+          </select>
+          <button id="rankButton">Pesquisar Claro</button>
+        </section>
+        <div id="claroResult"></div>
+        <!-- Blocos dos Órgãos Externos -->
+        <section class="row" aria-label="Blocos dos Órgãos Externos">
+          <div class="block" data-orgao="AFAS">
+            <h3>AFAS</h3>
+            <canvas id="chart-afas"></canvas>
+            <div class="numbers">
+              Previsto: 4 <br />
+              Existente: 1 <br />
+              Claro: 3
+            </div>
+          </div>
+          <div class="block" data-orgao="ALMG">
+            <h3>ALMG</h3>
+            <canvas id="chart-almg"></canvas>
+            <div class="numbers">
+              Previsto: 2 <br />
+              Existente: 2 <br />
+              Claro: 0
+            </div>
+          </div>
+          <div class="block" data-orgao="CEDEC">
+            <h3>CEDEC</h3>
+            <canvas id="chart-cedec"></canvas>
+            <div class="numbers">
+              Previsto: 10 <br />
+              Existente: 8 <br />
+              Claro: 2
+            </div>
+          </div>
+        </section>
+        <section class="row">
+          <div class="block" data-orgao="COORDENAÇÃO DAI/2">
+            <h3>COORDENAÇÃO DAI/2</h3>
+            <canvas id="chart-coordenacao-dai2"></canvas>
+            <div class="numbers">
+              Previsto: 2 <br />
+              Existente: 1 <br />
+              Claro: 1
+            </div>
+          </div>
+          <div class="block" data-orgao="CTPM">
+            <h3>Colégio Tiradentes RMBH</h3>
+            <canvas id="chart-ctpm"></canvas>
+            <div class="numbers">
+              Previsto: 17 <br />
+              Existente: 13 <br />
+              Claro: 4
+            </div>
+          </div>
+          <div class="block" data-orgao="ECIM">
+            <h3>Escola Cívico-Militar</h3>
+            <canvas id="chart-ecim"></canvas>
+            <div class="numbers">
+              Previsto: 47 <br />
+              Existente: 28 <br />
+              Claro: 19
+            </div>
+          </div>
+        </section>
+        <section class="row">
+          <div class="block" data-orgao="Fundação SALVAR">
+            <h3>Assessoria Fundacional</h3>
+            <canvas id="chart-salvar"></canvas>
+            <div class="numbers">
+              Previsto: 7 <br />
+              Existente: 6 <br />
+              Claro: 1
+            </div>
+          </div>
+          <div class="block" data-orgao="GMG">
+            <h3>GMG</h3>
+            <canvas id="chart-gmg"></canvas>
+            <div class="numbers">
+              Previsto: 14 <br />
+              Existente: 10 <br />
+              Claro: 4
+            </div>
+          </div>
+          <div class="block" data-orgao="Intendência">
+            <h3>Intendência CAMG</h3>
+            <canvas id="chart-intendencia"></canvas>
+            <div class="numbers">
+              Previsto: 6 <br />
+              Existente: 6 <br />
+              Claro: 0
+            </div>
+          </div>
+        </section>
+        <section class="row">
+          <div class="block" data-orgao="MPMG">
+            <h3>MPMG</h3>
+            <canvas id="chart-mpmg"></canvas>
+            <div class="numbers">
+              Previsto: 7 <br />
+              Existente: 7 <br />
+              Claro: 0
+            </div>
+          </div>
+          <div class="block" data-orgao="OGE">
+            <h3>OGE</h3>
+            <canvas id="chart-oge"></canvas>
+            <div class="numbers">
+              Previsto: 5 <br />
+              Existente: 5 <br />
+              Claro: 0
+            </div>
+          </div>
+          <div class="block" data-orgao="Secretaria Parlamentar">
+            <h3>Secretaria Parlamentar</h3>
+            <canvas id="chart-secretaria-parlamentar"></canvas>
+            <div class="numbers">
+              Previsto: 3 <br />
+              Existente: 3 <br />
+              Claro: 0
+            </div>
+          </div>
+        </section>
+        <section class="row">
+          <div class="block" data-orgao="SEE">
+            <h3>SEE</h3>
+            <canvas id="chart-see"></canvas>
+            <div class="numbers">
+              Previsto: 1 <br />
+              Existente: 1 <br />
+              Claro: 0
+            </div>
+          </div>
+          <div class="block" data-orgao="SEJUSP">
+            <h3>SEJUSP</h3>
+            <canvas id="chart-sejusp"></canvas>
+            <div class="numbers">
+              Previsto: 3 <br />
+              Existente: 3 <br />
+              Claro: 0
+            </div>
+          </div>
+          <div class="block" data-orgao="SENASP">
+            <h3>SENASP/MJ</h3>
+            <canvas id="chart-senasp"></canvas>
+            <div class="numbers">
+              Previsto: 2 <br />
+              Existente: 2 <br />
+              Claro: 0
+            </div>
+          </div>
+        </section>
+        <section class="row">
+          <div class="block" data-orgao="SES">
+            <h3>SES</h3>
+            <canvas id="chart-ses"></canvas>
+            <div class="numbers">
+              Previsto: 2 <br />
+              Existente: 2 <br />
+              Claro: 0
+            </div>
+          </div>
+          <div class="block" data-orgao="TJMG">
+            <h3>TJMG</h3>
+            <canvas id="chart-tjmg"></canvas>
+            <div class="numbers">
+              Previsto: 8 <br />
+              Existente: 7 <br />
+              Claro: 1
+            </div>
+          </div>
+          <div class="block" data-orgao="TJMMG">
+            <h3>TJMMG</h3>
+            <canvas id="chart-tjmmg"></canvas>
+            <div class="numbers">
+              Previsto: 11 <br />
+              Existente: 11 <br />
+              Claro: 0
+            </div>
+          </div>
+        </section>
+        <!-- Lista de Efetivo -->
+        <section class="list-toggle">
+          <button id="showListBtn">
+            Clique aqui para visualizar a Previsão de Efetivo pelo DDQOD
+          </button>
+        </section>
+        <section class="military-list" id="militaryList">
+          <ul>
+            <li>
+              <strong>AFAS:</strong> 3 SubTen/Sgt, 1 Cb/Sd <strong>Total: 4</strong>
+            </li>
+            <li>
+              <strong>ALMG:</strong> 1 Ten-Cel, 1 SubTen/Sgt <strong>Total: 2</strong>
+            </li>
+            <li>
+              <strong>Assessoria Fundacional:</strong> 1 Ten-Cel, 1 Ten, 2 SubTen/Sgt, 3 Cb/Sd <strong>Total: 7</strong>
+            </li>
+            <li>
+              <strong>CEDEC:</strong> 1 Ten-Cel, 1 Maj, 2 Ten, 5 SubTen/Sgt, 1 Cb/Sd <strong>Total: 10</strong>
+            </li>
+            <li>
+              <strong>Colégio Tiradentes RMBH:</strong> 16 SubTen/Sgt, 1 Especialista <strong>Total: 17</strong>
+            </li>
+            <li>
+              <strong>Coordenação:</strong> 1 Maj, 1 SubTen/Sgt <strong>Total: 2</strong>
+            </li>
+            <li>
+              <strong>Escola Cívico-Militar:</strong> 1 Cap, 9 Ten, 36 SubTen/Sgt, 1 Cb/Sd <strong>Total: 47</strong>
+            </li>
+            <li>
+              <strong>GMG:</strong> 1 Maj, 1 Cap, 1 Ten, 9 SubTen/Sgt, 2 Cb/Sd <strong>Total: 14</strong>
+            </li>
+            <li>
+              <strong>Intendência CAMG:</strong> 1 Ten, 5 SubTen/Sgt <strong>Total: 6</strong>
+            </li>
+            <li>
+              <strong>MPMG:</strong> 2 Cap, 3 Ten, 2 SubTen/Sgt <strong>Total: 7</strong>
+            </li>
+            <li>
+              <strong>OGE:</strong> 1 Maj, 1 Cap, 2 SubTen/Sgt, 1 Cb/Sd <strong>Total: 5</strong>
+            </li>
+            <li>
+              <strong>SEJUSP:</strong> 1 Ten-Cel, 1 Maj, 1 SubTen/Sgt <strong>Total: 3</strong>
+            </li>
+            <li>
+              <strong>Secretaria Parlamentar:</strong> 1 Ten, 2 Cb/Sd <strong>Total: 3</strong>
+            </li>
+            <li>
+              <strong>SEE:</strong> 1 Maj <strong>Total: 1</strong>
+            </li>
+            <li>
+              <strong>SES:</strong> 1 Maj, 1 Ten <strong>Total: 2</strong>
+            </li>
+            <li>
+              <strong>SENASP/MJ:</strong> 2 SubTen/Sgt <strong>Total: 2</strong>
+            </li>
+            <li>
+              <strong>TJMG:</strong> 1 Maj, 1 Ten, 5 SubTen/Sgt, 1 Cb/Sd <strong>Total: 8</strong>
+            </li>
+            <li>
+              <strong>TJMMG:</strong> 1 Cel, 1 Ten, 7 SubTen/Sgt, 2 Cb/Sd <strong>Total: 11</strong>
+            </li>
+          </ul>
+        </section>
+      </section>
+    </main>
+    <!-- MODAL DE MILITARES -->
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-content">
+        <span class="close" id="modalClose">&times;</span>
+        <h4 id="modalTitle">Relação de Militares</h4>
+        <div id="militares-list"></div>
+      </div>
+    </div>
+    <!-- RODAPÉ -->
+    <footer>
+      <p>
+        Corpo de Bombeiros Militar de Minas Gerais - Diretoria de Assuntos Institucionais - Órgãos Externos
+      </p>
+      <p>Compromisso e Excelência no serviço público.</p>
+      <p>&copy; 2025 Todos os Direitos Reservados</p>
+    </footer>
+    <!-- JavaScript -->
+    <script>
+      // Controle da SPLASH e do ONBOARDING
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          document.getElementById('splash').classList.add('hidden');
+          document.getElementById('onboarding').classList.remove('hidden');
+          currentOnboardingStep = 1;
+          showOnboardingStep(currentOnboardingStep);
+        }, 2000);
+      });
+      
+      let currentOnboardingStep = 1;
+      const totalOnboardingSteps = 4;
+      
+      const showOnboardingStep = (step) => {
+        document.querySelectorAll('.onboarding-step').forEach((stepEl) =>
+          stepEl.classList.add('hidden')
+        );
+        const currentStepEl = document.querySelector(
+          `.onboarding-step[data-step="${step}"]`
+        );
+        if (currentStepEl) {
+          currentStepEl.classList.remove('hidden');
+        }
+      };
+      
+      const finishOnboarding = () => {
+        document.getElementById('onboarding').classList.add('hidden');
+        document.getElementById('mainContent').classList.remove('hidden');
+        initPageLogic();
+      };
+      
+      // Eventos do ONBOARDING
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-continue')) {
+          currentOnboardingStep++;
+          if (currentOnboardingStep <= totalOnboardingSteps) {
+            showOnboardingStep(currentOnboardingStep);
+          } else {
+            finishOnboarding();
+          }
+        }
+        if (e.target.classList.contains('btn-skip')) {
+          finishOnboarding();
+        }
+      });
+      
+      // Lógica da Página
+      const initPageLogic = () => {
+        // 1) Estrutura de Dados para Efetivo
+        const distribuicao = {
+          AFAS: {
+            'Sd/Cb': { previsto: 1, existente: 0 },
+            'Sgt/SubTen': { previsto: 3, existente: 1 },
+            Ten: { previsto: 0, existente: 0 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 0, existente: 0 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          ALMG: {
+            'Sd/Cb': { previsto: 0, existente: 0 },
+            'Sgt/SubTen': { previsto: 1, existente: 1 },
+            Ten: { previsto: 0, existente: 0 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 0, existente: 0 },
+            'Ten-Cel': { previsto: 1, existente: 1 }
+          },
+          CEDEC: {
+            'Sd/Cb': { previsto: 1, existente: 0 },
+            'Sgt/SubTen': { previsto: 5, existente: 4 },
+            Ten: { previsto: 2, existente: 2 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 1, existente: 1 },
+            'Ten-Cel': { previsto: 1, existente: 1 }
+          },
+          'COORDENAÇÃO DAI/2': {
+            'Sd/Cb': { previsto: 0, existente: 0 },
+            'Sgt/SubTen': { previsto: 1, existente: 0 },
+            Ten: { previsto: 0, existente: 0 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 1, existente: 1 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          CTPM: {
+            'Sd/Cb': { previsto: 0, existente: 0 },
+            'Sgt/SubTen': { previsto: 17, existente: 13 },
+            Ten: { previsto: 0, existente: 0 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 0, existente: 0 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          ECIM: {
+            'Sd/Cb': { previsto: 1, existente: 1 },
+            'Sgt/SubTen': { previsto: 36, existente: 18 },
+            Ten: { previsto: 9, existente: 9 },
+            Cap: { previsto: 1, existente: 1 },
+            Maj: { previsto: 0, existente: 0 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          'Fundação SALVAR': {
+            'Sd/Cb': { previsto: 3, existente: 2 },
+            'Sgt/SubTen': { previsto: 2, existente: 2 },
+            Ten: { previsto: 1, existente: 1 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 0, existente: 0 },
+            'Ten-Cel': { previsto: 1, existente: 1 }
+          },
+          GMG: {
+            'Sd/Cb': { previsto: 2, existente: 0 },
+            'Sgt/SubTen': { previsto: 9, existente: 8 },
+            Ten: { previsto: 1, existente: 1 },
+            Cap: { previsto: 1, existente: 1 },
+            Maj: { previsto: 1, existente: 0 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          Intendência: {
+            'Sd/Cb': { previsto: 0, existente: 0 },
+            'Sgt/SubTen': { previsto: 5, existente: 5 },
+            Ten: { previsto: 1, existente: 0 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 0, existente: 0 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          MPMG: {
+            'Sd/Cb': { previsto: 0, existente: 0 },
+            'Sgt/SubTen': { previsto: 2, existente: 2 },
+            Ten: { previsto: 3, existente: 3 },
+            Cap: { previsto: 2, existente: 2 },
+            Maj: { previsto: 0, existente: 0 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          OGE: {
+            'Sd/Cb': { previsto: 1, existente: 1 },
+            'Sgt/SubTen': { previsto: 2, existente: 2 },
+            Ten: { previsto: 0, existente: 0 },
+            Cap: { previsto: 1, existente: 1 },
+            Maj: { previsto: 1, existente: 1 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          'Secretaria Parlamentar': {
+            'Sd/Cb': { previsto: 2, existente: 2 },
+            'Sgt/SubTen': { previsto: 0, existente: 0 },
+            Ten: { previsto: 1, existente: 1 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 0, existente: 0 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          SEJUSP: {
+            'Sd/Cb': { previsto: 0, existente: 1 },
+            'Sgt/SubTen': { previsto: 1, existente: 0 },
+            Ten: { previsto: 0, existente: 0 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 1, existente: 1 },
+            'Ten-Cel': { previsto: 1, existente: 1 }
+          },
+          SENASP: {
+            'Sd/Cb': { previsto: 0, existente: 0 },
+            'Sgt/SubTen': { previsto: 2, existente: 2 },
+            Ten: { previsto: 0, existente: 0 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 0, existente: 0 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          SES: {
+            'Sd/Cb': { previsto: 0, existente: 0 },
+            'Sgt/SubTen': { previsto: 0, existente: 0 },
+            Ten: { previsto: 1, existente: 1 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 1, existente: 1 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          SEE: {
+            'Sd/Cb': { previsto: 0, existente: 0 },
+            'Sgt/SubTen': { previsto: 0, existente: 0 },
+            Ten: { previsto: 0, existente: 0 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 1, existente: 1 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          TJMG: {
+            'Sd/Cb': { previsto: 1, existente: 1 },
+            'Sgt/SubTen': { previsto: 5, existente: 4 },
+            Ten: { previsto: 1, existente: 1 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 1, existente: 1 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          },
+          TJMMG: {
+            'Sd/Cb': { previsto: 2, existente: 3 },
+            'Sgt/SubTen': { previsto: 7, existente: 6 },
+            Ten: { previsto: 1, existente: 1 },
+            Cap: { previsto: 0, existente: 0 },
+            Maj: { previsto: 0, existente: 0 },
+            'Ten-Cel': { previsto: 0, existente: 0 }
+          }
+        };
+        
+        // 2) Dados dos Militares
+        const data = {
+          AFAS: [
+            '1º Sgt Tarcísio Marciano dos Santos Júnior - (31) 98623-5704'
+          ],
+          ALMG: [
+            'Ten Cel Cléia Gonçalves Mota - (31) 98527-7579',
+            '2º Sgt Pedro Henrique Garcia Pinto - (31) 99791-7322'
+          ],
+          CEDEC: [
+            'Ten Cel Wenderson Duarte Marcelino - (31) 98876-3781',
+            'Maj Mardell da Silva Alves - (31) 98525-1628',
+            '1º Ten Douglas Constantino Fernandes - (31) 98576-2386',
+            '2º Ten Rogério Silva de Paula - (31) 98769-8364',
+            'SubTen Anderson Pereira dos  Passos - (31) 98025-1721',
+            '3º Sgt Luiz Ricardo Vago Lima - (31) 99835-4229',
+            '3º Sgt Felipe Vaz de Sá - (31) 99086-3250',
+            '3º Sgt Deivison Queiroz de Souza - (31) 98305-7477'
+          ],
+          'COORDENAÇÃO DAI/2': [
+            'Maj Richelmy Murta Pinto - (35) 98464-0729',
+            'Sd Larissa Elias Diana Vieira - (31) 99816-2524'
+          ],
+          CTPM: [
+            'Sub Ten Davidson dos Santos da Rocha - (31) 98687-2095',
+            'Sub Ten Wagner Luiz Gonçalves - (31) 98746-1155',
+            '1º Sgt Dionísio Rosa Dias - (31) 98733-9992',
+            '1º Sgt Wanderson Moreira Luiz - (31) 98503-2098',
+            '2º Sgt Adilson Alves de Souza - (31) 99744-7210',
+            '2º Sgt Emerson Alexandre Pereira de Mello - (31) 99971-4985',
+            '2º Sgt Ângelo Rodrigo Siqueira - (31) 99618-1447',
+            '2º Sgt Ismael Camilo dos Santos - (31) 98885-9318',
+            '2º Sgt Alisson Alves Amorim - (31) 99208-1458',
+            '2º Sgt Kleiris Marcus H. do Nascimento - (31) 99141-1913',
+            '2º Sgt Pérsio Soares de Carvalho - (31) 98978-5139',
+            '2º Sgt Reginaldo Reis Bazílio - (31) 99233-0573',
+            '2º Sgt Geraldo Doroterio Ferreira - (31) 99689-0234'
+          ],
+          ECIM: [
+            'Cap Robson Leopoldino dos Reis - (31) 99711-8778',
+            '2º Ten Edmar Daltro Coutinho Júnior - (31) 99363-0606',
+            '2º Ten Hebert do Carmo Nonato - (31) 99612-4403',
+            '2º Ten Cristian Anderson de Freitas - (31) 98469-7837',
+            '2º Ten Marcelo Cardoso da Silva - (31) 98546-1811',
+            '2º Ten Renato Maia da Silva - (32) 98852-8883',
+            '2º Ten Fernando César Cardoso - (32) 98834-7941',
+            '2º Ten José Edson Alves da Costa - (35) 99972-2204',
+            '2º Ten Jairo Monteiro dos Santos - (31) 98594-9982',
+            '2º Ten Adailton Rogério da Cruz - (35) 98424-3270',
+            'Sub Ten Helton Luiz Dias de Sá - (32) 98867-9481',
+            'Sub Ten Eva Efigênia da Cruz - (31) 97516-5093',
+            'Sub Ten Marcio Edson Guimarães - (32) 98856-2957',
+            '1º Sgt Gilderson Tomé de Souza - (31) 99753-5100',
+            '1º Sgt Célio Alves Evangelista - (31) 98889-6464',
+            '1º Sgt Luiz Fernandes de Oliveira - (31) 99686-4949',
+            '1º Sgt Alessandro Eduardo de Souza Rafael - (35) 98817-7012',
+            '1º Sgt Edson Alves da Silva - (31) 98538-5249',
+            '1º Sgt Paulo Sérgio dos Santos - (35) 99970-2806',
+            '1º Sgt José Ronaldo Ferrarezi - (32) 99167-1868',
+            '1º Sgt Paulo Henrique de Oliveira - (31) 98979-0807',
+            '1º Sgt Eduardo Luiz Trindade - (32) 98423-5803',
+            '1º Sgt Denisson Diane da Silva - (32) 99341-0260',
+            '1º Sgt Heraldo de Campos Prado Júnior - (35) 99946-6032',
+            '1º Sgt Francisco Daniel da Costa - (31) 99988-8055',
+            '2º Sgt Edwaldo Elias Nunes - (31) 98567-2633',
+            '2º Sgt Ivair Batista - (31) 99785-5435',
+            '2º Sgt Cláudio Aristides Costa - (31) 97524-1867'
+          ],
+          'Fundação SALVAR': [
+            'Ten Cel Fellipe Augusto M. de Faria Mota - (31) 8726-0898',
+            '1º Ten Sandro Aloísio Matilde Junior - (31) 98525-1319',
+            'Sub Ten Carlos Martins de Freitas - (31) 99141-7224',
+            '3º Sgt Glauber Miguel Gonçalves - (31) 98451-6417',
+            'Sd Jéssica Rojas Silva - (31) 99172-4692',
+            'Sd Thais Firmato Fortes - (31) 97101-2689'
+          ],
+          GMG: [
+            'Cap Adriane Cristina da Silva - (31) 98873-1095',
+            '2º Ten Guilherme de Castro Quírico - (32) 98813-3965',
+            '1º Sgt Giovanni Batista Bento - (31) 98837-7293',
+            '1º Sgt Bruno Eustáquio de Souza Gomes - (31) 98638-9798',
+            '2º Sgt Heyder Alves Cangussu - (31) 97338-1542',
+            '2º Sgt João Flávio Alves - (35) 99220-9377',
+            '2º Sgt Olivaldo Reis Bispo - (31) 98827-9057',
+            '2º Sgt André Fillipe Rainon Ferreira - (31) 99070-7005',
+            '3º Sgt Almir Antônio Fiffe Neto - (31) 99330-5001',
+            '3º Sgt Artur Luis Vinhal Nunes Souza - (31) 99922-8931'
+          ],
+          Intendência: [
+            '1º Sgt Jayme Araujo dos Santos Filho - (31) 99247-0193',
+            '1º Sgt Carlos Antônio Ferreira Santana - (31) 98809-6982',
+            '1º Sgt Edson Silva Filho - (31) 98664-4113',
+            '1º Sgt Gilson Ribeiro da Silva - (31) 97592-5018',
+            '1º Sgt Washington Miguel de Andrade Souza - (31) 98412-5897',
+            'Cb Lucas Barbosa Aguiar - (31) 98481-8314'
+          ],
+          MPMG: [
+            'Cap Adler Augusto Dias da Silva - (31) 98760-4641',
+            'Cap Paulo Henrique Camargos Firme - (31) 98876-1423',
+            '1º Ten Thiago Alves da Silva Magalhães Campos - (31) 98481-9767',
+            '1º Ten Julio Cesar Ferreira dos Santos - (31) 99521-4155',
+            '2º Ten Samuel Márcio da Luz - (31) 97508-4950',
+            '2º Sgt Thiago Faria de Araujo - (31) 99211-3577',
+            '3º Sgt João Paulo Vieira Cotta - (31) 99570-5544'
+          ],
+          OGE: [
+            'Maj Wendell Hoover Gonçalves de Rezende - (31) 98985-7081',
+            'Cap Carlos Alberto Ferreira da Silva - (31) 99473-1072',
+            '2º Sgt Julio Cesar Alves Fonseca - (31) 98765-7876',
+            '2º Sgt Suzana de Souza Braga - (31) 99180-6378',
+            'Cb Vinícius da Costa Gomes - (31) 99644-2415'
+          ],
+          'Secretaria Parlamentar': [
+            '1º Ten Andresa Vicente Amante - (31) 99127-9068',
+            'Cb Cristiano Lages Wardil - (31) 99392-0732',
+            'Cb Lúcio Marcos Oliveira Hortêncio - (31) 97175-4554'
+          ],
+          SEJUSP: [
+            'Ten Cel Peterson José Paiva Monteiro - (31) 98709-2550',
+            'Maj Leandro de Oliveira Pereira - (31) 98709-3033',
+            'Cb Gefte da Silva Lemos - (31) 99343-8377'
+          ],
+          SENASP: [
+            '3º Sgt Emília Tainá Couto Viana e Sousa - (31) 98343-6808',
+            '3º Sgt André Ferreira de Oliveira - (38) 99816-3930'
+          ],
+          SES: [
+            'Maj Sílvia Amélia de Souza Paula - (31) 99122-5100',
+            '2º Ten Aline de Barros Souza Silveira - (31) 97167-7886'
+          ],
+          SEE: [
+            'Maj Andiara Beatriz Ribeiro Miranda - (31) 97153-9897'
+          ],
+          TJMG: [
+            'Maj Marcus Vinícius Siqueira Flores - (31) 98659-5707',
+            '1º Ten Carlos Eduardo de Oliveira - (31) 98600-2512',
+            'Sub Ten Fernando Eustáquio dos Santos - (31) 98801-1710',
+            '1º Sgt José Zito da Silva Filho - (31) 98781-7435',
+            '1º Sgt Fernando Iglésias Gonçalves - (31) 99871-2536',
+            '1º Sgt Jovane Jonatas Passos - (31) 98861-2326',
+            'Sd Igor Cláver Coelho de Resende - (31) 97530-8845'
+          ],
+          TJMMG: [
+            '1º Ten Flávio de Oliveira Barbosa - (35) 99727-1810',
+            'Sub Ten Carlos Rodrigues Gomes - (31) 98854-4380',
+            '1º Sgt Josaine Thais do Carmo - (31) 98788-1588',
+            '1º Sgt Rinaldo Cezar Fontes Cruz - (31) 99469-2218',
+            '2º Sgt Thiago Bruno de Albuquerque Morais - (31) 99137-8635',
+            '2º Sgt Wagner Magno Alves dos Santos - (31) 98978-4116',
+            '2º Sgt Gustavo Duarte Oliveira - (31) 97243-7139',
+            'Cb Alexandre Polidoro - (31) 98890-7567',
+            'Cb Giovane Antônio Fortunato Barros - (31) 98879-1065',
+            'Cb Giovanni Tadeu B. dos Santos - (31) 99318-7722'
+          ]
+        };
+        
+        // 3) Configuração do Modal
+        const modal = document.getElementById('modal');
+        const militaresList = document.getElementById('militares-list');
+        const modalClose = document.getElementById('modalClose');
+        const showModal = (orgao) => {
+          const militares = data[orgao];
+          const modalTitle = document.getElementById('modalTitle');
+          modalTitle.textContent = `Relação de Militares - ${orgao}`;
+          militaresList.innerHTML =
+            militares && militares.length
+              ? militares
+                  .map((militar) => {
+                    const [nome, telefone] = militar.split(' - ');
+                    return `
+                      <p><strong>Nome:</strong> ${nome}</p>
+                      <p><strong>Telefone:</strong> ${telefone}</p>
+                      <hr style="border: 1px solid #ddd;">
+                    `;
+                  })
+                  .join('')
+              : '<p style="color: red;">Nenhum militar registrado neste órgão.</p>';
+          modal.style.display = 'flex';
+        };
+        modalClose.addEventListener('click', () => (modal.style.display = 'none'));
+        window.addEventListener('click', (event) => {
+          if (event.target === modal) modal.style.display = 'none';
+        });
+        
+        // 4) Pesquisa de Militares (por nome/posto)
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const searchResult = document.getElementById('searchResult');
+        const searchMilitary = () => {
+          const query = searchInput.value.trim().toLowerCase();
+          let found = false;
+          searchResult.innerHTML = '';
+          Object.entries(data).forEach(([orgao, militares]) => {
+            militares.forEach((militar) => {
+              if (militar.toLowerCase().includes(query)) {
+                found = true;
+                const [nome, telefone] = militar.split(' - ');
+                searchResult.innerHTML += `
+                  <p><strong>Nome:</strong> ${nome}</p>
+                  <p><strong>Telefone:</strong> ${telefone}</p>
+                  <p><strong>Órgão Externo:</strong> ${orgao}</p>
+                  <hr style="border: 1px solid #ddd;">
+                `;
+              }
+            });
+          });
+          if (!found) {
+            searchResult.innerHTML =
+              '<p style="color: red;">Nenhum militar encontrado.</p>';
+          }
+        };
+        searchButton.addEventListener('click', searchMilitary);
+        
+        // 5) Pesquisa de "CLARO" por posto/graduação
+        const rankSelect = document.getElementById('rankSelect');
+        const rankButton = document.getElementById('rankButton');
+        const claroResult = document.getElementById('claroResult');
+        const searchClaro = () => {
+          const selectedRank = rankSelect.value;
+          if (!selectedRank) {
+            claroResult.innerHTML =
+              '<p style="color: red;">Selecione um posto/graduação!</p>';
+            return;
+          }
+          claroResult.innerHTML = '';
+          let foundAny = false;
+          Object.keys(distribuicao).forEach((orgao) => {
+            const postoGrad = distribuicao[orgao][selectedRank];
+            if (postoGrad) {
+              const { previsto, existente } = postoGrad;
+              const claro = previsto - (existente || 0);
+              if (claro > 0) {
+                foundAny = true;
+                claroResult.innerHTML += `
+                  <p>
+                    <strong>${orgao}</strong>: 
+                    Previsto = ${previsto}, 
+                    Existente = ${existente}, 
+                    <span style="color: red;">Claro = ${claro}</span>
+                  </p>
+                `;
+              }
+            }
+          });
+          if (!foundAny) {
+            claroResult.innerHTML =
+              '<p style="color: red;">Nenhum órgão possui claro para este posto/graduação.</p>';
+          }
+        };
+        rankButton.addEventListener('click', searchClaro);
+        
+        // 6) Criação dos Gráficos Doughnut (Chart.js)
+        const createChart = (canvasId, previsto, existente, claro) => {
+          const ctx = document.getElementById(canvasId).getContext('2d');
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ['Previsto', 'Existente', 'Claro'],
+              datasets: [
+                {
+                  data: [previsto, existente, claro],
+                  backgroundColor: ['#ffeb3b', '#4caf50', '#f44336'],
+                  borderWidth: 1
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } }
+            }
+          });
+        };
+        createChart('chart-afas', 4, 1, 3);
+        createChart('chart-cedec', 10, 8, 2);
+        createChart('chart-almg', 2, 2, 0);
+        createChart('chart-ctpm', 17, 13, 4);
+        createChart('chart-gmg', 14, 10, 4);
+        createChart('chart-intendencia', 6, 6, 0);
+        createChart('chart-mpmg', 7, 7, 0);
+        createChart('chart-senasp', 2, 2, 0);
+        createChart('chart-oge', 5, 5, 0);
+        createChart('chart-salvar', 7, 6, 1);
+        createChart('chart-see', 1, 1, 0);
+        createChart('chart-secretaria-parlamentar', 3, 3, 0);
+        createChart('chart-sejusp', 3, 3, 0);
+        createChart('chart-ses', 2, 2, 0);
+        createChart('chart-tjmg', 8, 7, 1);
+        createChart('chart-tjmmg', 11, 11, 0);
+        createChart('chart-ecim', 47, 28, 19);
+        createChart('chart-coordenacao-dai2', 2, 1, 1);
+        
+        // Eventos de clique nos blocos para exibir o modal
+        document.querySelectorAll('.block').forEach((block) => {
+          block.addEventListener('click', () => {
+            showModal(block.getAttribute('data-orgao'));
+          });
+        });
+        
+        // Toggle da Lista de Efetivo
+        const showListBtn = document.getElementById('showListBtn');
+        const militaryList = document.getElementById('militaryList');
+        showListBtn.addEventListener('click', () => {
+          militaryList.style.display =
+            !militaryList.style.display || militaryList.style.display === 'none'
+              ? 'block'
+              : 'none';
+        });
+      };
+    </script>
+  </body>
 </html>
+
