@@ -181,39 +181,6 @@
       }
       .general-data p { margin: 10px 0; font-weight: 600; color: var(--secondary-color); }
 
-      .rank-summary {
-        background-color: #fcfcfd;
-        border: 1px solid #e9ecef;
-        border-radius: 12px;
-        padding: 18px;
-        margin: 0 0 24px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      }
-      .rank-summary h2 {
-        text-align: center;
-        margin-bottom: 14px;
-        color: var(--secondary-color);
-        font-size: 24px;
-      }
-      .rank-summary-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 14px;
-      }
-      .rank-card {
-        background: #fff;
-        border: 1px solid #e3e7eb;
-        border-radius: 12px;
-        padding: 14px;
-        text-align: center;
-      }
-      .rank-card h3 {
-        margin-bottom: 8px;
-        font-size: 18px;
-        color: var(--secondary-color);
-      }
-      .rank-card p { margin: 4px 0; font-size: 15px; }
-
       /* LEGENDA DE CORES */
       .color-legend { margin: 20px 0; }
       .color-legend h2 { text-align: center; margin-bottom: 10px; }
@@ -415,8 +382,8 @@
       <div class="onboarding-step" data-step="1">
         <h2>Bem-vindo ao Portal DAI/2</h2>
         <p>
-          Aqui você tem uma visão geral da distribuição do efetivo dos órgãos
-          externos, com acesso rápido aos detalhes de cada unidade.
+          Aqui você tem uma visão geral da distribuição do efetivo dos Órgãos
+          Externos, com acesso rápido aos detalhes de cada unidade.
         </p>
         <div class="onboarding-controls">
           <button class="btn-continue">Continuar</button>
@@ -472,18 +439,7 @@
         <section class="general-data" aria-label="Dados Gerais">
           <p>Total Previsto: 101</p>
           <p>Total Existente: 80</p>
-          <p>Total Claro: 21</p>
-
-        <section class="rank-summary" aria-label="Quadro geral por posto e graduação">
-          <h2>Quadro geral por posto/graduação</h2>
-          <div class="rank-summary-grid" id="rankSummaryGrid">
-            <div class="rank-card"><h3>Sd/Cb</h3><p>Previsto: 13</p><p>Existente: 10</p><p>Claro: 3</p></div>
-            <div class="rank-card"><h3>Sgt/SubTen</h3><p>Previsto: 61</p><p>Existente: 43</p><p>Claro: 18</p></div>
-            <div class="rank-card"><h3>Ten</h3><p>Previsto: 11</p><p>Existente: 13</p><p>Claro: -2</p></div>
-            <div class="rank-card"><h3>Cap</h3><p>Previsto: 4</p><p>Existente: 4</p><p>Claro: 0</p></div>
-            <div class="rank-card"><h3>Maj</h3><p>Previsto: 8</p><p>Existente: 6</p><p>Claro: 2</p></div>
-            <div class="rank-card"><h3>Ten-Cel</h3><p>Previsto: 4</p><p>Existente: 4</p><p>Claro: 0</p></div>
-          </div>
+          <p>Total Claro: 22</p>
         </section>
 
         <section class="quick-actions" aria-label="Atalhos de consulta">
@@ -530,13 +486,11 @@
           <select id="rankSelect">
             <option value="">Selecione o Posto/Graduação</option>
             <option value="Sd/Cb">Sd/Cb</option>
-            <option value="Sgt">Sgt</option>
-            <option value="SubTen">SubTen</option>
+            <option value="Sgt/SubTen">Sgt/SubTen</option>
             <option value="Ten">Ten</option>
             <option value="Cap">Cap</option>
             <option value="Maj">Maj</option>
             <option value="Ten-Cel">Ten-Cel</option>
-            <option value="Cel">Cel</option>
           </select>
           <button id="rankButton">Pesquisar Claro</button>
         </section>
@@ -565,13 +519,14 @@
           <div class="block" data-orgao="COORDENAÇÃO DAI/2">
             <h3>COORDENAÇÃO DAI/2</h3>
             <canvas id="chart-coordenacao-dai2"></canvas>
-            <div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div>
+            <div class="numbers">Previsto: 2 <br /> Existente: 1 <br /> Claro: 1</div>
           </div>
           <div class="block" data-orgao="CTPM">
             <h3>Colégio Tiradentes RMBH</h3>
             <canvas id="chart-ctpm"></canvas>
             <div class="numbers">Previsto: 17 <br /> Existente: 14 <br /> Claro: 3</div>
           </div>
+</div>
         </section>
 
         <section class="row">
@@ -588,7 +543,7 @@
           <div class="block" data-orgao="Intendência">
             <h3>Intendência CAMG</h3>
             <canvas id="chart-intendencia"></canvas>
-            <div class="numbers">Previsto: 6 <br /> Existente: 5 <br /> Claro: 1</div>
+            <div class="numbers">Previsto: 6 <br /> Existente: 6 <br /> Claro: 0</div>
           </div>
         </section>
 
@@ -656,9 +611,9 @@
             <li><strong>ALMG:</strong> 1 Ten-Cel, 1 SubTen/Sgt <strong>Total: 2</strong></li>
             <li><strong>Assessoria Fundacional:</strong> 1 Ten-Cel, 1 Maj, 1 Ten, 3 SubTen/Sgt, 2 Cb/Sd <strong>Total: 8</strong></li>
             <li><strong>CEDEC:</strong> 1 Ten-Cel, 1 Maj, 2 Ten, 5 SubTen/Sgt, 1 Cb/Sd <strong>Total: 10</strong></li>
-            <li><strong>Colégio Tiradentes RMBH:</strong> 17 SubTen/Sgt <strong>Total: 17</strong></li>
-            <li><strong>Coordenação DAI/2:</strong> 1 Maj, 1 SubTen/Sgt <strong>Total: 2</strong></li>
-            <li><strong>GMG:</strong> 1 Maj, 1 Cap, 1 Ten, 9 SubTen/Sgt, 2 Cb/Sd <strong>Total: 14</strong></li>
+            <li><strong>Colégio Tiradentes RMBH:</strong> 16 SubTen/Sgt, 1 Especialista <strong>Total: 17</strong></li>
+            <li><strong>Coordenação:</strong> 1 Maj, 1 SubTen/Sgt <strong>Total: 2</strong></li>
+<li><strong>GMG:</strong> 1 Maj, 1 Cap, 1 Ten, 9 SubTen/Sgt, 2 Cb/Sd <strong>Total: 14</strong></li>
             <li><strong>Intendência CAMG:</strong> 1 Ten, 5 SubTen/Sgt <strong>Total: 6</strong></li>
             <li><strong>MPMG:</strong> 2 Cap, 2 Ten, 2 SubTen/Sgt <strong>Total: 6</strong></li>
             <li><strong>OGE:</strong> 1 Maj, 1 Cap, 2 SubTen/Sgt, 1 Cb/Sd <strong>Total: 5</strong></li>
@@ -668,7 +623,7 @@
             <li><strong>SES:</strong> 1 Maj, 1 Ten <strong>Total: 2</strong></li>
             <li><strong>SENASP/MJ:</strong> 2 SubTen/Sgt <strong>Total: 2</strong></li>
             <li><strong>TJMG:</strong> 1 Maj, 1 Ten, 5 SubTen/Sgt, 1 Cb/Sd <strong>Total: 8</strong></li>
-            <li><strong>TJMMG:</strong> 1 Ten, 6 SubTen/Sgt, 3 Cb/Sd <strong>Total: 10</strong></li>
+            <li><strong>TJMMG:</strong> 1 Cel, 1 Ten, 6 SubTen/Sgt, 3 Cb/Sd <strong>Total: 11</strong></li>
           </ul>
         </section>
       </section>
@@ -763,178 +718,144 @@
       };
 
       const initPageLogic = () => {
-        const rankOrder = ['Sd/Cb', 'Sgt', 'SubTen', 'Ten', 'Cap', 'Maj', 'Ten-Cel', 'Cel'];
+        const rankOrder = ['Sd/Cb', 'Sgt/SubTen', 'Ten', 'Cap', 'Maj', 'Ten-Cel'];
 
         const ddqod = {
           "AFAS": {
                     "Sd/Cb": 1,
-                    "Sgt": 2,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 2,
                     "Ten": 0,
                     "Cap": 0,
                     "Maj": 0,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 0
           },
           "ALMG": {
                     "Sd/Cb": 0,
-                    "Sgt": 1,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 1,
                     "Ten": 0,
                     "Cap": 0,
                     "Maj": 0,
-                    "Ten-Cel": 1,
-                    "Cel": 0
+                    "Ten-Cel": 1
           },
           "CEDEC": {
                     "Sd/Cb": 1,
-                    "Sgt": 5,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 5,
                     "Ten": 2,
                     "Cap": 0,
                     "Maj": 1,
-                    "Ten-Cel": 1,
-                    "Cel": 0
+                    "Ten-Cel": 1
           },
           "COORDENAÇÃO DAI/2": {
-                    "Sd/Cb": 0,
-                    "Sgt": 1,
-                    "SubTen": 0,
+                    "Sd/Cb": 1,
+                    "Sgt/SubTen": 0,
                     "Ten": 0,
                     "Cap": 0,
                     "Maj": 1,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 0
           },
           "CTPM": {
                     "Sd/Cb": 0,
-                    "Sgt": 15,
-                    "SubTen": 2,
+                    "Sgt/SubTen": 17,
                     "Ten": 0,
                     "Cap": 0,
                     "Maj": 0,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 0
           },
           "Fundação SALVAR": {
                     "Sd/Cb": 2,
-                    "Sgt": 2,
-                    "SubTen": 1,
+                    "Sgt/SubTen": 3,
                     "Ten": 1,
                     "Cap": 0,
                     "Maj": 1,
-                    "Ten-Cel": 1,
-                    "Cel": 0
+                    "Ten-Cel": 1
           },
           "GMG": {
                     "Sd/Cb": 2,
-                    "Sgt": 9,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 9,
                     "Ten": 1,
                     "Cap": 1,
                     "Maj": 1,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 0
           },
           "Intendência": {
                     "Sd/Cb": 0,
-                    "Sgt": 5,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 5,
                     "Ten": 1,
                     "Cap": 0,
                     "Maj": 0,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 0
           },
           "MPMG": {
                     "Sd/Cb": 0,
-                    "Sgt": 2,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 2,
                     "Ten": 2,
-                    "Cap": 2,
+                    "Cap": 1,
                     "Maj": 0,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 1
           },
           "OGE": {
                     "Sd/Cb": 1,
-                    "Sgt": 2,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 2,
                     "Ten": 0,
                     "Cap": 1,
                     "Maj": 1,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 0
           },
           "Secretaria Parlamentar": {
                     "Sd/Cb": 2,
-                    "Sgt": 0,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 0,
                     "Ten": 1,
                     "Cap": 0,
                     "Maj": 0,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 0
           },
           "SEJUSP": {
                     "Sd/Cb": 0,
-                    "Sgt": 1,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 1,
                     "Ten": 0,
                     "Cap": 0,
-                    "Maj": 0,
-                    "Ten-Cel": 1,
-                    "Cel": 0
+                    "Maj": 1,
+                    "Ten-Cel": 0
           },
           "SENASP": {
                     "Sd/Cb": 0,
-                    "Sgt": 2,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 2,
                     "Ten": 0,
                     "Cap": 0,
                     "Maj": 0,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 0
           },
           "SES": {
                     "Sd/Cb": 0,
-                    "Sgt": 0,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 0,
                     "Ten": 1,
                     "Cap": 0,
                     "Maj": 1,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 0
           },
           "SEE": {
                     "Sd/Cb": 0,
-                    "Sgt": 0,
-                    "SubTen": 0,
+                    "Sgt/SubTen": 0,
                     "Ten": 0,
                     "Cap": 0,
                     "Maj": 0,
-                    "Ten-Cel": 1,
-                    "Cel": 0
+                    "Ten-Cel": 1
           },
           "TJMG": {
                     "Sd/Cb": 1,
-                    "Sgt": 4,
-                    "SubTen": 1,
+                    "Sgt/SubTen": 5,
                     "Ten": 1,
                     "Cap": 0,
                     "Maj": 1,
-                    "Ten-Cel": 0,
-                    "Cel": 0
+                    "Ten-Cel": 0
           },
           "TJMMG": {
                     "Sd/Cb": 3,
-                    "Sgt": 5,
-                    "SubTen": 1,
+                    "Sgt/SubTen": 6,
                     "Ten": 1,
                     "Cap": 0,
                     "Maj": 0,
-                    "Ten-Cel": 0,
-                    "Cel": 1
+                    "Ten-Cel": 0
           }
 };
 
@@ -1440,9 +1361,9 @@
                     "phone": "(31) 97167-7886",
                     "orgao": "SES"
           },
-          "Ten Cel Andiara Beatriz Ribeiro Miranda": {
+          "Maj Andiara Beatriz Ribeiro Miranda": {
                     "date": "16/06",
-                    "fullName": "Andiara Beatriz Ribeiro Miranda",
+                    "fullName": "Andiara Beatriz Ribeiro",
                     "phone": "(31) 97153-9897",
                     "orgao": "SEE"
           },
@@ -1540,7 +1461,7 @@
 
         const normasDB = {
           "Sem convênio | Adicional: Não": {
-                    "intro": "Órgãos cuja disponibilização decorre diretamente de fundamento normativo geral, sem convênio específico e sem pagamento de adicional. Em termos práticos, a cessão se ancora no regime jurídico aplicável e não gera verba adicional vinculada ao posto de trabalho.",
+                    "intro": "Órgãos cuja disponibilização decorre diretamente de fundamento normativo geral, sem convênio específico e sem pagamento de adicional. Em termos práticos, a movimentação se ancora no regime jurídico aplicável e não gera verba adicional vinculada ao posto de trabalho.",
                     "items": [
                               {
                                         "orgao": "AFAS",
@@ -1666,13 +1587,11 @@
 
         const classifyRank = (militar) => {
           const nome = (militar || '').toLowerCase();
-          if (/\bten\s*cel\b|\bten-cel\b/.test(nome)) return 'Ten-Cel';
-          if (/\bcel\b/.test(nome)) return 'Cel';
+          if (/\bten\s*cel\b/.test(nome) || /\bten-cel\b/.test(nome)) return 'Ten-Cel';
           if (/\bmaj\b|\bmajor\b/.test(nome)) return 'Maj';
           if (/\bcap\b/.test(nome)) return 'Cap';
-          if (/\bsub\s*ten\b/.test(nome)) return 'SubTen';
-          if (/\b(?:1º|2º|3º)\s*ten\b|\bten\b/.test(nome)) return 'Ten';
-          if (/\b(?:1º|2º|3º)\s*sgt\b|\bsgt\b/.test(nome)) return 'Sgt';
+          if (/\b(?:1º|2º)\s*ten\b|\bten\b/.test(nome)) return 'Ten';
+          if (/\bsub\s*ten\b|\b(?:1º|2º|3º)\s*sgt\b|\bsgt\b/.test(nome)) return 'Sgt/SubTen';
           if (/\bcb\b|\bsd\b/.test(nome)) return 'Sd/Cb';
           return null;
         };
@@ -1697,96 +1616,17 @@
           });
         });
 
-        const groupedRankOrder = ['Cel', 'Ten-Cel', 'Maj', 'Cap', 'Ten', 'Sgt/SubTen', 'Sd/Cb'];
-        const groupedRankLabel = {
-          Cel: 'Cel',
-          'Ten-Cel': 'Ten-Cel',
-          Maj: 'Maj',
-          Cap: 'Cap',
-          Ten: 'Ten',
-          'Sgt/SubTen': 'Sgt/SubTen',
-          'Sd/Cb': 'Cb/Sd'
-        };
-
-        const getGroupedMetrics = (orgao) => {
-          const previstoMap = {
-            Cel: distribuicao[orgao].Cel.previsto,
-            'Ten-Cel': distribuicao[orgao]['Ten-Cel'].previsto,
-            Maj: distribuicao[orgao].Maj.previsto,
-            Cap: distribuicao[orgao].Cap.previsto,
-            Ten: distribuicao[orgao].Ten.previsto,
-            'Sgt/SubTen': distribuicao[orgao].Sgt.previsto + distribuicao[orgao].SubTen.previsto,
-            'Sd/Cb': distribuicao[orgao]['Sd/Cb'].previsto
-          };
-
-          const existenteMap = {
-            Cel: distribuicao[orgao].Cel.existente,
-            'Ten-Cel': distribuicao[orgao]['Ten-Cel'].existente,
-            Maj: distribuicao[orgao].Maj.existente,
-            Cap: distribuicao[orgao].Cap.existente,
-            Ten: distribuicao[orgao].Ten.existente,
-            'Sgt/SubTen': distribuicao[orgao].Sgt.existente + distribuicao[orgao].SubTen.existente,
-            'Sd/Cb': distribuicao[orgao]['Sd/Cb'].existente
-          };
-
-          const claros = groupedRankOrder.reduce((acc, rank) => {
-            acc[rank] = Math.max((previstoMap[rank] || 0) - (existenteMap[rank] || 0), 0);
-            return acc;
-          }, {});
-
-          return {
-            previstoTotal: rankOrder.reduce((sum, rank) => sum + distribuicao[orgao][rank].previsto, 0),
-            existenteTotal: (data[orgao] || []).length,
-            claroTotal: groupedRankOrder.reduce((sum, rank) => sum + claros[rank], 0),
-            previstoMap,
-            existenteMap,
-            claros
-          };
-        };
-
         const orgTotals = {};
         orgaos.forEach((orgao) => {
-          const groupedMetrics = getGroupedMetrics(orgao);
-          orgTotals[orgao] = {
-            previsto: groupedMetrics.previstoTotal,
-            existente: groupedMetrics.existenteTotal,
-            claro: groupedMetrics.claroTotal,
-            clarosPorPosto: groupedMetrics.claros,
-            previstoPorGrupo: groupedMetrics.previstoMap,
-            existentePorGrupo: groupedMetrics.existenteMap
-          };
+          const previsto = rankOrder.reduce((sum, rank) => sum + distribuicao[orgao][rank].previsto, 0);
+          const existente = (data[orgao] || []).length;
+          const claro = previsto - existente;
+          orgTotals[orgao] = { previsto, existente, claro };
         });
 
         const totalPrevisto = orgaos.reduce((sum, orgao) => sum + orgTotals[orgao].previsto, 0);
         const totalExistente = orgaos.reduce((sum, orgao) => sum + orgTotals[orgao].existente, 0);
         const totalClaro = orgaos.reduce((sum, orgao) => sum + orgTotals[orgao].claro, 0);
-
-        const rankTotals = rankOrder.reduce((acc, rank) => {
-          acc[rank] = {
-            previsto: orgaos.reduce((sum, orgao) => sum + distribuicao[orgao][rank].previsto, 0),
-            existente: orgaos.reduce((sum, orgao) => sum + distribuicao[orgao][rank].existente, 0)
-          };
-          acc[rank].claro = acc[rank].previsto - acc[rank].existente;
-          return acc;
-        }, {});
-
-        const renderRankSummary = () => {
-          const rankSummaryGrid = document.getElementById('rankSummaryGrid');
-          if (!rankSummaryGrid) return;
-          rankSummaryGrid.innerHTML = rankOrder
-            .slice()
-            .reverse()
-            .map((rank) => `
-              <div class="rank-card">
-                <h3>${rankLabel[rank]}</h3>
-                <p>Previsto: ${rankTotals[rank].previsto}</p>
-                <p>Existente: ${rankTotals[rank].existente}</p>
-                <p>Claro: ${rankTotals[rank].claro}</p>
-              </div>
-            `)
-            .join('');
-        };
-
 
         const generalData = document.querySelector('.general-data');
         if (generalData) {
@@ -1799,33 +1639,21 @@
 
         document.querySelectorAll('.block').forEach((block) => {
           const orgao = block.getAttribute('data-orgao');
-          const totals = orgTotals[orgao] || { previsto: 0, existente: 0, claro: 0, clarosPorPosto: {} };
+          const totals = orgTotals[orgao] || { previsto: 0, existente: 0, claro: 0 };
           const numbers = block.querySelector('.numbers');
           if (numbers) {
-            const clarosAbertos = Object.entries(totals.clarosPorPosto || {})
-              .filter(([, qtd]) => qtd > 0)
-              .map(([rank, qtd]) => `${qtd} ${groupedRankLabel[rank]}`);
-            numbers.innerHTML = `
-              Previsto: ${totals.previsto} <br />
-              Existente: ${totals.existente} <br />
-              <span style="color: ${totals.claro > 0 ? '#f44336' : '#6c757d'}; font-weight: 700;">Claro: ${totals.claro}</span>
-              ${clarosAbertos.length ? `<br /><span style="display:block; margin-top:6px; font-size:13px; color:#f44336; font-weight:600;">Claros em: ${clarosAbertos.join(', ')}</span>` : ''}
-            `;
+            numbers.innerHTML = `Previsto: ${totals.previsto} <br /> Existente: ${totals.existente} <br /> Claro: ${totals.claro}`;
           }
         });
 
         const rankLabel = {
-          Cel: 'Cel',
           'Ten-Cel': 'Ten-Cel',
           Maj: 'Maj',
           Cap: 'Cap',
           Ten: 'Ten',
-          SubTen: 'SubTen',
-          Sgt: 'Sgt',
+          'Sgt/SubTen': 'SubTen/Sgt',
           'Sd/Cb': 'Cb/Sd'
         };
-
-        renderRankSummary();
 
         const ddqodList = document.querySelector('#militaryList ul');
         if (ddqodList) {
@@ -1878,39 +1706,21 @@
 
         const showModal = (orgao) => {
           const militares = data[orgao] || [];
-          const totals = orgTotals[orgao] || { clarosPorPosto: {}, claro: 0 };
-          const clarosAbertos = Object.entries(totals.clarosPorPosto || {})
-            .filter(([, qtd]) => qtd > 0)
-            .map(([rank, qtd]) => `${qtd} ${groupedRankLabel[rank]}`);
-
           document.getElementById('modalTitle').textContent = `Relação de Militares - ${orgao}`;
-          const listaMilitares = militares.length > 0
-            ? militares.map((militar) => {
-                const [nome, telefone] = militar.split(' - ');
-                return `
-                  <div style="margin-bottom:12px; text-align:left;">
-                    <p><strong>Nome:</strong> ${nome}</p>
-                    <p><strong>Telefone:</strong> ${telefone || 'Não informado'}</p>
-                    ${renderWaButtonHTML(telefone, 'Enviar WhatsApp', `Olá, ${nome}. Aqui é da DAI/2.`)}
-                  </div>
-                  <hr style="border: 1px solid #ddd;">
-                `;
-              }).join('')
-            : '<p style="color: red;">Nenhum militar registrado neste órgão.</p>';
-
-          const notaClaro = clarosAbertos.length
-            ? `
-              <div style="margin-top: 14px; padding: 12px; border-radius: 10px; background: #fff5f5; border: 1px solid #f5c2c7; text-align: left;">
-                <p style="margin: 0; color: #842029;"><strong>Nota:</strong> Há claro aberto neste órgão para os seguintes postos/graduações: ${clarosAbertos.join(', ')}.</p>
-              </div>
-            `
-            : `
-              <div style="margin-top: 14px; padding: 12px; border-radius: 10px; background: #f6fff8; border: 1px solid #cfe8d5; text-align: left;">
-                <p style="margin: 0; color: #1f5132;"><strong>Nota:</strong> Não há claro aberto neste órgão por posto/graduação.</p>
-              </div>
-            `;
-
-          militaresList.innerHTML = `${listaMilitares}${notaClaro}`;
+          militaresList.innerHTML =
+            militares.length > 0
+              ? militares.map((militar) => {
+                  const [nome, telefone] = militar.split(' - ');
+                  return `
+                    <div style="margin-bottom:12px; text-align:left;">
+                      <p><strong>Nome:</strong> ${nome}</p>
+                      <p><strong>Telefone:</strong> ${telefone || 'Não informado'}</p>
+                      ${renderWaButtonHTML(telefone, 'Enviar WhatsApp', `Olá, ${nome}. Aqui é da DAI/2.`)}
+                    </div>
+                    <hr style="border: 1px solid #ddd;">
+                  `;
+                }).join('')
+              : '<p style="color: red;">Nenhum militar registrado neste órgão.</p>';
           modal.style.display = 'flex';
         };
 
@@ -1974,20 +1784,9 @@
 
           const resultados = orgaos
             .map((orgao) => {
-              let previsto = 0;
-              let existente = 0;
-              let claro = 0;
-
-              if (selectedRank === 'Sgt/SubTen') {
-                previsto = (distribuicao[orgao].Sgt?.previsto || 0) + (distribuicao[orgao].SubTen?.previsto || 0);
-                existente = (distribuicao[orgao].Sgt?.existente || 0) + (distribuicao[orgao].SubTen?.existente || 0);
-                claro = Math.max(previsto - existente, 0);
-              } else {
-                previsto = distribuicao[orgao][selectedRank]?.previsto || 0;
-                existente = distribuicao[orgao][selectedRank]?.existente || 0;
-                claro = Math.max(previsto - existente, 0);
-              }
-
+              const previsto = distribuicao[orgao][selectedRank].previsto;
+              const existente = distribuicao[orgao][selectedRank].existente;
+              const claro = previsto - existente;
               return { orgao, previsto, existente, claro };
             })
             .filter((item) => item.claro > 0);
