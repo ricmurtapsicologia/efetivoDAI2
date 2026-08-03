@@ -48,8 +48,9 @@
   const normalizePhoneForWA = (raw) => {
     const candidates = String(raw || '').split(/[\/|]/).map((part) => part.replace(/\D/g, '')).filter(Boolean);
     const mobile = candidates.find((digits) => {
-      const local = digits.startsWith('55') ? digits.slice(2) : digits;
-      return local.length === 11 && local[2] === '9';
+      const hasCountryCode = digits.startsWith('55');
+      const local = hasCountryCode ? digits.slice(2) : digits;
+      return (local.length === 11 && local[2] === '9') || (hasCountryCode && local.length === 10);
     });
     if (!mobile) return null;
     return mobile.startsWith('55') ? mobile : `55${mobile}`;
