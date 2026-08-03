@@ -37,6 +37,8 @@ Campos administrativos adicionais da planilha, como número BM, e-mail, sexo, fu
 /
 ├── index.html
 ├── assets/
+│   ├── css/
+│   │   └── main.css
 │   └── js/
 │       └── app.js
 ├── data/
@@ -46,7 +48,8 @@ Campos administrativos adicionais da planilha, como número BM, e-mail, sexo, fu
 
 ### Responsabilidades
 
-- `index.html`: estrutura visual e semântica do portal, com os estilos originais preservados;
+- `index.html`: estrutura visual e semântica do portal;
+- `assets/css/main.css`: estilos originais do frontend;
 - `assets/js/app.js`: splash, onboarding, pesquisa, gráficos, modais, aniversários e cálculos;
 - `data/data.js`: fonte nominal do efetivo, aniversários preservados, DDQOD original e instrumentos jurídicos correlatos.
 
