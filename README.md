@@ -4,27 +4,27 @@ Portal estático de consulta da distribuição de efetivo da DAI/2.
 
 ## Versão
 
-**v1.1.0 — 03/08/2026**
+**v1.1.1 — 03/08/2026**
 
-Refatoração conservadora do portal original. O frontend foi preservado: splash, onboarding, banner, fotografia, layout de cards, gráficos, pesquisa, modais, painel de aniversariantes e consulta jurídica mantêm a mesma apresentação e fluxo de uso.
+Ajuste cirúrgico de efetivo no TJMMG sobre a arquitetura conservadora v1.1.0, sem alteração de layout, splash, onboarding, banner, cards, gráficos, pesquisa ou demais elementos do frontend.
+
+### Alteração da v1.1.1
+
+- removido do efetivo do TJMMG: **1º Sgt Rinaldo Cézar Fontes Cruz**;
+- removida também a data de aniversário anteriormente associada a esse registro;
+- incluído no TJMMG: **3º Sgt Diego Natalino dos Santos**;
+- contato cadastrado: **+55 31 8849-7210**;
+- a troca é 1 por 1 no mesmo órgão, portanto não altera o efetivo total nem o claro quantitativo do TJMMG;
+- a validação do botão de WhatsApp foi ajustada para aceitar este número exatamente no formato informado, sem inserir dígito inexistente;
+- cache de `data.js` e `app.js` atualizado para `v1.1.1`.
 
 ## Atualização de efetivo
 
-Fonte utilizada para a relação nominal:
+A base nominal principal foi originalmente consolidada a partir de `Planilha de Efetivo da DAI-2 _ Órgãos Externos(3).xlsx`, aba `TABELA`, e recebe posteriormente movimentações pontuais formalmente informadas.
 
-`Planilha de Efetivo da DAI-2 _ Órgãos Externos(3).xlsx` — aba `TABELA`.
+São publicados somente os dados necessários às funcionalidades da página: posto/graduação, nome, órgão, unidade do CTPM quando existente e contato. Número BM, e-mail, sexo, função, origem administrativa e demais campos administrativos não são publicados no portal.
 
-Foram considerados somente os dados necessários às funcionalidades já existentes na página:
-
-- posto/graduação;
-- nome completo;
-- órgão;
-- unidade do CTPM, quando existente;
-- contato.
-
-Campos administrativos adicionais da planilha, como número BM, e-mail, sexo, função e situação funcional, não foram publicados nesta versão.
-
-## Resultado da atualização
+## Resultado atual
 
 - efetivo nominal atual: **82 militares**;
 - DDQOD original mantido: **101 posições previstas**;
@@ -59,8 +59,8 @@ Para novas atualizações de pessoal, alterar prioritariamente o bloco `DAI2_PER
 
 ## Observação sobre aniversários
 
-A planilha-fonte atual não contém data de aniversário. Por isso, foram preservadas apenas as datas já existentes no portal anterior para militares que permanecem na relação. Novos militares não receberam datas inferidas ou inventadas.
+Datas de aniversário são mantidas somente quando já conhecidas na base anterior. Novos militares não recebem datas inferidas ou inventadas.
 
 ## Compatibilidade visual
 
-A refatoração foi desenhada para não modificar o layout percebido pelo usuário. O objetivo é reduzir acoplamento e facilitar manutenção sem redesenhar o portal.
+A arquitetura foi desenhada para não modificar o layout percebido pelo usuário. O objetivo é reduzir acoplamento e facilitar manutenção sem redesenhar o portal.
