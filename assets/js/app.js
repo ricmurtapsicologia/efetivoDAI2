@@ -6,6 +6,19 @@
   const ddqod = window.DAI2_DDQOD || {};
   const normasDB = window.DAI2_LEGAL || {};
 
+  Object.assign(birthdays, {
+    'Eva Efigênia da Cruz': '11/04',
+    'Cosme Sebastião Costa': '13/06',
+    'Rubens Afonso do Carmo Gonçalves': '16/07',
+    'Leonardo da Silva Machado': '02/04',
+    'Filipe César Gonzaga Evangelista': '13/10',
+    'Wilsa Maíra do Nascimento': '20/01',
+    'Diego Natalino dos Santos': '25/12',
+    'Denilson Andrade': '03/09',
+    'Warleysson Flávio Cláudio Melo': '29/08',
+    'Matheus Thomaz da Silva': '02/01'
+  });
+
   let currentOnboardingStep = 1;
   const totalOnboardingSteps = 4;
   let pageInitialized = false;
