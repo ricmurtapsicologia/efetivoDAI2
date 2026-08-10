@@ -1,0 +1,30 @@
+name: Python personnel audit
+
+on:
+  pull_request:
+    paths:
+      - 'data/**'
+      - 'scripts/personnel_pipeline.py'
+      - '.github/workflows/python-personnel-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-current-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit existing production data
+        run: python scripts/personnel_pipeline.py audit --input data/data.js --report artifacts/personnel-audit.json
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: personnel-audit
+          path: artifacts/personnel-audit.json
+          if-no-files-found: ignore
