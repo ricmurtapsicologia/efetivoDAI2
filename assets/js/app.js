@@ -92,6 +92,7 @@
   };
 
   const displayMilitary = (person) => `${person.rank} ${person.name}`;
+  const renderNumberHTML = (person) => person.number ? `<p><strong>Nr BM:</strong> ${person.number}</p>` : '';
 
   const initPageLogic = () => {
     const rankOrder = ['Sd/Cb', 'Sgt/SubTen', 'Ten', 'Cap', 'Maj', 'Ten-Cel'];
@@ -99,7 +100,7 @@
       AFAS:'chart-afas', ALMG:'chart-almg', CEDEC:'chart-cedec', 'COORDENAÇÃO DAI/2':'chart-coordenacao-dai2',
       CTPM:'chart-ctpm', 'Fundação SALVAR':'chart-salvar', GMG:'chart-gmg', Intendência:'chart-intendencia',
       MPMG:'chart-mpmg', OGE:'chart-oge', 'Secretaria Parlamentar':'chart-secretaria-parlamentar', SEE:'chart-see',
-      SEJUSP:'chart-sejusp', SENASP:'chart-senasp', SES:'chart-ses', TJMG:'chart-tjmg', TJMMG:'chart-tjmmg'
+      SEJUSP:'chart-sejusp', SEMAD:'chart-semad', SENASP:'chart-senasp', SES:'chart-ses', TJMG:'chart-tjmg', TJMMG:'chart-tjmmg'
     };
 
     const orgaos = Object.keys(chartMap);
@@ -176,7 +177,7 @@
       document.getElementById('modalTitle').textContent = `Relação de Militares - ${orgao}`;
       militaresList.innerHTML = militares.length ? militares.map((person) => {
         const nome = displayMilitary(person);
-        return `<div class="modal-military-item"><p><strong>Nome:</strong> ${nome}</p><p><strong>Telefone:</strong> ${person.phone || 'Não informado'}</p>${renderWaButtonHTML(person.phone,'Enviar WhatsApp',`Olá, ${nome}. Aqui é da DAI/2.`)}</div>`;
+        return `<div class="modal-military-item"><p><strong>Nome:</strong> ${nome}</p>${renderNumberHTML(person)}<p><strong>Telefone:</strong> ${person.phone || 'Não informado'}</p>${renderWaButtonHTML(person.phone,'Enviar WhatsApp',`Olá, ${nome}. Aqui é da DAI/2.`)}</div>`;
       }).join('<hr class="modal-divider">') + claroHtml : '<p style="color: red;">Nenhum militar registrado neste órgão.</p>' + claroHtml;
       modal.style.display = 'flex';
     };
@@ -195,11 +196,11 @@
       searchResult.innerHTML = '';
       if (!query) return;
       orgaos.forEach((orgao) => data[orgao].forEach((person) => {
-        const searchable = normalizeText(`${person.rank} ${person.name} ${orgao} ${person.subunit || ''} ${person.phone || ''} ${classifyRank(person.rank) || ''}`);
+        const searchable = normalizeText(`${person.rank} ${person.name} ${person.number || ''} ${orgao} ${person.subunit || ''} ${person.phone || ''} ${classifyRank(person.rank) || ''}`);
         if (!searchable.includes(query)) return;
         found = true;
         const nome = displayMilitary(person);
-        searchResult.innerHTML += `<div style="margin-bottom:16px; text-align:left;"><p><strong>Nome:</strong> ${nome}</p><p><strong>Telefone:</strong> ${person.phone || 'Não informado'}</p><p><strong>Órgão Externo:</strong> ${orgao}</p>${renderWaButtonHTML(person.phone,'Enviar WhatsApp',`Olá, ${nome}. Aqui é da DAI/2.`)}</div><hr style="border: 1px solid #ddd;">`;
+        searchResult.innerHTML += `<div style="margin-bottom:16px; text-align:left;"><p><strong>Nome:</strong> ${nome}</p>${renderNumberHTML(person)}<p><strong>Telefone:</strong> ${person.phone || 'Não informado'}</p><p><strong>Órgão Externo:</strong> ${orgao}</p>${renderWaButtonHTML(person.phone,'Enviar WhatsApp',`Olá, ${nome}. Aqui é da DAI/2.`)}</div><hr style="border: 1px solid #ddd;">`;
       }));
       if (!found) searchResult.innerHTML = '<p style="color: red;">Nenhum militar encontrado.</p>';
     };
@@ -242,7 +243,7 @@
       if (!aniversariantes.length) { birthdayContent.innerHTML = '<div class="birthday-empty"><p><strong>Não há aniversariantes no dia.</strong></p></div>'; return; }
       birthdayContent.innerHTML = aniversariantes.map((person) => {
         const displayName = displayMilitary(person);
-        return `<div class="birthday-card"><p><strong>Posto/Graduação e identificação:</strong> ${displayName}</p><p><strong>Nome completo:</strong> ${person.name}</p><p><strong>WhatsApp:</strong> ${person.phone || 'Não informado'}</p><span class="orgao-tag">${person.org}</span><div style="margin-top:10px;">${renderWaButtonHTML(person.phone,'Enviar parabéns no WhatsApp',birthdayMessage(person.name))}</div></div>`;
+        return `<div class="birthday-card"><p><strong>Posto/Graduação e identificação:</strong> ${displayName}</p><p><strong>Nome completo:</strong> ${person.name}</p>${renderNumberHTML(person)}<p><strong>WhatsApp:</strong> ${person.phone || 'Não informado'}</p><span class="orgao-tag">${person.org}</span><div style="margin-top:10px;">${renderWaButtonHTML(person.phone,'Enviar parabéns no WhatsApp',birthdayMessage(person.name))}</div></div>`;
       }).join('');
     };
     birthdayToggleBtn.addEventListener('click',() => birthdayPanel.style.display = !birthdayPanel.style.display || birthdayPanel.style.display === 'none' ? 'block' : 'none');
