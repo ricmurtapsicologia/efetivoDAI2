@@ -53,8 +53,8 @@
         <h1 class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</h1>
 
         <section class="general-data" aria-label="Dados Gerais">
-          <p>Total Previsto: 101</p>
-          <p>Total Existente: 77</p>
+          <p>Total Previsto: 102</p>
+          <p>Total Existente: 78</p>
           <p>Total Claro: 24</p>
         </section>
 
@@ -78,7 +78,7 @@
         </section>
 
         <section class="search-container" aria-label="Pesquisar Militar">
-          <input type="text" id="searchInput" placeholder="Pesquisar militar por nome ou posto..." />
+          <input type="text" id="searchInput" placeholder="Pesquisar militar por nome, Nr BM, posto ou órgão..." />
           <button id="searchButton">Pesquisar Militar</button>
         </section>
         <div id="searchResult"></div>
@@ -123,12 +123,16 @@
         <section class="row">
           <div class="block" data-orgao="SEE"><h3>SEE</h3><canvas id="chart-see"></canvas><div class="numbers">Previsto: 1 <br /> Existente: 1 <br /> Claro: 0</div></div>
           <div class="block" data-orgao="SEJUSP"><h3>SEJUSP</h3><canvas id="chart-sejusp"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 1 <br /> Claro: 1</div></div>
-          <div class="block" data-orgao="SENASP"><h3>SENASP/MJ</h3><canvas id="chart-senasp"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
+          <div class="block" data-orgao="SEMAD"><h3>SEMAD</h3><canvas id="chart-semad"></canvas><div class="numbers">Previsto: 1 <br /> Existente: 1 <br /> Claro: 0</div></div>
         </section>
 
         <section class="row">
+          <div class="block" data-orgao="SENASP"><h3>SENASP/MJ</h3><canvas id="chart-senasp"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
           <div class="block" data-orgao="SES"><h3>SES</h3><canvas id="chart-ses"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
           <div class="block" data-orgao="TJMG"><h3>TJMG</h3><canvas id="chart-tjmg"></canvas><div class="numbers">Previsto: 8 <br /> Existente: 6 <br /> Claro: 2</div></div>
+        </section>
+
+        <section class="row">
           <div class="block" data-orgao="TJMMG"><h3>TJMMG</h3><canvas id="chart-tjmmg"></canvas><div class="numbers">Previsto: 10 <br /> Existente: 6 <br /> Claro: 4</div></div>
         </section>
 
@@ -151,7 +155,7 @@
       <p>&copy; 2026 Todos os Direitos Reservados</p>
     </footer>
     <script src="data/data.js?v=1.1.1"></script>
-    <script src="data/runtime-updates.js?v=1.0.0"></script>
-    <script src="assets/js/app.js?v=1.1.1"></script>
+    <script src="data/runtime-updates.js?v=1.1.0"></script>
+    <script src="assets/js/app.js?v=1.2.0"></script>
   </body>
 </html>
