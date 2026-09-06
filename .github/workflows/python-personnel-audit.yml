@@ -33,6 +33,9 @@ jobs:
         run: python scripts/personnel_pipeline.py audit --input data/data.js --report artifacts/personnel-audit.json
       - name: Audit production invariants
         run: python scripts/site_audit.py
+      - name: Public GitHub Pages smoke 30/30
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: python scripts/live_smoke.py
       - name: Upload audit report
         if: always()
         uses: actions/upload-artifact@v4
