@@ -1,66 +1,69 @@
-# Efetivo DAI/2 — Órgãos Externos
+# DAI/2 · Efetivo e TPB 2026
 
-Portal estático de consulta da distribuição de efetivo da DAI/2.
+Painel estático do CBMMG/DAI para consulta gerencial de:
 
-## Versão
+- efetivo DAI/2 em órgãos externos;
+- DDQOD e claro por posto/graduação;
+- rastreabilidade funcional quando o ato está localizado;
+- acompanhamento mobile-first do TPB 2026 para o escopo DAI controlado.
 
-**v1.1.1 — 03/08/2026**
+## Versão 2.0.0
 
-Ajuste cirúrgico de efetivo no TJMMG sobre a arquitetura conservadora v1.1.0, sem alteração de layout, splash, onboarding, banner, cards, gráficos, pesquisa ou demais elementos do frontend.
+Principais mudanças:
 
-### Alteração da v1.1.1
+- arquitetura mobile-first;
+- TPB 2026 integrado ao painel, com velocímetro, KPIs, pendências, próximos ciclos e consulta individual;
+- remoção de Chart.js e de imagens/dependências remotas obrigatórias;
+- cálculo de claro por posto/graduação;
+- SEMAD tratada como implantação extra-DDQOD, com 0 previsto no DDQOD consultado;
+- dados canônicos consolidados em `data/data.js`;
+- nenhuma mutação de dados em runtime;
+- camada pública não publica Nº BM;
+- onboarding persistente e acessibilidade de teclado/dialog;
+- CI em `pull_request` e `push` para `main`.
 
-- removido do efetivo do TJMMG: **1º Sgt Rinaldo Cézar Fontes Cruz**;
-- removida também a data de aniversário anteriormente associada a esse registro;
-- incluído no TJMMG: **3º Sgt Diego Natalino dos Santos**;
-- contato cadastrado: **+55 31 8849-7210**;
-- a troca é 1 por 1 no mesmo órgão, portanto não altera o efetivo total nem o claro quantitativo do TJMMG;
-- a validação do botão de WhatsApp foi ajustada para aceitar este número exatamente no formato informado, sem inserir dígito inexistente;
-- cache de `data.js` e `app.js` atualizado para `v1.1.1`.
+## Fontes de corte
 
-## Atualização de efetivo
+Efetivo DAI/2: ficha-mestre dos órgãos externos, validação de 17/08/2026.
 
-A base nominal principal foi originalmente consolidada a partir de `Planilha de Efetivo da DAI-2 _ Órgãos Externos(3).xlsx`, aba `TABELA`, e recebe posteriormente movimentações pontuais formalmente informadas.
+DDQOD: Anexo C da Resolução nº 1.268/2025, quadro consultado.
 
-São publicados somente os dados necessários às funcionalidades da página: posto/graduação, nome, órgão, unidade do CTPM quando existente e contato. Número BM, e-mail, sexo, função, origem administrativa e demais campos administrativos não são publicados no portal.
+TPB: `Dashboard TPB DAI 2026 - controle por ata - 03-09-2026.xlsx`, corte 03/09/2026.
 
-## Resultado atual
+Ato individual vigente e fonte primária prevalecem sobre qualquer síntese gerencial exibida na página.
 
-- efetivo nominal atual: **82 militares**;
-- DDQOD original mantido: **101 posições previstas**;
-- o quantitativo existente e o claro por órgão são calculados dinamicamente a partir da base nominal;
-- a distribuição prevista por P/G permanece a mesma do portal original.
+## Regra do TPB
 
-## Arquitetura
+`TPB FEITO` significa participação comprovada em lista/ata ou consolidada como concluída/regularizada na fonte governada. Dispensa definitiva permanece separada e não é contabilizada como TPB feito.
 
-```text
-/
-├── index.html
-├── assets/
-│   ├── css/
-│   │   └── main.css
-│   └── js/
-│       └── app.js
-├── data/
-│   └── data.js
-└── README.md
+No corte de 03/09/2026:
+
+- escopo controlado: 85;
+- TPB feito: 69;
+- TPB não feito: 16;
+- dispensa definitiva: 9;
+- não feito e sem dispensa: 7;
+- feito com data da evidência a recuperar: 15.
+
+A planilha-fonte contém 4 históricos de ciclo com ano divergente de 2026. Esses históricos foram neutralizados na camada executiva e não são usados como evidência de conclusão ou programação.
+
+## Regra do claro
+
+O claro é calculado por posto/graduação:
+
+`claro_PG = max(previsto_PG - existente_PG, 0)`
+
+Excedentes de uma graduação não compensam vagas de outra.
+
+## Segurança e privacidade
+
+A camada pública usa apenas os campos necessários para consulta gerencial nominal: posto/graduação, nome, órgão e subunidade. Nº BM, telefone, aniversário e outros dados pessoais não necessários à consulta não são publicados.
+
+## Validação
+
+```bash
+python scripts/personnel_pipeline.py audit --input data/data.js
+python scripts/site_audit.py
 ```
 
-### Responsabilidades
-
-- `index.html`: estrutura visual e semântica do portal;
-- `assets/css/main.css`: estilos originais do frontend;
-- `assets/js/app.js`: splash, onboarding, pesquisa, gráficos, modais, aniversários e cálculos;
-- `data/data.js`: fonte nominal do efetivo, aniversários preservados, DDQOD original e instrumentos jurídicos correlatos.
-
-## Regra de manutenção
-
-Para novas atualizações de pessoal, alterar prioritariamente o bloco `DAI2_PERSONNEL` em `data/data.js`. O `index.html` não deve voltar a armazenar nomes, telefones ou listas nominais.
-
-## Observação sobre aniversários
-
-Datas de aniversário são mantidas somente quando já conhecidas na base anterior. Novos militares não recebem datas inferidas ou inventadas.
-
-## Compatibilidade visual
-
-A arquitetura foi desenhada para não modificar o layout percebido pelo usuário. O objetivo é reduzir acoplamento e facilitar manutenção sem redesenhar o portal.
+O workflow `.github/workflows/python-personnel-audit.yml` executa os gates em PRs e em `main`.
