@@ -1,161 +1,90 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0b5a36">
-  <meta name="description" content="Painel gerencial da DAI/2 para efetivo de órgãos externos e acompanhamento do TPB 2026 da DAI.">
-  <title>DAI/2 · Efetivo e TPB 2026</title>
-  <link rel="stylesheet" href="assets/css/main.css?v=2.0.0">
-</head>
-<body>
-  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
-
-  <header class="site-header">
-    <div class="header-inner">
-      <div>
-        <p class="eyebrow">CBMMG · Diretoria de Assuntos Institucionais</p>
-        <h1>DAI/2 · Órgãos Externos</h1>
-        <p class="header-subtitle">Efetivo, DDQOD, rastreabilidade e TPB 2026 da DAI</p>
-      </div>
-      <button id="helpButton" class="icon-button" type="button" aria-label="Abrir ajuda">Ajuda</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Distribuição de Efetivo DAI/2</title>
+    <meta property="og:title" content="Distribuição de Efetivo DAI/2" />
+    <meta property="og:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
+    <meta property="og:url" content="https://ricmurtapsicologia.github.io/efetivoDAI2/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Distribuição de Efetivo DAI/2" />
+    <meta name="twitter:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
+    <meta name="theme-color" content="#2e7d32" />
+    <link rel="stylesheet" href="assets/css/main.css?v=2.1.0" />
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Ir para o conteúdo</a>
+    <div id="splash">
+      <h1>Distribuição de Efetivo DAI/2</h1>
+      <p>Carregando dados...</p>
     </div>
-  </header>
 
-  <main id="conteudo" class="page-shell">
-    <section id="visao-geral" class="section-card" aria-labelledby="overviewTitle">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Visão geral</p>
-          <h2 id="overviewTitle">Efetivo DAI/2</h2>
-        </div>
-        <div class="source-chip" id="dataVersion">Carregando versão…</div>
+    <div id="onboarding" class="hidden">
+      <div class="onboarding-step" data-step="1">
+        <h2>Bem-vindo ao Portal DAI/2</h2>
+        <p>Aqui você tem uma visão geral da distribuição do efetivo dos Órgãos Externos, com acesso rápido aos detalhes de cada unidade.</p>
+        <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar</button><button class="btn-skip" type="button">Pular</button></div>
       </div>
-
-      <div class="kpi-grid overview-kpis" id="overviewKpis" aria-live="polite"></div>
-
-      <div class="notice neutral">
-        <strong>Regra de leitura.</strong>
-        <span>“Claro DDQOD” é calculado por posto/graduação. Excedentes de uma graduação não compensam vagas de outra.</span>
+      <div class="onboarding-step hidden" data-step="2">
+        <h2>Pesquisa e “Claro”</h2>
+        <p>Encontre militares por nome ou posto/graduação e verifique rapidamente o “claro” (vagas disponíveis) em cada posto.</p>
+        <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar</button><button class="btn-skip" type="button">Pular</button></div>
       </div>
-
-      <div class="quick-actions">
-        <button id="legalButton" class="secondary-button" type="button">Base jurídica correlata</button>
+      <div class="onboarding-step hidden" data-step="3">
+        <h2>Gráficos Interativos</h2>
+        <p>Veja de forma visual o preenchimento das vagas previstas e o “claro” por posto/graduação. Clique no gráfico para conferir a lista nominal dos militares.</p>
+        <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar</button><button class="btn-skip" type="button">Pular</button></div>
       </div>
-    </section>
-
-    <section id="tpb" class="section-card tpb-section" aria-labelledby="tpbTitle">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Treinamento Profissional Básico</p>
-          <h2 id="tpbTitle">TPB 2026 · DAI</h2>
-        </div>
-        <div class="source-chip" id="tpbCutoff">Corte: —</div>
+      <div class="onboarding-step hidden" data-step="4">
+        <h2>Previsão de Efetivo</h2>
+        <p>Confira a previsão de efetivo pelo DDQOD ao clicar no botão. Explore todas as funcionalidades para facilitar sua consulta.</p>
+        <div class="onboarding-controls"><button class="btn-continue" type="button">Finalizar</button><button class="btn-skip" type="button">Pular</button></div>
       </div>
+    </div>
 
-      <div class="tpb-hero">
-        <div class="gauge-card">
-          <svg id="tpbGauge" class="gauge" viewBox="0 0 240 140" role="img" aria-labelledby="gaugeTitle gaugeDesc">
-            <title id="gaugeTitle">Percentual de TPB feito</title>
-            <desc id="gaugeDesc">Percentual de militares da DAI no escopo do TPB com participação comprovada.</desc>
-            <path class="gauge-track" d="M20 120 A100 100 0 0 1 220 120" pathLength="100"></path>
-            <path id="gaugeProgress" class="gauge-progress" d="M20 120 A100 100 0 0 1 220 120" pathLength="100"></path>
-          </svg>
-          <div class="gauge-value" aria-hidden="true">
-            <strong id="gaugePercent">—</strong>
-            <span>TPB feito</span>
+    <main id="mainContent" class="hidden">
+      <header class="banner" role="banner"><div class="banner-text">Distribuição de Efetivo DAI/2</div></header>
+
+      <section class="container">
+        <h1 class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</h1>
+
+        <section class="general-data" aria-label="Dados Gerais">
+          <p>Total Previsto: 101</p>
+          <p>Total Existente: 84</p>
+          <p>Total Claro: 23</p>
+        </section>
+
+        <section class="quick-actions" aria-label="Atalhos de consulta">
+          <button id="birthdayToggleBtn" class="cta-button" type="button">Verificar aniversariantes do dia</button>
+          <button id="normasToggleBtn" class="cta-button cta-button-secondary" type="button">Instrumento Jurídico Correlato</button>
+          <button id="tpbToggleBtn" class="cta-button" type="button">TPB 2026 · DAI</button>
+        </section>
+
+        <section class="birthday-panel" id="birthdayPanel" aria-label="Aniversariantes do dia">
+          <div class="birthday-header"><h2>Aniversariantes do dia</h2><p id="localDateTime">Carregando data e hora local...</p></div>
+          <div id="birthdayContent" class="birthday-content"></div>
+        </section>
+
+        <section class="color-legend" aria-label="Legenda de Cores">
+          <h2>Legenda de Cores</h2>
+          <div class="legend-grid">
+            <div class="legend-item"><span class="legend-color" style="background-color: var(--accent-yellow);"></span><span>Efetivo Previsto</span></div>
+            <div class="legend-item"><span class="legend-color" style="background-color: var(--accent-green);"></span><span>Vagas DDQOD preenchidas</span></div>
+            <div class="legend-item"><span class="legend-color" style="background-color: var(--accent-red);"></span><span>Claro por P/G</span></div>
           </div>
-          <p id="gaugeCaption" class="gauge-caption">Carregando…</p>
-        </div>
+        </section>
 
-        <div class="kpi-grid tpb-kpis" id="tpbKpis"></div>
-      </div>
+        <section class="search-container" aria-label="Pesquisar Militar">
+          <input type="text" id="searchInput" aria-label="Pesquisar militar" placeholder="Pesquisar militar por nome, posto ou órgão..." />
+          <button id="searchButton" type="button">Pesquisar Militar</button>
+        </section>
+        <div id="searchResult" aria-live="polite"></div>
 
-      <div class="governance-strip" id="tpbGovernance" aria-label="Governança da base TPB"></div>
-      <div id="tpbQualityNote" class="notice neutral" hidden></div>
-
-      <section class="attention-panel" aria-labelledby="attentionTitle">
-        <div class="subsection-heading">
-          <div>
-            <p class="eyebrow">Prioridade operacional</p>
-            <h3 id="attentionTitle">Atenção imediata</h3>
-          </div>
-          <span id="attentionCount" class="count-badge">—</span>
-        </div>
-        <div id="attentionList" class="stack-list"></div>
-      </section>
-
-      <section aria-labelledby="cyclesTitle">
-        <div class="subsection-heading">
-          <div>
-            <p class="eyebrow">Planejamento</p>
-            <h3 id="cyclesTitle">Próximos ciclos</h3>
-          </div>
-        </div>
-        <div id="nextCycles" class="cycle-grid"></div>
-      </section>
-
-      <section class="tpb-search" aria-labelledby="tpbSearchTitle">
-        <div class="subsection-heading">
-          <div>
-            <p class="eyebrow">Consulta individual</p>
-            <h3 id="tpbSearchTitle">Situação no TPB</h3>
-          </div>
-        </div>
-        <label class="field-label" for="tpbSearchInput">Buscar por nome, posto/graduação ou lotação</label>
-        <div class="search-row">
-          <input id="tpbSearchInput" type="search" autocomplete="off" placeholder="Ex.: CTPM, 1 Sgt, nome do militar">
-          <button id="tpbSearchButton" class="primary-button" type="button">Buscar</button>
-        </div>
-        <div class="filter-chips" role="group" aria-label="Filtrar situação do TPB">
-          <button type="button" class="filter-chip active" data-filter="all" aria-pressed="true">Todos</button>
-          <button type="button" class="filter-chip" data-filter="feito" aria-pressed="false">TPB feito</button>
-          <button type="button" class="filter-chip" data-filter="acao" aria-pressed="false">Exige ação</button>
-          <button type="button" class="filter-chip" data-filter="dispensa" aria-pressed="false">Dispensados</button>
-          <button type="button" class="filter-chip" data-filter="conferir" aria-pressed="false">Data a conferir</button>
-        </div>
-        <div id="tpbSearchResults" class="search-results" aria-live="polite"></div>
-      </section>
-    </section>
-
-    <section id="efetivo" class="section-card" aria-labelledby="personnelTitle">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Distribuição</p>
-          <h2 id="personnelTitle">Órgãos e efetivo</h2>
-        </div>
-      </div>
-      <p class="section-intro">Toque em um órgão para ver a relação nominal, claro por posto/graduação e rastreabilidade disponível.</p>
-      <div id="orgGrid" class="org-grid"></div>
-
-      <details class="ddqod-details">
-        <summary>Ver previsão de efetivo pelo DDQOD</summary>
-        <div id="ddqodList" class="ddqod-list"></div>
-      </details>
-    </section>
-
-    <section id="buscar" class="section-card" aria-labelledby="searchTitle">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Pesquisa</p>
-          <h2 id="searchTitle">Buscar militar ou claro</h2>
-        </div>
-      </div>
-
-      <div class="search-block">
-        <label class="field-label" for="searchInput">Militar por nome, posto/graduação, órgão ou subunidade</label>
-        <div class="search-row">
-          <input id="searchInput" type="search" autocomplete="off" placeholder="Ex.: TJMMG, Cap, nome do militar">
-          <button id="searchButton" class="primary-button" type="button">Pesquisar</button>
-        </div>
-        <div id="searchResult" class="search-results" aria-live="polite"></div>
-      </div>
-
-      <div class="search-block">
-        <label class="field-label" for="rankSelect">Claro DDQOD por posto/graduação</label>
-        <div class="search-row">
-          <select id="rankSelect">
-            <option value="">Selecione</option>
+        <section class="search-container" aria-label="Pesquisar Claro por Posto/Graduação">
+          <select id="rankSelect" aria-label="Selecionar posto ou graduação">
+            <option value="">Selecione o Posto/Graduação</option>
             <option value="Sd/Cb">Cb/Sd</option>
             <option value="Sgt/SubTen">SubTen/Sgt</option>
             <option value="Ten">Ten</option>
@@ -163,61 +92,73 @@
             <option value="Maj">Maj</option>
             <option value="Ten-Cel">Ten-Cel</option>
           </select>
-          <button id="rankButton" class="primary-button" type="button">Pesquisar claro</button>
-        </div>
-        <div id="claroResult" class="search-results" aria-live="polite"></div>
-      </div>
-    </section>
+          <button id="rankButton" type="button">Pesquisar Claro</button>
+        </section>
+        <div id="claroResult" aria-live="polite"></div>
 
-    <section class="source-footer" aria-label="Fontes e atualização">
-      <p id="sourceSummary">Carregando fontes…</p>
-      <p>Camada pública: não publica Nº BM, telefone ou aniversário. Ato individual vigente e fonte primária prevalecem sobre sínteses gerenciais.</p>
-    </section>
-  </main>
+        <section class="row" aria-label="Blocos dos Órgãos Externos">
+          <div class="block" data-orgao="AFAS"><h3>AFAS</h3><canvas id="chart-afas" aria-label="Situação AFAS"></canvas><div class="numbers">Previsto: 3 <br /> Existente: 2 <br /> Claro: 1</div></div>
+          <div class="block" data-orgao="ALMG"><h3>ALMG</h3><canvas id="chart-almg" aria-label="Situação ALMG"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
+          <div class="block" data-orgao="CEDEC"><h3>CEDEC</h3><canvas id="chart-cedec" aria-label="Situação CEDEC"></canvas><div class="numbers">Previsto: 10 <br /> Existente: 6 <br /> Claro: 4</div></div>
+        </section>
 
-  <nav class="mobile-nav" aria-label="Navegação principal">
-    <a href="#visao-geral">Visão geral</a>
-    <a href="#tpb">TPB</a>
-    <a href="#efetivo">Efetivo</a>
-    <a href="#buscar">Buscar</a>
-  </nav>
+        <section class="row">
+          <div class="block" data-orgao="COORDENAÇÃO DAI/2"><h3>COORDENAÇÃO DAI/2</h3><canvas id="chart-coordenacao-dai2" aria-label="Situação Coordenação DAI/2"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
+          <div class="block" data-orgao="CTPM"><h3>Colégio Tiradentes RMBH</h3><canvas id="chart-ctpm" aria-label="Situação CTPM"></canvas><div class="numbers">Previsto: 17 <br /> Existente: 15 <br /> Claro: 2</div></div>
+        </section>
 
-  <dialog id="personDialog" class="app-dialog" aria-labelledby="personDialogTitle">
-    <div class="dialog-header">
-      <h2 id="personDialogTitle">Relação de militares</h2>
-      <button class="dialog-close" data-close-dialog="personDialog" type="button" aria-label="Fechar">Fechar</button>
+        <section class="row">
+          <div class="block" data-orgao="Fundação SALVAR"><h3>Assessoria Fundacional</h3><canvas id="chart-salvar" aria-label="Situação Fundação SALVAR"></canvas><div class="numbers">Previsto: 8 <br /> Existente: 8 <br /> Claro: 0</div></div>
+          <div class="block" data-orgao="GMG"><h3>GMG</h3><canvas id="chart-gmg" aria-label="Situação GMG"></canvas><div class="numbers">Previsto: 14 <br /> Existente: 9 <br /> Claro: 6</div></div>
+          <div class="block" data-orgao="Intendência"><h3>Intendência CAMG</h3><canvas id="chart-intendencia" aria-label="Situação Intendência CAMG"></canvas><div class="numbers">Previsto: 6 <br /> Existente: 6 <br /> Claro: 1</div></div>
+        </section>
+
+        <section class="row">
+          <div class="block" data-orgao="MPMG"><h3>MPMG</h3><canvas id="chart-mpmg" aria-label="Situação MPMG"></canvas><div class="numbers">Previsto: 6 <br /> Existente: 6 <br /> Claro: 0</div></div>
+          <div class="block" data-orgao="OGE"><h3>OGE</h3><canvas id="chart-oge" aria-label="Situação OGE"></canvas><div class="numbers">Previsto: 5 <br /> Existente: 5 <br /> Claro: 0</div></div>
+          <div class="block" data-orgao="Secretaria Parlamentar"><h3>Secretaria Parlamentar</h3><canvas id="chart-secretaria-parlamentar" aria-label="Situação Secretaria Parlamentar"></canvas><div class="numbers">Previsto: 3 <br /> Existente: 1 <br /> Claro: 2</div></div>
+        </section>
+
+        <section class="row">
+          <div class="block" data-orgao="SEE"><h3>SEE</h3><canvas id="chart-see" aria-label="Situação SEE"></canvas><div class="numbers">Previsto: 1 <br /> Existente: 1 <br /> Claro: 0</div></div>
+          <div class="block" data-orgao="SEJUSP"><h3>SEJUSP</h3><canvas id="chart-sejusp" aria-label="Situação SEJUSP"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 1 <br /> Claro: 1</div></div>
+          <div class="block" data-orgao="SEMAD"><h3>SEMAD</h3><canvas id="chart-semad" aria-label="Situação SEMAD"></canvas><div class="numbers">Previsto: 0 <br /> Existente: 1 <br /> Claro: 0</div></div>
+        </section>
+
+        <section class="row">
+          <div class="block" data-orgao="SENASP"><h3>SENASP/MJ</h3><canvas id="chart-senasp" aria-label="Situação SENASP"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
+          <div class="block" data-orgao="SES"><h3>SES</h3><canvas id="chart-ses" aria-label="Situação SES"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
+          <div class="block" data-orgao="TJMG"><h3>TJMG</h3><canvas id="chart-tjmg" aria-label="Situação TJMG"></canvas><div class="numbers">Previsto: 8 <br /> Existente: 6 <br /> Claro: 2</div></div>
+        </section>
+
+        <section class="row">
+          <div class="block" data-orgao="TJMMG"><h3>TJMMG</h3><canvas id="chart-tjmmg" aria-label="Situação TJMMG"></canvas><div class="numbers">Previsto: 10 <br /> Existente: 9 <br /> Claro: 3</div></div>
+        </section>
+
+        <section class="list-toggle"><button id="showListBtn" type="button">Clique aqui para visualizar a Previsão de Efetivo pelo DDQOD</button></section>
+        <section class="military-list" id="militaryList"><ul></ul></section>
+      </section>
+    </main>
+
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+      <div class="modal-content"><button class="close close-button" id="modalClose" type="button" aria-label="Fechar">&times;</button><h4 id="modalTitle">Relação de Militares</h4><div id="militares-list"></div></div>
     </div>
-    <div id="personDialogBody" class="dialog-body"></div>
-  </dialog>
 
-  <dialog id="legalDialog" class="app-dialog wide-dialog" aria-labelledby="legalDialogTitle">
-    <div class="dialog-header">
-      <h2 id="legalDialogTitle">Base jurídica correlata</h2>
-      <button class="dialog-close" data-close-dialog="legalDialog" type="button" aria-label="Fechar">Fechar</button>
+    <div id="normasModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="normasModalTitle" aria-hidden="true">
+      <div class="modal-content modal-wide"><button class="close close-button" id="normasModalClose" type="button" aria-label="Fechar">&times;</button><h4 id="normasModalTitle">Disponibilização de militares - fundamentos por órgão</h4><div id="normasContent" class="normas-content"></div></div>
     </div>
-    <div id="legalDialogBody" class="dialog-body"></div>
-  </dialog>
 
-
-  <dialog id="helpDialog" class="app-dialog" aria-labelledby="helpDialogTitle">
-    <div class="dialog-header">
-      <h2 id="helpDialogTitle">Como usar o painel</h2>
-      <button class="dialog-close" data-close-dialog="helpDialog" type="button" aria-label="Fechar">Fechar</button>
+    <div id="tpbModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="tpbModalTitle" aria-hidden="true">
+      <div class="modal-content modal-wide tpb-modal-content"><button class="close close-button" id="tpbModalClose" type="button" aria-label="Fechar">&times;</button><h4 id="tpbModalTitle">TPB 2026 · DAI</h4><div id="tpbContent" class="tpb-content"></div></div>
     </div>
-    <div class="dialog-body help-copy">
-      <p><strong>TPB:</strong> o velocímetro mostra quem efetivamente fez o TPB dentro do escopo DAI controlado. Dispensa definitiva aparece separadamente.</p>
-      <p><strong>Efetivo:</strong> o claro é calculado por posto/graduação; excedentes não compensam vagas de outra graduação.</p>
-      <p><strong>Rastreabilidade:</strong> quando houver ato confirmado ele aparece na ficha; lacunas são sinalizadas, nunca inferidas.</p>
-      <button id="helpDoneButton" class="primary-button" type="button">Entendi</button>
-    </div>
-  </dialog>
 
-  <footer class="site-footer">
-    <p>Corpo de Bombeiros Militar de Minas Gerais · Diretoria de Assuntos Institucionais · DAI/2</p>
-  </footer>
-
-  <script src="data/data.js?v=2.0.0"></script>
-  <script src="data/tpb.js?v=2026.09.03"></script>
-  <script src="assets/js/app.js?v=2.0.0"></script>
-</body>
+    <footer>
+      <p>Corpo de Bombeiros Militar de Minas Gerais - Diretoria de Assuntos Institucionais - Órgãos Externos</p>
+      <p>Compromisso e Excelência no serviço público.</p>
+      <p>&copy; 2026 Todos os Direitos Reservados</p>
+    </footer>
+    <script src="data/data.js?v=2.0.0"></script>
+    <script src="data/tpb.js?v=2026.09.03"></script>
+    <script src="assets/js/app.js?v=2.1.0"></script>
+  </body>
 </html>
