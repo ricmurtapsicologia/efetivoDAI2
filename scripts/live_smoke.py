@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""30-point post-deploy smoke test: layout original preservado + correções funcionais."""
+"""30-point post-deploy smoke test: layout original + WhatsApp direto + frontend limpo."""
 from __future__ import annotations
 import json,re,sys,time,urllib.request
 from collections import Counter
@@ -7,10 +7,11 @@ from urllib.parse import urljoin
 
 BASE="https://ricmurtapsicologia.github.io/efetivoDAI2/"
 RANKS=["Sd/Cb","Sgt/SubTen","Ten","Cap","Maj","Ten-Cel"]
+BANNED=["BGBM a localizar","Ato de movimentação","A vincular","A localizar","base interna autorizada","neutralizados na camada executiva","Rastreabilidade: data/período da evidência a recuperar","addTrace("]
 
 def fetch(path,timeout=20):
     url=urljoin(BASE,path); sep="&" if "?" in url else "?"
-    req=urllib.request.Request(url+sep+f"smoke={int(time.time())}",headers={"User-Agent":"DAI2-live-smoke/2.1"})
+    req=urllib.request.Request(url+sep+f"smoke={int(time.time())}",headers={"User-Agent":"DAI2-live-smoke/2.2"})
     with urllib.request.urlopen(req,timeout=timeout) as r:
         return int(r.status),r.read().decode("utf-8")
 
@@ -34,19 +35,21 @@ def main():
     for _ in range(24):
         try:
             s,index=fetch("")
-            if s==200 and 'assets/js/app.js?v=2.1.0' in index and 'class="banner"' in index:
+            if s==200 and 'assets/js/app.js?v=2.2.0' in index and 'data/contacts.js?v=2026.09.05' in index and 'class="banner"' in index:
                 break
         except Exception as e: last=e
         time.sleep(5)
     else:
-        print(f"FAIL: Pages não convergiu para layout-preserved v2.1.0: {last}"); return 1
+        print(f"FAIL: Pages não convergiu para layout-preserved v2.2.0: {last}"); return 1
 
     is_,index=fetch("")
     ds,data=fetch("data/data.js?v=2.0.0")
+    cts,contact_text=fetch("data/contacts.js?v=2026.09.05")
     ts,tpbt=fetch("data/tpb.js?v=2026.09.03")
-    aps,app=fetch("assets/js/app.js?v=2.1.0")
+    aps,app=fetch("assets/js/app.js?v=2.2.0")
     cs,css=fetch("assets/css/main.css?v=2.1.0")
     meta=assignment(data,"DAI2_META"); ddqod=assignment(data,"DAI2_DDQOD"); personnel=assignment(data,"DAI2_PERSONNEL")
+    contacts=assignment(contact_text,"DAI2_CONTACTS"); birthdays=assignment(contact_text,"DAI2_BIRTHDAYS")
     tm=assignment(tpbt,"DAI_TPB_META"); rows=assignment(tpbt,"DAI_TPB_ROWS")
     tpb=[{"status":r[3],"dispensa":bool(r[4]),"dateToConfirm":bool(r[7])} for r in rows]
     planned=sum(sum(int(g.get(r,0) or 0) for r in RANKS) for g in ddqod.values())
@@ -60,6 +63,8 @@ def main():
     done=sum(1 for r in tpb if r["status"]=="feito"); notdone=len(tpb)-done
     disp=sum(1 for r in tpb if r["dispensa"]); action=sum(1 for r in tpb if r["status"]!="feito" and not r["dispensa"])
     check=sum(1 for r in tpb if r["status"]=="feito" and r["dateToConfirm"])
+    frontend=index+"\n"+app
+    names={p['name'] for p in personnel}
     tests=[
       ("01 URL pública responde HTTP 200",is_==200),
       ("02 layout original: splash presente",'id="splash"' in index),
@@ -71,15 +76,15 @@ def main():
       ("08 layout original: 18 blocos",index.count('class="block"')==18),
       ("09 redesign estrutural removido",'mobile-nav' not in index and 'section-card' not in index and 'org-grid' not in index),
       ("10 CSS 2.1 carregado",cs==200 and 'assets/css/main.css?v=2.1.0' in index),
-      ("11 app 2.1 carregado",aps==200 and 'assets/js/app.js?v=2.1.0' in index),
+      ("11 app 2.2 carregado",aps==200 and 'assets/js/app.js?v=2.2.0' in index),
       ("12 runtime-updates removido",'runtime-updates.js' not in index),
       ("13 Chart.js removido",'chart.js' not in index.lower() and 'chart.js' not in app.lower()),
       ("14 Nº BM não publicado",'\"number\":' not in data and 'Nr BM' not in index),
-      ("15 telefone/aniversário não publicados",'\"phone\":' not in data and 'DAI2_BIRTHDAYS' not in data),
-      ("16 previsto DDQOD = 101",planned==101),
-      ("17 efetivo = 84",len(personnel)==84),
-      ("18 SEMAD previsto = 0",sum(int(ddqod["SEMAD"].get(r,0) or 0) for r in RANKS)==0),
-      ("19 SEMAD extra-DDQOD = 1",by.get("SEMAD",0)==1),
+      ("15 contatos WhatsApp completos",cts==200 and set(contacts)==names and len(contacts)==84),
+      ("16 aniversários carregados",len(birthdays)>=60 and set(birthdays).issubset(names)),
+      ("17 previsto DDQOD = 101",planned==101),
+      ("18 efetivo = 84",len(personnel)==84),
+      ("19 SEMAD previsto 0 e extra-DDQOD 1",sum(int(ddqod["SEMAD"].get(r,0) or 0) for r in RANKS)==0 and by.get("SEMAD",0)==1),
       ("20 Silvana está na AFAS",any(p["name"]=="Silvana Tiengo" and p["org"]=="AFAS" for p in personnel)),
       ("21 Claro P/G = 23",claro==23),
       ("22 excedente P/G DDQOD = 5",excess==5),
@@ -89,15 +94,15 @@ def main():
       ("26 TPB feito = 69",done==69),
       ("27 TPB não feito = 16",notdone==16),
       ("28 dispensa = 9",disp==9),
-      ("29 exigem ação = 7 / data a conferir = 15",action==7 and check==15),
-      ("30 segurança/a11y sem mudar layout",'.innerHTML' not in app and 'prefers-reduced-motion' in css and 'viewport-fit=cover' in index and 'role="dialog"' in index),
+      ("29 exigem ação = 7 / sem data consolidada = 15",action==7 and check==15),
+      ("30 WhatsApp + frontend limpo + a11y",'https://wa.me/' in app and 'Enviar WhatsApp' in app and not any(x in frontend for x in BANNED) and 'renderBirthdaysPrivacy' not in app and '.innerHTML' not in app and 'prefers-reduced-motion' in css and 'viewport-fit=cover' in index and 'role="dialog"' in index),
     ]
     fail=[n for n,ok in tests if not ok]
     for n,ok in tests: print(f"{'PASS' if ok else 'FAIL'} | {n}")
     print(f"RESULTADO: {30-len(fail)}/30")
     if fail:
         print("FALHAS:"); [print("-",x) for x in fail]; return 1
-    print("SMOKE PÚBLICO: APROVADO 30/30 — layout original preservado")
+    print("SMOKE PÚBLICO: APROVADO 30/30 — layout original, WhatsApp direto e frontend limpo")
     return 0
 
 if __name__=="__main__": sys.exit(main())
