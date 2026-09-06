@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RANKS = ['Sd/Cb','Sgt/SubTen','Ten','Cap','Maj','Ten-Cel']
 ALLOWED_PERSONNEL = {'rank','name','org','subunit'}
+EXPECTED_EMAILS = 72
 BANNED_FRONTEND = [
     'BGBM a localizar', 'Ato de movimentação', 'A vincular', 'A localizar',
     'base interna autorizada', 'neutralizados na camada executiva',
@@ -35,10 +36,12 @@ def main() -> int:
     errors=[]
     data_path=ROOT/'data'/'data.js'
     contacts_path=ROOT/'data'/'contacts.js'
+    emails_path=ROOT/'data'/'emails.js'
     tpb_path=ROOT/'data'/'tpb.js'
     index=(ROOT/'index.html').read_text(encoding='utf-8')
     css=(ROOT/'assets'/'css'/'main.css').read_text(encoding='utf-8')
     app=(ROOT/'assets'/'js'/'app.js').read_text(encoding='utf-8')
+    email_actions=(ROOT/'assets'/'js'/'email-actions.js').read_text(encoding='utf-8')
 
     try:
         meta=extract_assignment(data_path,'DAI2_META')
@@ -46,6 +49,7 @@ def main() -> int:
         personnel=extract_assignment(data_path,'DAI2_PERSONNEL')
         contacts=extract_assignment(contacts_path,'DAI2_CONTACTS')
         birthdays=extract_assignment(contacts_path,'DAI2_BIRTHDAYS')
+        emails=extract_assignment(emails_path,'DAI2_EMAILS')
         tpb_meta=extract_assignment(tpb_path,'DAI_TPB_META')
         rows=extract_assignment(tpb_path,'DAI_TPB_ROWS')
         tpb=[dict(rank=r[0],name=r[1],lotacao=r[2],status=r[3],dispensa=bool(r[4]),cycle=r[5],participation=r[6],dateToConfirm=bool(r[7]),history=r[8]) for r in rows]
@@ -73,6 +77,13 @@ def main() -> int:
     if bad_phones: errors.append(f'telefones inválidos: {bad_phones[:5]}')
     unknown_birthdays=sorted(set(birthdays)-names)
     if unknown_birthdays: errors.append(f'aniversários sem militar correspondente: {unknown_birthdays[:5]}')
+
+    unknown_emails=sorted(set(emails)-names)
+    if unknown_emails: errors.append(f'e-mails sem militar correspondente: {unknown_emails[:5]}')
+    bad_emails=[name for name,email in emails.items() if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+",str(email).strip())]
+    if bad_emails: errors.append(f'e-mails inválidos: {bad_emails[:5]}')
+    if len(emails)!=EXPECTED_EMAILS:
+        errors.append(f'e-mails validados={len(emails)}, esperado {EXPECTED_EMAILS}')
 
     planned=sum(sum(int(g.get(r,0) or 0) for r in RANKS) for g in ddqod.values())
     by_org=Counter(r['org'] for r in personnel)
@@ -111,12 +122,13 @@ def main() -> int:
     if 'mobile-nav' in index or 'section-card' in index or 'org-grid' in index:
         errors.append('redesign estrutural detectado; layout original deve ser preservado')
 
-    if 'data/contacts.js?v=2026.09.05' not in index or 'data/tpb.js?v=2026.09.03' not in index or 'assets/js/app.js?v=2.2.0' not in index or 'assets/css/main.css?v=2.1.0' not in index:
+    required_refs=['data/contacts.js?v=2026.09.05','data/emails.js?v=2026.09.06','data/tpb.js?v=2026.09.03','assets/js/app.js?v=2.2.0','assets/js/email-actions.js?v=1.0.0','assets/css/main.css?v=2.1.0']
+    if any(ref not in index for ref in required_refs):
         errors.append('versionamento/referências do frontend incompletos')
     if 'runtime-updates.js' in index: errors.append('runtime-updates ainda carregado')
     if 'chart.js' in index.lower() or 'chart.js' in app.lower(): errors.append('Chart.js ainda é dependência')
     if 'Nr BM' in index: errors.append('UI ainda oferece Nº BM')
-    if '.innerHTML' in app: errors.append('innerHTML detectado')
+    if '.innerHTML' in app or '.innerHTML' in email_actions: errors.append('innerHTML detectado')
     if 'const safeStorage' not in app or 'dai2_onboarding_seen_v2' not in app:
         errors.append('persistência resiliente do onboarding ausente')
     if 'prefers-reduced-motion' not in css: errors.append('prefers-reduced-motion ausente')
@@ -126,13 +138,16 @@ def main() -> int:
     if 'background-color:' not in css or 'url(' not in css: errors.append('fallback visual para imagens decorativas ausente')
     if 'https://wa.me/' not in app or 'Enviar WhatsApp' not in app:
         errors.append('envio direto por WhatsApp ausente')
+    if 'mailto:' not in email_actions or 'Enviar e-mail' not in email_actions:
+        errors.append('envio direto por e-mail ausente')
     if 'renderBirthdaysPrivacy' in app or 'Aniversários não são publicados' in app:
         errors.append('placeholder de privacidade de aniversários ainda visível')
+    frontend='\n'.join((index,app,email_actions))
     for phrase in BANNED_FRONTEND:
-        if phrase in app or phrase in index:
+        if phrase in frontend:
             errors.append(f'resíduo de bastidor no frontend: {phrase}')
 
-    payload={'ok':not errors,'version':meta.get('version'),'layout':'original-preserved','ddqod_planned':planned,'personnel':len(personnel),'contacts':len(contacts),'birthdays':len(birthdays),'claro_pg':claro,'excess_pg_ddqod':excess,'semad_extra_ddqod':by_org.get('SEMAD',0),'tpb':observed,'errors':errors}
+    payload={'ok':not errors,'version':meta.get('version'),'layout':'original-preserved','ddqod_planned':planned,'personnel':len(personnel),'contacts':len(contacts),'emails':len(emails),'birthdays':len(birthdays),'claro_pg':claro,'excess_pg_ddqod':excess,'semad_extra_ddqod':by_org.get('SEMAD',0),'tpb':observed,'errors':errors}
     print(json.dumps(payload,ensure_ascii=False,indent=2))
     return 0 if not errors else 1
 
