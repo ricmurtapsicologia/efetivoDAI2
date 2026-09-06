@@ -36,8 +36,8 @@ section.container{max-width:1200px;margin:20px auto;padding:20px;background-colo
 .legend-item{display:flex;align-items:center;gap:8px}
 .legend-color{width:20px;height:20px;display:inline-block;border-radius:4px}
 .search-container{text-align:center;margin-top:10px;display:flex;justify-content:center;gap:20px;align-items:center;flex-wrap:wrap}
-.search-container input[type='text'],.search-container input[type='search'],.search-container select{width:60%;padding:10px;min-height:44px;border-radius:8px;border:1px solid #aaa;margin-bottom:10px;background:#fff;color:#222}
-.search-container button{padding:10px 20px;min-height:44px;border-radius:8px;border:none;background-color:#2e7d32;color:#fff;cursor:pointer;transition:background-color var(--transition-speed)}
+.search-container input[type='text'],.search-container input[type='search'],.search-container select{width:60%;padding:10px;min-height:44px;border-radius:8px;border:1px solid #aaa;margin-bottom:10px;background:#fff;color:#222;font-size:14px}
+.search-container button{padding:10px 20px;min-height:44px;border-radius:8px;border:none;background-color:#2e7d32;color:#fff;cursor:pointer;transition:background-color var(--transition-speed);font-size:14px}
 .search-container button:hover{background-color:#256428}
 #searchResult,#claroResult{margin-top:20px;font-size:18px;color:var(--primary-color);text-align:center}
 .row{display:flex;flex-wrap:wrap;justify-content:space-between;margin-bottom:20px}
@@ -108,8 +108,8 @@ footer{text-align:center;padding:20px;font-size:14px;color:#555;background-color
 .tpb-item p{margin:3px 0;font-size:14px}
 .tpb-badge{display:inline-block;border-radius:999px;padding:3px 8px;font-size:12px;font-weight:700;background:#fff3cd;color:#765500;margin-top:4px}
 .tpb-controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-.tpb-controls input{flex:1 1 260px;min-height:44px;padding:10px;border-radius:8px;border:1px solid #aaa}
-.tpb-filter{min-height:44px;padding:8px 12px;border-radius:8px;border:1px solid #2e7d32;background:#fff;color:#1b5e20;font-weight:600;cursor:pointer}
+.tpb-controls input{flex:1 1 260px;min-height:44px;padding:10px;border-radius:8px;border:1px solid #aaa;font-size:14px}
+.tpb-filter{min-height:44px;padding:8px 12px;border-radius:8px;border:1px solid #2e7d32;background:#fff;color:#1b5e20;font-weight:600;cursor:pointer;font-size:14px}
 .tpb-filter[aria-pressed="true"]{background:#2e7d32;color:#fff}
 .tpb-meta{padding:10px 12px;border-radius:10px;background:#f1f3f5;color:#495057;font-size:14px;margin:12px 0}
 .tpb-warning{padding:10px 12px;border-radius:10px;background:#fff8e1;border:1px solid #e7cf80;color:#5f4a00;font-size:14px;margin:12px 0}
