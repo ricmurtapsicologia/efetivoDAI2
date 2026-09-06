@@ -1,26 +1,27 @@
 # DAI/2 · Efetivo e TPB 2026
 
-Painel estático do CBMMG/DAI para consulta gerencial de:
+Painel estático do CBMMG/DAI para consulta gerencial de efetivo DAI/2 em órgãos externos, DDQOD e claro por posto/graduação, rastreabilidade funcional quando o ato está localizado e acompanhamento do TPB 2026 da DAI.
 
-- efetivo DAI/2 em órgãos externos;
-- DDQOD e claro por posto/graduação;
-- rastreabilidade funcional quando o ato está localizado;
-- acompanhamento mobile-first do TPB 2026 para o escopo DAI controlado.
+## Interface 2.1.0 · layout original preservado
 
-## Versão 2.0.0
+A versão 2.1.0 mantém a arquitetura visual original do portal. Não há redesign da página principal.
 
-Principais mudanças:
+Foram preservados: splash inicial, onboarding, banner, título, quadro de dados gerais, atalhos, painel de aniversariantes, legenda de cores, campos de pesquisa, organização em linhas, os 18 blocos dos órgãos, botão de previsão DDQOD, modais e rodapé.
 
-- arquitetura mobile-first;
-- TPB 2026 integrado ao painel, com velocímetro, KPIs, pendências, próximos ciclos e consulta individual;
-- remoção de Chart.js e de imagens/dependências remotas obrigatórias;
+Os ajustes foram implementados dentro dessa estrutura:
+
+- TPB 2026 da DAI acessível por um novo botão na área já existente de atalhos e exibido em modal, sem criar nova navegação ou reorganizar a página;
 - cálculo de claro por posto/graduação;
-- SEMAD tratada como implantação extra-DDQOD, com 0 previsto no DDQOD consultado;
-- dados canônicos consolidados em `data/data.js`;
-- nenhuma mutação de dados em runtime;
-- camada pública não publica Nº BM;
-- onboarding persistente e acessibilidade de teclado/dialog;
-- CI em `pull_request` e `push` para `main`.
+- SEMAD tratada como implantação extra-DDQOD, com 0 previsto no DDQOD consultado e 1 militar em exercício;
+- dados canônicos consolidados em `data/data.js`, sem `runtime-updates.js`;
+- camada pública sem Nº BM, telefone ou aniversário;
+- gráficos mantidos nos mesmos canvases dos blocos, agora desenhados localmente e sem dependência de Chart.js;
+- onboarding persistente após a primeira visualização;
+- melhorias de teclado, foco, contraste, alvos de toque e `prefers-reduced-motion` sem alteração da composição visual;
+- imagens remotas do splash/banner mantidas apenas como elementos decorativos do layout original, com fundo local de contingência caso não carreguem;
+- CI em `pull_request` e `push` para `main`, com gate específico que reprova alterações estruturais do layout original.
+
+A versão dos dados permanece `2.0.0`; a versão `2.1.0` identifica a interface compatível com o layout original.
 
 ## Fontes de corte
 
@@ -55,6 +56,14 @@ O claro é calculado por posto/graduação:
 
 Excedentes de uma graduação não compensam vagas de outra.
 
+Invariantes da base atual:
+
+- previsto oficial DDQOD: 101;
+- efetivo atual total: 84;
+- SEMAD extra-DDQOD: 1;
+- claro por P/G: 23;
+- excedentes por P/G nos órgãos DDQOD: 5.
+
 ## Segurança e privacidade
 
 A camada pública usa apenas os campos necessários para consulta gerencial nominal: posto/graduação, nome, órgão e subunidade. Nº BM, telefone, aniversário e outros dados pessoais não necessários à consulta não são publicados.
@@ -66,4 +75,4 @@ python scripts/personnel_pipeline.py audit --input data/data.js
 python scripts/site_audit.py
 ```
 
-O workflow `.github/workflows/python-personnel-audit.yml` executa os gates em PRs e em `main`.
+O workflow `.github/workflows/python-personnel-audit.yml` executa os gates em PRs e em `main`. Em produção, `scripts/live_smoke.py` executa 30 verificações na URL pública, incluindo preservação do layout original.
