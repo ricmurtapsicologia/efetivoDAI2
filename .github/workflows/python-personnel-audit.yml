@@ -1,10 +1,20 @@
-name: Python personnel audit
+name: DAI2 production gates
 
 on:
   pull_request:
     paths:
+      - 'index.html'
+      - 'assets/**'
       - 'data/**'
-      - 'scripts/personnel_pipeline.py'
+      - 'scripts/**'
+      - '.github/workflows/python-personnel-audit.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'assets/**'
+      - 'data/**'
+      - 'scripts/**'
       - '.github/workflows/python-personnel-audit.yml'
   workflow_dispatch:
 
@@ -12,19 +22,21 @@ permissions:
   contents: read
 
 jobs:
-  audit-current-data:
+  production-gates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Audit existing production data
+      - name: Audit personnel allowlist
         run: python scripts/personnel_pipeline.py audit --input data/data.js --report artifacts/personnel-audit.json
+      - name: Audit production invariants
+        run: python scripts/site_audit.py
       - name: Upload audit report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: personnel-audit
+          name: dai2-audit
           path: artifacts/personnel-audit.json
           if-no-files-found: ignore
