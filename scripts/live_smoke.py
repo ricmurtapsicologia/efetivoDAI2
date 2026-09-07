@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""30-point post-deploy smoke: layout, invariantes, a11y, UX e limite de dados."""
+"""30-point post-deploy smoke: layout, invariantes, WhatsApp, a11y e UX."""
 from __future__ import annotations
 
 import json
@@ -17,14 +17,14 @@ BANNED = [
     "BGBM a localizar","Ato de movimentação","A vincular","A localizar",
     "base interna autorizada","neutralizados na camada executiva",
     "Rastreabilidade: data/período da evidência a recuperar","addTrace(",
-    "DAI2_CONTACTS","DAI2_EMAILS","DAI2_BIRTHDAYS","mailto:"
+    "DAI2_EMAILS","DAI2_BIRTHDAYS","mailto:"
 ]
 
 
 def fetch(path, timeout=20):
     url = urljoin(BASE, path)
     sep = "&" if "?" in url else "?"
-    req = urllib.request.Request(url + sep + f"smoke={int(time.time())}", headers={"User-Agent":"DAI2-live-smoke/4.0"})
+    req = urllib.request.Request(url + sep + f"smoke={int(time.time())}", headers={"User-Agent":"DAI2-live-smoke/5.0"})
     with urllib.request.urlopen(req, timeout=timeout) as response:
         return int(response.status), response.read().decode("utf-8")
 
@@ -46,6 +46,15 @@ def assignment(text, name):
     return json.loads(match.group(1))
 
 
+def normalize_phone(raw):
+    digits = re.sub(r'\D', '', str(raw or ''))
+    if digits.startswith('55') and len(digits) >= 12:
+        digits = digits[2:]
+    if len(digits) == 10:
+        digits = digits[:2] + '9' + digits[2:]
+    return '55' + digits if len(digits) == 11 else ''
+
+
 def classify(rank):
     value = str(rank or '').lower().replace('º','').strip()
     if 'ten cel' in value or 'ten-cel' in value or value == 'cel': return 'Ten-Cel'
@@ -62,25 +71,30 @@ def main():
     for _ in range(30):
         try:
             status, index = fetch("")
-            if status == 200 and 'assets/js/app.js?v=2.4.0' in index and 'data/tpb.js?v=2026.09.06-public' in index and 'class="banner"' in index:
+            if status == 200 and 'assets/js/app.js?v=2.5.0' in index and 'data/contacts.js?v=2026.09.07' in index and 'class="banner"' in index:
                 break
         except Exception as exc:
             last = exc
         time.sleep(5)
     else:
-        print(f"FAIL: Pages não convergiu para interface 2.4.0: {last}")
+        print(f"FAIL: Pages não convergiu para interface 2.5.0: {last}")
         return 1
 
     index_status, index = fetch("")
     data_status, data = fetch("data/data.js?v=2.0.0")
+    contacts_status, contacts_text = fetch("data/contacts.js?v=2026.09.07")
     tpb_status, tpb_text = fetch("data/tpb.js?v=2026.09.06-public")
-    app_status, app = fetch("assets/js/app.js?v=2.4.0")
-    css_status, css = fetch("assets/css/main.css?v=2.2.0")
+    app_status, app = fetch("assets/js/app.js?v=2.5.0")
+    css_status, css = fetch("assets/css/main.css?v=2.3.0")
+    hero_status, hero_text = fetch("assets/hero-source.json")
 
     ddqod = assignment(data, "DAI2_DDQOD")
     personnel = assignment(data, "DAI2_PERSONNEL")
+    contacts = assignment(contacts_text, "DAI2_CONTACTS")
+    contacts_meta = assignment(contacts_text, "DAI2_CONTACTS_META")
     tpb_meta = assignment(tpb_text, "DAI_TPB_META")
     tpb_rows = assignment(tpb_text, "DAI_TPB_ROWS")
+    hero_meta = json.loads(hero_text)
 
     planned = sum(sum(int(grades.get(rank,0) or 0) for rank in RANKS) for grades in ddqod.values())
     by_org = Counter(person["org"] for person in personnel)
@@ -96,27 +110,30 @@ def main():
                 excess += max(existing_rank-planned_rank, 0)
 
     expected = tpb_meta.get("expected", {})
-    frontend = index + "\n" + app + "\n" + tpb_text
-    private_paths = ["data/contacts.js","data/emails.js","assets/js/email-actions.js"]
-    private_status = {path:fetch_status(path) for path in private_paths}
+    names = {person['name'] for person in personnel}
+    contact_names = set(contacts)
+    valid_contacts = all(normalize_phone(raw) for raw in contacts.values())
+    silvana_phone = normalize_phone(contacts.get('Silvana Tiengo'))
+    hero_id = 'photo-1778876087506-47da0c3e6d98'
+    frontend = index + "\n" + app + "\n" + contacts_text + "\n" + tpb_text
 
     tests = [
       ("01 URL pública responde HTTP 200", index_status == 200),
       ("02 layout original: splash presente", 'id="splash"' in index),
       ("03 layout original: onboarding presente", 'id="onboarding"' in index),
-      ("04 hero corporativo presente", 'photo-1521737711867-e3b97375f902' in css),
+      ("04 hero corporativo governado presente", hero_id in css and hero_status == 200 and hero_id in hero_meta.get('image_url','')),
       ("05 layout original: container presente", 'class="container"' in index),
       ("06 layout original: dados gerais presente", 'class="general-data"' in index),
       ("07 bloco visual de privacidade removido", 'birthdayPanel' not in index and 'Proteção de dados' not in index and 'Privacidade da camada pública' not in index),
       ("08 layout original: 18 blocos", index.count('class="block"') == 18),
       ("09 redesign estrutural removido", 'mobile-nav' not in index and 'section-card' not in index and 'org-grid' not in index),
-      ("10 CSS 2.2 carregado", css_status == 200 and 'assets/css/main.css?v=2.2.0' in index),
-      ("11 app 2.4 carregado", app_status == 200 and 'assets/js/app.js?v=2.4.0' in index),
-      ("12 runtime-updates removido", 'runtime-updates.js' not in index),
-      ("13 Chart.js removido", 'chart.js' not in index.lower() and 'chart.js' not in app.lower()),
-      ("14 Nº BM não publicado", '\"number\":' not in data and 'Nr BM' not in index),
-      ("15 arquivos de contato não publicados", all(code == 404 for code in private_status.values())),
-      ("16 WhatsApp por militar sem número público", 'https://wa.me/?text=' in app and 'whatsapp-action' in app and re.search(r'https://wa\.me/(?:\+?55)?\d', frontend) is None),
+      ("10 CSS 2.3 carregado", css_status == 200 and 'assets/css/main.css?v=2.3.0' in index),
+      ("11 app 2.5 carregado", app_status == 200 and 'assets/js/app.js?v=2.5.0' in index),
+      ("12 diretório WhatsApp carregado", contacts_status == 200 and 'data/contacts.js?v=2026.09.07' in index and contacts_meta.get('display') == 'public'),
+      ("13 cobertura WhatsApp = 84/84", len(contacts) == 84 and contact_names == names and valid_contacts),
+      ("14 WhatsApp direto de Silvana normaliza corretamente", silvana_phone == '5531991743862'),
+      ("15 ação WhatsApp direta no app", 'normalizeWhatsApp' in app and 'https://wa.me/${phone}?text=' in app and 'whatsapp-number' in app),
+      ("16 e-mail/aniversário não publicados", 'DAI2_EMAILS' not in frontend and 'DAI2_BIRTHDAYS' not in frontend and 'mailto:' not in frontend),
       ("17 texto técnico de claro removido", 'Claro calculado por posto/graduação' not in app),
       ("18 previsto DDQOD = 101", planned == 101),
       ("19 efetivo = 84", len(personnel) == 84),
@@ -141,9 +158,8 @@ def main():
         print("FALHAS:")
         for item in failed:
             print("-", item)
-        print("private_status=", private_status)
         return 1
-    print("SMOKE PÚBLICO: APROVADO 30/30 — UI 2.4, TPB intuitivo e WhatsApp sem número embutido")
+    print("SMOKE PÚBLICO: APROVADO 30/30 — UI 2.5, WhatsApp direto visível e hero governado")
     return 0
 
 
