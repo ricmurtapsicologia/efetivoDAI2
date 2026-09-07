@@ -1,155 +1,175 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import json, re, sys
+import json
+import re
+import sys
 from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RANKS = ['Sd/Cb','Sgt/SubTen','Ten','Cap','Maj','Ten-Cel']
 ALLOWED_PERSONNEL = {'rank','name','org','subunit'}
-EXPECTED_EMAILS = 72
+EXPECTED_TPB = {'scope':85,'done':69,'notDone':16,'dispensed':9,'actionable':7,'dateToConfirm':15}
 BANNED_FRONTEND = [
     'BGBM a localizar', 'Ato de movimentação', 'A vincular', 'A localizar',
     'base interna autorizada', 'neutralizados na camada executiva',
-    'Rastreabilidade: data/período da evidência a recuperar', 'addTrace('
+    'Rastreabilidade: data/período da evidência a recuperar', 'addTrace(',
+    'DAI2_CONTACTS', 'DAI2_EMAILS', 'DAI2_BIRTHDAYS', 'https://wa.me/', 'mailto:'
 ]
+PRIVATE_PUBLIC_FILES = [
+    ROOT/'data'/'contacts.js',
+    ROOT/'data'/'emails.js',
+    ROOT/'assets'/'js'/'email-actions.js',
+]
+
 
 def extract_assignment(path: Path, variable: str):
     text = path.read_text(encoding='utf-8')
-    m = re.search(rf"window\.{re.escape(variable)}\s*=\s*(.*?);(?:\r?\n|$)", text, re.S)
-    if not m:
+    match = re.search(rf"window\.{re.escape(variable)}\s*=\s*(.*?);(?:\r?\n|$)", text, re.S)
+    if not match:
         raise AssertionError(f'{path}: window.{variable} não encontrado')
-    return json.loads(m.group(1))
+    return json.loads(match.group(1))
+
 
 def classify(rank: str):
-    v = str(rank or '').lower().replace('º','').strip()
-    if 'ten cel' in v or 'ten-cel' in v or v == 'cel': return 'Ten-Cel'
-    if v.startswith('maj'): return 'Maj'
-    if v.startswith('cap'): return 'Cap'
-    if 'sub ten' in v or 'subten' in v or 'sgt' in v: return 'Sgt/SubTen'
-    if 'ten' in v: return 'Ten'
-    if v.startswith('cb') or v.startswith('sd'): return 'Sd/Cb'
+    value = str(rank or '').lower().replace('º','').strip()
+    if 'ten cel' in value or 'ten-cel' in value or value == 'cel': return 'Ten-Cel'
+    if value.startswith('maj'): return 'Maj'
+    if value.startswith('cap'): return 'Cap'
+    if 'sub ten' in value or 'subten' in value or 'sgt' in value: return 'Sgt/SubTen'
+    if 'ten' in value: return 'Ten'
+    if value.startswith('cb') or value.startswith('sd'): return 'Sd/Cb'
     return None
 
+
 def main() -> int:
-    errors=[]
-    data_path=ROOT/'data'/'data.js'
-    contacts_path=ROOT/'data'/'contacts.js'
-    emails_path=ROOT/'data'/'emails.js'
-    tpb_path=ROOT/'data'/'tpb.js'
-    index=(ROOT/'index.html').read_text(encoding='utf-8')
-    css=(ROOT/'assets'/'css'/'main.css').read_text(encoding='utf-8')
-    app=(ROOT/'assets'/'js'/'app.js').read_text(encoding='utf-8')
-    email_actions=(ROOT/'assets'/'js'/'email-actions.js').read_text(encoding='utf-8')
+    errors = []
+    data_path = ROOT/'data'/'data.js'
+    tpb_path = ROOT/'data'/'tpb.js'
+    index = (ROOT/'index.html').read_text(encoding='utf-8')
+    css = (ROOT/'assets'/'css'/'main.css').read_text(encoding='utf-8')
+    app = (ROOT/'assets'/'js'/'app.js').read_text(encoding='utf-8')
 
     try:
-        meta=extract_assignment(data_path,'DAI2_META')
-        ddqod=extract_assignment(data_path,'DAI2_DDQOD')
-        personnel=extract_assignment(data_path,'DAI2_PERSONNEL')
-        contacts=extract_assignment(contacts_path,'DAI2_CONTACTS')
-        birthdays=extract_assignment(contacts_path,'DAI2_BIRTHDAYS')
-        emails=extract_assignment(emails_path,'DAI2_EMAILS')
-        tpb_meta=extract_assignment(tpb_path,'DAI_TPB_META')
-        rows=extract_assignment(tpb_path,'DAI_TPB_ROWS')
-        tpb=[dict(rank=r[0],name=r[1],lotacao=r[2],status=r[3],dispensa=bool(r[4]),cycle=r[5],participation=r[6],dateToConfirm=bool(r[7]),history=r[8]) for r in rows]
+        meta = extract_assignment(data_path, 'DAI2_META')
+        ddqod = extract_assignment(data_path, 'DAI2_DDQOD')
+        personnel = extract_assignment(data_path, 'DAI2_PERSONNEL')
+        tpb_meta = extract_assignment(tpb_path, 'DAI_TPB_META')
+        tpb_rows = extract_assignment(tpb_path, 'DAI_TPB_ROWS')
     except Exception as exc:
         print(f'FATAL: {exc}')
         return 1
 
-    for i,row in enumerate(personnel,1):
-        extra=set(row)-ALLOWED_PERSONNEL
-        if extra: errors.append(f'personnel row {i}: campos não permitidos {sorted(extra)}')
-        if not all(str(row.get(k,'')).strip() for k in ('rank','name','org')):
-            errors.append(f'personnel row {i}: campos obrigatórios vazios')
-    if len({str(r['name']).casefold() for r in personnel}) != len(personnel):
+    for index_row, row in enumerate(personnel, 1):
+        extra = set(row) - ALLOWED_PERSONNEL
+        if extra:
+            errors.append(f'personnel row {index_row}: campos não permitidos {sorted(extra)}')
+        if not all(str(row.get(key, '')).strip() for key in ('rank','name','org')):
+            errors.append(f'personnel row {index_row}: campos obrigatórios vazios')
+    if len({str(row['name']).casefold() for row in personnel}) != len(personnel):
         errors.append('nomes duplicados no efetivo')
-    public_data=data_path.read_text(encoding='utf-8')
+    public_data = data_path.read_text(encoding='utf-8')
     if '"number":' in public_data:
         errors.append('Nº BM detectado na camada pública')
 
-    names={r['name'] for r in personnel}
-    if set(contacts) != names:
-        missing=sorted(names-set(contacts)); extra=sorted(set(contacts)-names)
-        if missing: errors.append(f'contatos ausentes para {len(missing)} militar(es): {missing[:5]}')
-        if extra: errors.append(f'contatos sem militar correspondente: {extra[:5]}')
-    bad_phones=[name for name,phone in contacts.items() if len(re.sub(r'\D','',str(phone))) not in (10,11,12,13)]
-    if bad_phones: errors.append(f'telefones inválidos: {bad_phones[:5]}')
-    unknown_birthdays=sorted(set(birthdays)-names)
-    if unknown_birthdays: errors.append(f'aniversários sem militar correspondente: {unknown_birthdays[:5]}')
+    for private_path in PRIVATE_PUBLIC_FILES:
+        if private_path.exists():
+            errors.append(f'arquivo pessoal não permitido na camada pública: {private_path.relative_to(ROOT)}')
+    if tpb_rows:
+        errors.append(f'TPB nominal publicado: {len(tpb_rows)} registro(s); esperado 0')
+    frontend = '\n'.join((index, app, tpb_path.read_text(encoding='utf-8')))
+    for phrase in BANNED_FRONTEND:
+        if phrase in frontend:
+            errors.append(f'dado/ação privada no frontend público: {phrase}')
 
-    unknown_emails=sorted(set(emails)-names)
-    if unknown_emails: errors.append(f'e-mails sem militar correspondente: {unknown_emails[:5]}')
-    bad_emails=[name for name,email in emails.items() if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+",str(email).strip())]
-    if bad_emails: errors.append(f'e-mails inválidos: {bad_emails[:5]}')
-    if len(emails)!=EXPECTED_EMAILS:
-        errors.append(f'e-mails validados={len(emails)}, esperado {EXPECTED_EMAILS}')
-
-    planned=sum(sum(int(g.get(r,0) or 0) for r in RANKS) for g in ddqod.values())
-    by_org=Counter(r['org'] for r in personnel)
-    claro=0; excess=0
-    for org,grades in ddqod.items():
-        ex=Counter(classify(r['rank']) for r in personnel if r['org']==org)
+    planned = sum(sum(int(grades.get(rank,0) or 0) for rank in RANKS) for grades in ddqod.values())
+    by_org = Counter(row['org'] for row in personnel)
+    claro = 0
+    excess = 0
+    for org, grades in ddqod.items():
+        existing = Counter(classify(row['rank']) for row in personnel if row['org'] == org)
         for rank in RANKS:
-            p=int(grades.get(rank,0) or 0); e=int(ex.get(rank,0) or 0)
-            claro += max(p-e,0)
-            if org!='SEMAD': excess += max(e-p,0)
-    if planned!=101: errors.append(f'DDQOD previsto={planned}, esperado 101')
-    if len(personnel)!=84: errors.append(f'efetivo={len(personnel)}, esperado 84')
-    if by_org.get('SEMAD',0)!=1: errors.append('SEMAD deve ter 1 extra-DDQOD')
-    if sum(int(ddqod.get('SEMAD',{}).get(r,0) or 0) for r in RANKS)!=0:
+            planned_rank = int(grades.get(rank,0) or 0)
+            existing_rank = int(existing.get(rank,0) or 0)
+            claro += max(planned_rank - existing_rank, 0)
+            if org != 'SEMAD':
+                excess += max(existing_rank - planned_rank, 0)
+    if planned != 101: errors.append(f'DDQOD previsto={planned}, esperado 101')
+    if len(personnel) != 84: errors.append(f'efetivo={len(personnel)}, esperado 84')
+    if by_org.get('SEMAD',0) != 1: errors.append('SEMAD deve ter 1 extra-DDQOD')
+    if sum(int(ddqod.get('SEMAD',{}).get(rank,0) or 0) for rank in RANKS) != 0:
         errors.append('SEMAD não pode ter vaga prevista no DDQOD consultado')
-    if claro!=23: errors.append(f'claro P/G={claro}, esperado 23')
-    if excess!=5: errors.append(f'excedente P/G DDQOD={excess}, esperado 5')
+    if claro != 23: errors.append(f'claro P/G={claro}, esperado 23')
+    if excess != 5: errors.append(f'excedente P/G DDQOD={excess}, esperado 5')
 
-    done=sum(1 for r in tpb if r['status']=='feito')
-    not_done=len(tpb)-done
-    disp=sum(1 for r in tpb if r['dispensa'])
-    action=sum(1 for r in tpb if r['status']!='feito' and not r['dispensa'])
-    check=sum(1 for r in tpb if r['status']=='feito' and r['dateToConfirm'])
-    observed={'scope':len(tpb),'done':done,'notDone':not_done,'dispensed':disp,'actionable':action,'dateToConfirm':check}
-    for k,v in observed.items():
-        if int(tpb_meta.get('expected',{}).get(k,-1))!=v:
-            errors.append(f'TPB {k}={v}, esperado {tpb_meta.get("expected",{}).get(k)}')
-    if re.search(r'/20(?:27|28|29)', tpb_path.read_text(encoding='utf-8')):
-        errors.append('ano divergente de 2026 propagado no histórico TPB')
+    observed_tpb = {key:int(tpb_meta.get('expected',{}).get(key,-1)) for key in EXPECTED_TPB}
+    for key, expected in EXPECTED_TPB.items():
+        if observed_tpb[key] != expected:
+            errors.append(f'TPB agregado {key}={observed_tpb[key]}, esperado {expected}')
 
-    required_layout=['id="splash"','id="onboarding"','class="banner"','class="container"','class="general-data"','class="color-legend"','class="row"','class="block"','id="birthdayPanel"','id="militaryList"','id="modal"','id="normasModal"']
+    required_layout = [
+        'id="splash"','id="onboarding"','class="banner"','class="container"',
+        'class="general-data"','class="color-legend"','class="row"','class="block"',
+        'id="birthdayPanel"','id="militaryList"','id="modal"','id="normasModal"','id="tpbModal"'
+    ]
     for token in required_layout:
         if token not in index: errors.append(f'layout original ausente: {token}')
     if index.count('class="block"') != 18:
         errors.append(f'layout original: {index.count("class=\"block\"")} blocos, esperado 18')
     if 'mobile-nav' in index or 'section-card' in index or 'org-grid' in index:
         errors.append('redesign estrutural detectado; layout original deve ser preservado')
+    if re.search(r'<div class="numbers">\s*Previsto:', index):
+        errors.append('dados de efetivo duplicados/hardcoded no HTML dos blocos')
+    if 'Total Previsto: 101' in index or 'Total Existente: 84' in index or 'Total Claro: 23' in index:
+        errors.append('totais canônicos duplicados/hardcoded no HTML')
 
-    required_refs=['data/contacts.js?v=2026.09.05','data/emails.js?v=2026.09.06','data/tpb.js?v=2026.09.03','assets/js/app.js?v=2.2.0','assets/js/email-actions.js?v=1.0.0','assets/css/main.css?v=2.1.0']
+    required_refs = [
+        'data/tpb.js?v=2026.09.06-public',
+        'assets/js/app.js?v=2.3.0',
+        'assets/css/main.css?v=2.1.0'
+    ]
     if any(ref not in index for ref in required_refs):
         errors.append('versionamento/referências do frontend incompletos')
+    forbidden_refs = ['data/contacts.js','data/emails.js','assets/js/email-actions.js']
+    if any(ref in index for ref in forbidden_refs):
+        errors.append('referência a dados pessoais ainda presente no index')
     if 'runtime-updates.js' in index: errors.append('runtime-updates ainda carregado')
     if 'chart.js' in index.lower() or 'chart.js' in app.lower(): errors.append('Chart.js ainda é dependência')
     if 'Nr BM' in index: errors.append('UI ainda oferece Nº BM')
-    if '.innerHTML' in app or '.innerHTML' in email_actions: errors.append('innerHTML detectado')
-    if 'const safeStorage' not in app or 'dai2_onboarding_seen_v2' not in app:
-        errors.append('persistência resiliente do onboarding ausente')
+    if '.innerHTML' in app: errors.append('innerHTML detectado')
+    if 'const safeStorage' not in app or 'dai2_onboarding_seen_v3' not in app:
+        errors.append('persistência resiliente do onboarding v3 ausente')
     if 'prefers-reduced-motion' not in css: errors.append('prefers-reduced-motion ausente')
     if 'viewport-fit=cover' not in index: errors.append('viewport-fit=cover ausente')
+    if 'class="skip-link"' not in index: errors.append('skip-link ausente')
     if 'role="dialog"' not in index or 'close-button' not in index: errors.append('modal acessível incompleto')
-    if 'id="tpbToggleBtn"' not in index or 'id="tpbModal"' not in index: errors.append('TPB não integrado ao layout original')
-    if 'background-color:' not in css or 'url(' not in css: errors.append('fallback visual para imagens decorativas ausente')
-    if 'https://wa.me/' not in app or 'Enviar WhatsApp' not in app:
-        errors.append('envio direto por WhatsApp ausente')
-    if 'mailto:' not in email_actions or 'Enviar e-mail' not in email_actions:
-        errors.append('envio direto por e-mail ausente')
-    if 'renderBirthdaysPrivacy' in app or 'Aniversários não são publicados' in app:
-        errors.append('placeholder de privacidade de aniversários ainda visível')
-    frontend='\n'.join((index,app,email_actions))
-    for phrase in BANNED_FRONTEND:
-        if phrase in frontend:
-            errors.append(f'resíduo de bastidor no frontend: {phrase}')
+    if 'aria-haspopup="dialog"' not in index: errors.append('gatilhos de modal sem aria-haspopup')
+    if 'aria-expanded="false"' not in index: errors.append('controles expansíveis sem aria-expanded inicial')
+    if 'function trapFocus' not in app: errors.append('focus trap dos modais ausente')
+    if "setAttribute('inert'" not in app: errors.append('isolamento do conteúdo de fundo dos modais ausente')
+    if 'Proteção de dados' not in index or 'Telefones, e-mails, aniversários' not in app:
+        errors.append('aviso de privacidade pública ausente')
+    if 'somente indicadores agregados' not in app.lower():
+        errors.append('TPB agregado não está explicitado no frontend')
 
-    payload={'ok':not errors,'version':meta.get('version'),'layout':'original-preserved','ddqod_planned':planned,'personnel':len(personnel),'contacts':len(contacts),'emails':len(emails),'birthdays':len(birthdays),'claro_pg':claro,'excess_pg_ddqod':excess,'semad_extra_ddqod':by_org.get('SEMAD',0),'tpb':observed,'errors':errors}
-    print(json.dumps(payload,ensure_ascii=False,indent=2))
+    payload = {
+        'ok': not errors,
+        'version': meta.get('version'),
+        'interface': '2.3.0',
+        'layout': 'original-preserved',
+        'privacy_boundary': 'public-aggregate-no-contact-data',
+        'ddqod_planned': planned,
+        'personnel': len(personnel),
+        'claro_pg': claro,
+        'excess_pg_ddqod': excess,
+        'semad_extra_ddqod': by_org.get('SEMAD',0),
+        'tpb_aggregate': observed_tpb,
+        'errors': errors,
+    }
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
     return 0 if not errors else 1
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     sys.exit(main())
