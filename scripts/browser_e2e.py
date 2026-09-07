@@ -25,18 +25,20 @@ def main() -> int:
     console_errors = []
     page_errors = []
     failed_requests = []
+    bad_responses = []
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         context = browser.new_context(viewport={'width': 1366, 'height': 900}, locale='pt-BR')
         page = context.new_page()
-        page.on('console', lambda msg: console_errors.append(msg.text) if msg.type == 'error' else None)
+        page.on('console', lambda msg: console_errors.append(msg.text) if msg.type == 'error' and not msg.text.startswith('Failed to load resource') else None)
         page.on('pageerror', lambda exc: page_errors.append(str(exc)))
         page.on('requestfailed', lambda req: failed_requests.append(req.url))
+        page.on('response', lambda res: bad_responses.append((res.status, res.url)) if res.status >= 400 else None)
 
         response = page.goto(BASE, wait_until='networkidle')
         check(results, 'E2E 01 · página responde', response is not None and response.ok, str(response.status if response else 'sem resposta'))
-        check(results, 'QA 01 · sem erro de console inicial', not console_errors, '; '.join(console_errors[:3]))
+        check(results, 'QA 01 · sem erro JavaScript de console inicial', not console_errors, '; '.join(console_errors[:3]))
         check(results, 'QA 02 · sem pageerror inicial', not page_errors, '; '.join(page_errors[:3]))
 
         page.wait_for_timeout(1100)
@@ -130,9 +132,10 @@ def main() -> int:
         body_size = page.locator('body').evaluate("el => parseFloat(getComputedStyle(el).fontSize)")
         check(results, 'UI 04 · hierarquia tipográfica preservada', title_size >= 24 and body_size >= 14, f'title={title_size}px body={body_size}px')
 
-        check(results, 'QA 07 · sem erros JS ao final', not console_errors and not page_errors, f'console={console_errors[:3]} page={page_errors[:3]}')
+        check(results, 'QA 07 · sem erros JavaScript ao final', not console_errors and not page_errors, f'console={console_errors[:3]} page={page_errors[:3]}')
         local_failures = [url for url in failed_requests if url.startswith(BASE)]
-        check(results, 'QA 08 · assets locais sem falha de rede', not local_failures, '; '.join(local_failures[:5]))
+        local_bad = [f'{status} {url}' for status,url in bad_responses if url.startswith(BASE)]
+        check(results, 'QA 08 · assets locais sem falha de rede/HTTP', not local_failures and not local_bad, '; '.join((local_failures + local_bad)[:5]))
 
         browser.close()
 
