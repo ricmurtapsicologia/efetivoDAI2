@@ -1,13 +1,15 @@
 {
   "asset": "hero DAI/2",
-  "type": "photograph",
-  "title": "Two women in white shirts stand in an office",
-  "photographer": "Ufoma Ojo",
-  "photographer_handle": "ladyufoma001",
-  "source_page": "https://unsplash.com/photos/two-women-in-white-shirts-stand-in-an-office-J4g4b8bx2F0",
-  "image_url": "https://images.unsplash.com/photo-1778876087506-47da0c3e6d98?auto=format&fit=crop&w=2400&q=90",
-  "license": "Unsplash License",
-  "published": "2026-05-15",
+  "type": "photograph-composite",
+  "title": "Viatura do CBMMG — composição panorâmica corporativa",
+  "photographer": "Autor não identificado na referência visual consultada",
+  "photographer_handle": "não informado",
+  "source_page": "https://br.pinterest.com/search/pins/?q=CBMMG%20Corpo%20de%20Bombeiros%20Minas%20Gerais",
+  "source_image_url": "https://i.pinimg.com/originals/11/a1/77/11a177ae248e628148fdb30fdf448f9e.jpg",
+  "image_url": "assets/img/banner-cbmmg.jpg?asset=photo-1778876087506-47da0c3e6d98",
+  "license": "Licença específica não informada na referência consultada; manter a referência de origem registrada antes de qualquer reutilização fora deste portal.",
   "retrieved": "2026-09-07",
-  "use": "Hero corporativo do Portal DAI/2"
+  "processing": "Composição 2400x900 a partir da fotografia original: fundo derivado desfocado/escurecido, fotografia nítida integrada à direita e área de leitura preservada à esquerda.",
+  "use": "Banner corporativo/aesthetic do Portal DAI/2 com referência visual explícita ao CBMMG",
+  "stability": "Imagem final internalizada em assets/img/banner-cbmmg.jpg; o runtime não depende do host externo."
 }
