@@ -10,5 +10,6 @@
   "license": "Licença específica não informada na referência consultada; manter a referência de origem registrada antes de qualquer reutilização fora deste portal.",
   "retrieved": "2026-09-07",
   "processing": "Composição 2400x900 a partir da fotografia original: fundo derivado desfocado/escurecido, fotografia nítida integrada à direita e área de leitura preservada à esquerda.",
-  "use": "Banner corporativo/aesthetic do Portal DAI/2 com referência visual explícita ao CBMMG"
+  "use": "Banner corporativo/aesthetic do Portal DAI/2 com referência visual explícita ao CBMMG",
+  "stability": "Imagem final internalizada em assets/img/banner-cbmmg.jpg; o runtime não depende do host externo."
 }
