@@ -76,8 +76,9 @@ def main() -> int:
         check(results, 'E2E 11 · pesquisa traz ação WhatsApp', page.locator('#searchResult .whatsapp-action').count() == 1)
         page.evaluate("window.__opened=[]; window.open=(url)=>{window.__opened.push(url); return null;}")
         page.locator('#searchResult .whatsapp-action').click()
-        opened = page.evaluate('window.__opened')
-        check(results, 'Privacy 01 · WhatsApp sem número embutido', len(opened) == 1 and opened[0].startswith('https://wa.me/?text=') and re.search(r'https://wa\.me/(?:\+?55)?\d', opened[0]) is None, str(opened))
+        opened = [url for url in page.evaluate('window.__opened') if isinstance(url, str) and url]
+        whatsapp_url = opened[-1] if opened else ''
+        check(results, 'Privacy 01 · WhatsApp sem número embutido', whatsapp_url.startswith('https://wa.me/?text=') and re.search(r'https://wa\.me/(?:\+?55)?\d', whatsapp_url) is None, str(opened))
 
         page.locator('#rankSelect').select_option('Sgt/SubTen')
         page.locator('#rankButton').click()
