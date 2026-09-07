@@ -1,31 +1,26 @@
 # DAI/2 · Efetivo e TPB 2026
 
-Painel estático do CBMMG/DAI para consulta gerencial de efetivo DAI/2 em órgãos externos, DDQOD e claro por posto/graduação, contatos operacionais e acompanhamento do TPB 2026 da DAI.
+Painel estático do CBMMG/DAI para consulta gerencial da distribuição do efetivo DAI/2 em órgãos externos, DDQOD, claro por posto/graduação, fundamentos correlatos e indicadores agregados do TPB 2026.
 
-## Interface 2.2.0 · layout original preservado
+## Interface 2.3.0 · auditoria completa em 3 camadas
 
-A versão 2.2.0 mantém integralmente a arquitetura visual original do portal. Não há redesign da página principal.
+A versão 2.3.0 preserva a arquitetura visual original do portal e incorpora um limite explícito entre informação pública e dados funcionais internos.
 
-Foram preservados: splash inicial, onboarding, banner, título, quadro de dados gerais, atalhos, painel de aniversariantes, legenda de cores, campos de pesquisa, organização em linhas, os 18 blocos dos órgãos, botão de previsão DDQOD, modais e rodapé.
+Foram preservados: splash inicial, onboarding, banner, título, quadro de dados gerais, três atalhos, painel auxiliar, legenda de cores, campos de pesquisa, organização em linhas, 18 blocos dos órgãos, botão de previsão DDQOD, modais e rodapé.
 
-Os ajustes foram implementados dentro dessa estrutura:
+Principais regras da versão:
 
-- envio direto de WhatsApp restaurado nos cartões nominais e nos resultados de pesquisa;
-- aniversariantes do dia novamente funcionais, com atalho de WhatsApp quando houver contato cadastrado;
-- contatos e aniversários mantidos em `data/contacts.js`, separados da base canônica de efetivo;
-- informações internas de rastreabilidade documental e pendências de produção não são exibidas no frontend nominal;
-- TPB 2026 da DAI acessível por botão na área já existente de atalhos e exibido em modal;
-- cálculo de claro por posto/graduação;
-- SEMAD tratada como implantação extra-DDQOD, com 0 previsto no DDQOD e 1 militar em exercício;
-- dados canônicos de efetivo consolidados em `data/data.js`, sem `runtime-updates.js`;
-- Nº BM permanece excluído da camada pública;
-- gráficos mantidos nos mesmos canvases dos blocos e desenhados localmente, sem Chart.js;
-- onboarding persistente após a primeira visualização;
-- melhorias de teclado, foco, contraste, alvos de toque e `prefers-reduced-motion` sem alteração da composição visual;
-- imagens remotas do splash/banner mantidas apenas como elementos decorativos do layout original, com fundo local de contingência;
-- CI em `pull_request` e `push` para `main`, com gate específico contra redesign e contra resíduos de bastidores no frontend.
-
-A versão dos dados de efetivo permanece `2.0.0`; a versão `2.2.0` identifica a interface atual.
+- fonte canônica de efetivo e DDQOD em `data/data.js`, sem mutações por `runtime-updates.js`;
+- claro calculado por posto/graduação; excedentes de uma P/G não compensam vagas de outra;
+- SEMAD tratada como implantação extra-DDQOD: 0 previsto no DDQOD consultado e 1 militar em exercício;
+- Nº BM, telefones, e-mails, aniversários e situação individual de TPB não são carregados na página pública;
+- arquivos públicos de contatos/e-mails foram removidos; ações `wa.me` e `mailto:` não fazem parte do frontend público;
+- TPB 2026 permanece no mesmo atalho/modal, porém apenas com indicadores agregados;
+- os números dos blocos são calculados a partir da fonte canônica em runtime, sem duplicação numérica no HTML;
+- gráficos permanecem nos canvases originais e são desenhados localmente, sem Chart.js;
+- acessibilidade reforçada com skip-link, foco visível, acionamento por teclado, Escape, retorno de foco, focus trap, `inert` do conteúdo de fundo, alvos de toque e `prefers-reduced-motion`;
+- CI executa a Auditoria Institucional/Técnica, invariantes, privacidade e a terceira camada automatizada em navegador: E2E + QA + Acessibilidade + UX + UI;
+- após merge em `main`, o smoke público 30/30 valida a URL efetivamente publicada.
 
 ## Fontes de corte
 
@@ -33,28 +28,11 @@ Efetivo DAI/2: ficha-mestre dos órgãos externos, validação de 17/08/2026.
 
 DDQOD: Anexo C da Resolução nº 1.268/2025.
 
-TPB: `Dashboard TPB DAI 2026 - controle por ata - 03-09-2026.xlsx`, corte 03/09/2026.
-
-## Regra do TPB
-
-`TPB FEITO` significa participação comprovada em lista/ata ou consolidada como concluída/regularizada na fonte governada. Dispensa definitiva permanece separada e não é contabilizada como TPB feito.
-
-No corte de 03/09/2026:
-
-- escopo controlado: 85;
-- TPB feito: 69;
-- TPB não feito: 16;
-- dispensa definitiva: 9;
-- não feito e sem dispensa: 7;
-- feito sem data consolidada: 15.
+TPB: `Dashboard TPB DAI 2026 - controle por ata - 03-09-2026.xlsx`, corte 03/09/2026. O frontend público recebe somente os agregados consolidados desse corte.
 
 ## Regra do claro
 
-O claro é calculado por posto/graduação:
-
 `claro_PG = max(previsto_PG - existente_PG, 0)`
-
-Excedentes de uma graduação não compensam vagas de outra.
 
 Invariantes da base atual:
 
@@ -64,15 +42,23 @@ Invariantes da base atual:
 - claro por P/G: 23;
 - excedentes por P/G nos órgãos DDQOD: 5.
 
-## Contatos públicos
+## TPB agregado no corte de 03/09/2026
 
-A camada pública disponibiliza posto/graduação, nome, órgão, subunidade e contato telefônico operacional para abertura direta do WhatsApp. O painel de aniversariantes usa a data de aniversário cadastrada. Nº BM permanece fora do frontend e dos dados públicos carregados pela página.
+- escopo controlado: 85;
+- TPB feito: 69;
+- TPB não feito: 16;
+- dispensas: 9;
+- não feito e sem dispensa: 7;
+- feito sem data consolidada: 15.
+
+Os registros nominais, datas pessoais e históricos de situação não integram a camada pública.
 
 ## Validação
 
 ```bash
 python scripts/personnel_pipeline.py audit --input data/data.js
 python scripts/site_audit.py
+python scripts/browser_e2e.py
 ```
 
-O workflow `.github/workflows/python-personnel-audit.yml` executa os gates em PRs e em `main`. Em produção, `scripts/live_smoke.py` executa 30 verificações na URL pública, incluindo preservação do layout, WhatsApp direto e ausência de resíduos de bastidores no frontend.
+O workflow `.github/workflows/python-personnel-audit.yml` executa os gates em PRs e em `main`. Em produção, `scripts/live_smoke.py` executa 30 verificações na URL pública.
