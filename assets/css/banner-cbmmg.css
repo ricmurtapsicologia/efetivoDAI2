@@ -1,0 +1,16 @@
+/* Banner DAI/2 — imagem institucional CBMMG.
+   Fonte: página oficial do Corpo de Bombeiros Militar de Minas Gerais.
+   Uso visual: composição corporativa/aesthetic do portal, sem alterar o splash. */
+header.banner{
+  background-image:url('https://www.bombeiros.mg.gov.br/storage/images/17120885802.jpeg?asset=photo-1778876087506-47da0c3e6d98');
+  background-position:center 34%;
+  background-size:cover;
+}
+header.banner:hover{background-position:center 29%}
+.banner-overlay{
+  background:linear-gradient(90deg,rgba(10,18,28,.82) 0%,rgba(16,24,35,.58) 46%,rgba(16,24,35,.22) 100%);
+}
+@media(max-width:576px){
+  header.banner{background-position:center 32%}
+  header.banner:hover{background-position:center 32%}
+}
