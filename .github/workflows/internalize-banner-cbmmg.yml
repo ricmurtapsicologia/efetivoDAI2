@@ -1,0 +1,48 @@
+name: Internalizar banner CBMMG
+
+on:
+  push:
+    branches: [dai2-banner-cbmmg-aesthetic-2026-09-07]
+    paths:
+      - '.github/workflows/internalize-banner-cbmmg.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  internalize-banner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Baixar fotografia institucional CBMMG
+        run: |
+          set -euo pipefail
+          mkdir -p assets/img
+          UA='Mozilla/5.0 (compatible; DAI2AssetBot/1.0)'
+          URL='https://pbs.twimg.com/media/G264CFTXsAE1qz4.jpg?format=jpg&name=orig'
+          curl -fL --retry 5 --retry-delay 2 --connect-timeout 15 --max-time 90 -A "$UA" "$URL" -o assets/img/banner-cbmmg.jpg
+          test -s assets/img/banner-cbmmg.jpg
+          file assets/img/banner-cbmmg.jpg | grep -Eqi 'JPEG|image data'
+          python - <<'PY'
+          from PIL import Image
+          p='assets/img/banner-cbmmg.jpg'
+          with Image.open(p) as im:
+              print(f'Banner CBMMG: {im.width}x{im.height}')
+              if im.width < 1600:
+                  raise SystemExit(f'Imagem insuficiente para hero: largura {im.width}px')
+          PY
+      - name: Commitar asset local
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/img/banner-cbmmg.jpg
+          if git diff --cached --quiet; then
+            echo 'Banner já internalizado.'
+            exit 0
+          fi
+          git commit -m 'assets: internalizar fotografia institucional CBMMG'
+          git pull --rebase origin dai2-banner-cbmmg-aesthetic-2026-09-07
+          git push origin HEAD:dai2-banner-cbmmg-aesthetic-2026-09-07
