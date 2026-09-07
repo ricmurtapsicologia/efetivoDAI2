@@ -17,61 +17,60 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Selecionar e internalizar fotografia de alta resolução
+      - name: Selecionar e internalizar fotografia CBMMG
         run: |
           set -euo pipefail
           mkdir -p assets/img
           python -m pip install --quiet pillow
           UA='Mozilla/5.0 (compatible; DAI2AssetBot/1.0)'
-          rm -f assets/img/banner-cbmmg.jpg assets/img/banner-cbmmg-source.txt /tmp/banner-candidate.jpg
+          rm -f /tmp/banner-candidate.jpg
+          SELECTED=''
           SOURCES=(
-            'https://i.pinimg.com/originals/33/9d/0c/339d0cc2f05bbb719debe6a5efb414dd.jpg'
-            'https://i.pinimg.com/originals/38/70/c5/3870c5a678e72a0c16ca58914e14df3f.jpg'
+            'https://www.bombeiros.mg.gov.br/storage/images/17120885802.jpeg'
             'https://i.pinimg.com/originals/11/a1/77/11a177ae248e628148fdb30fdf448f9e.jpg'
-            'https://images.unsplash.com/photo-1697952433648-d1ad0e6cda00?auto=format&fit=crop&w=2400&q=90'
           )
           for URL in "${SOURCES[@]}"; do
             echo "Tentando $URL"
             rm -f /tmp/banner-candidate.jpg
-            if ! curl -fL --retry 3 --retry-delay 2 --connect-timeout 15 --max-time 90 -A "$UA" "$URL" -o /tmp/banner-candidate.jpg; then
+            if ! curl -fL --retry 4 --retry-delay 2 --connect-timeout 20 --max-time 120 -A "$UA" "$URL" -o /tmp/banner-candidate.jpg; then
               continue
             fi
-            if ! test -s /tmp/banner-candidate.jpg || ! file /tmp/banner-candidate.jpg | grep -Eqi 'JPEG|image data'; then
-              continue
-            fi
-            WIDTH=$(python - <<'PY'
-          from PIL import Image
-          p='/tmp/banner-candidate.jpg'
-          with Image.open(p) as im:
-              print(im.width)
-              print(f'Candidato: {im.width}x{im.height}', file=__import__('sys').stderr)
-          PY
-            )
-            if [ "$WIDTH" -ge 1600 ]; then
-              mv /tmp/banner-candidate.jpg assets/img/banner-cbmmg.jpg
-              printf '%s\n' "$URL" > assets/img/banner-cbmmg-source.txt
+            if test -s /tmp/banner-candidate.jpg && file /tmp/banner-candidate.jpg | grep -Eqi 'JPEG|image data'; then
+              SELECTED="$URL"
               break
             fi
           done
-          test -s assets/img/banner-cbmmg.jpg
-          python - <<'PY'
-          from PIL import Image
-          p='assets/img/banner-cbmmg.jpg'
-          with Image.open(p) as im:
-              print(f'Banner selecionado: {im.width}x{im.height}')
-              if im.width < 1600:
-                  raise SystemExit('Hero abaixo de 1600 px')
+          test -n "$SELECTED"
+          test -s /tmp/banner-candidate.jpg
+          SELECTED="$SELECTED" python - <<'PY'
+          from PIL import Image, ImageEnhance, ImageFilter
+          import os
+          src='/tmp/banner-candidate.jpg'
+          dst='assets/img/banner-cbmmg.jpg'
+          with Image.open(src) as im:
+              im = im.convert('RGB')
+              print(f'Fonte original: {im.width}x{im.height}')
+              if im.width < 2400:
+                  ratio = 2400 / im.width
+                  new_size = (2400, round(im.height * ratio))
+                  im = im.resize(new_size, Image.Resampling.LANCZOS)
+                  im = ImageEnhance.Contrast(im).enhance(1.035)
+                  im = im.filter(ImageFilter.UnsharpMask(radius=1.1, percent=105, threshold=3))
+              im.save(dst, 'JPEG', quality=91, optimize=True, progressive=True)
+              print(f'Banner final: {im.width}x{im.height}')
+          with open('assets/img/banner-cbmmg-source.txt','w',encoding='utf-8') as f:
+              f.write(os.environ['SELECTED']+'\n')
           PY
-          echo "Fonte selecionada: $(cat assets/img/banner-cbmmg-source.txt)"
+          echo "Fonte selecionada: $SELECTED"
       - name: Commitar asset local
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add assets/img/banner-cbmmg.jpg assets/img/banner-cbmmg-source.txt
           if git diff --cached --quiet; then
-            echo 'Banner já internalizado.'
+            echo 'Banner CBMMG já está internalizado.'
             exit 0
           fi
-          git commit -m 'assets: internalizar banner CBMMG em alta resolução'
+          git commit -m 'assets: internalizar banner institucional CBMMG'
           git pull --rebase origin dai2-banner-cbmmg-aesthetic-2026-09-07
           git push origin HEAD:dai2-banner-cbmmg-aesthetic-2026-09-07
