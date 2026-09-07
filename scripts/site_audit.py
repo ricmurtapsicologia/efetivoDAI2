@@ -15,7 +15,7 @@ BANNED_FRONTEND = [
     'BGBM a localizar', 'Ato de movimentação', 'A vincular', 'A localizar',
     'base interna autorizada', 'neutralizados na camada executiva',
     'Rastreabilidade: data/período da evidência a recuperar', 'addTrace(',
-    'DAI2_CONTACTS', 'DAI2_EMAILS', 'DAI2_BIRTHDAYS', 'https://wa.me/', 'mailto:'
+    'DAI2_CONTACTS', 'DAI2_EMAILS', 'DAI2_BIRTHDAYS', 'mailto:'
 ]
 PRIVATE_PUBLIC_FILES = [
     ROOT/'data'/'contacts.js',
@@ -82,6 +82,8 @@ def main() -> int:
     for phrase in BANNED_FRONTEND:
         if phrase in frontend:
             errors.append(f'dado/ação privada no frontend público: {phrase}')
+    if re.search(r'https://wa\.me/(?:\+?55)?\d', frontend):
+        errors.append('WhatsApp com número de destinatário embutido no frontend público')
 
     planned = sum(sum(int(grades.get(rank,0) or 0) for rank in RANKS) for grades in ddqod.values())
     by_org = Counter(row['org'] for row in personnel)
@@ -111,7 +113,7 @@ def main() -> int:
     required_layout = [
         'id="splash"','id="onboarding"','class="banner"','class="container"',
         'class="general-data"','class="color-legend"','class="row"','class="block"',
-        'id="birthdayPanel"','id="militaryList"','id="modal"','id="normasModal"','id="tpbModal"'
+        'id="militaryList"','id="modal"','id="normasModal"','id="tpbModal"'
     ]
     for token in required_layout:
         if token not in index: errors.append(f'layout original ausente: {token}')
@@ -126,8 +128,8 @@ def main() -> int:
 
     required_refs = [
         'data/tpb.js?v=2026.09.06-public',
-        'assets/js/app.js?v=2.3.0',
-        'assets/css/main.css?v=2.1.0'
+        'assets/js/app.js?v=2.4.0',
+        'assets/css/main.css?v=2.2.0'
     ]
     if any(ref not in index for ref in required_refs):
         errors.append('versionamento/referências do frontend incompletos')
@@ -148,17 +150,24 @@ def main() -> int:
     if 'aria-expanded="false"' not in index: errors.append('controles expansíveis sem aria-expanded inicial')
     if 'function trapFocus' not in app: errors.append('focus trap dos modais ausente')
     if "setAttribute('inert'" not in app: errors.append('isolamento do conteúdo de fundo dos modais ausente')
-    if 'Proteção de dados' not in index or 'Telefones, e-mails, aniversários' not in app:
-        errors.append('aviso de privacidade pública ausente')
-    if 'somente indicadores agregados' not in app.lower():
-        errors.append('TPB agregado não está explicitado no frontend')
+    if 'Proteção de dados' in index or 'birthdayPanel' in index or 'Privacidade da camada pública' in index:
+        errors.append('bloco visual de privacidade deveria estar removido')
+    if 'Claro calculado por posto/graduação' in app:
+        errors.append('texto explicativo de claro deveria estar removido')
+    if 'https://wa.me/?text=' not in app or 'whatsapp-action' not in app:
+        errors.append('ação WhatsApp por militar ausente')
+    if 'Situação do TPB 2026' not in index or 'tpb-overview' not in app:
+        errors.append('TPB intuitivo 2.4 incompleto')
+    if 'photo-1521737711867-e3b97375f902' not in css:
+        errors.append('hero corporativo de alta resolução ausente')
 
     payload = {
         'ok': not errors,
         'version': meta.get('version'),
-        'interface': '2.3.0',
-        'layout': 'original-preserved',
-        'privacy_boundary': 'public-aggregate-no-contact-data',
+        'interface': '2.4.0',
+        'layout': 'original-preserved-refined',
+        'public_contacts': 'not-embedded',
+        'whatsapp_action': 'per-person-share-without-public-number',
         'ddqod_planned': planned,
         'personnel': len(personnel),
         'claro_pg': claro,
