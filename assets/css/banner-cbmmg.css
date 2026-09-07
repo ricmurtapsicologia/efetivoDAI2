@@ -1,16 +1,16 @@
-/* Banner DAI/2 — imagem institucional CBMMG.
-   Fonte visual: perfil oficial @Bombeiros_MG, registro da entrega de 18 novas viaturas na Cidade Administrativa.
-   Uso visual: composição corporativa/aesthetic do portal, sem alterar o splash. */
+/* Banner DAI/2 — fotografia CBMMG selecionada em pesquisa visual (Pinterest),
+   internalizada e tratada como hero panorâmico 2400x900 para estabilidade e leitura.
+   O splash permanece inalterado. */
 header.banner{
-  background-image:url('https://pbs.twimg.com/media/G264CFTXsAE1qz4.jpg?format=jpg&name=orig&asset=photo-1778876087506-47da0c3e6d98');
-  background-position:center 48%;
+  background-image:url('../img/banner-cbmmg.jpg?asset=photo-1778876087506-47da0c3e6d98');
+  background-position:center 50%;
   background-size:cover;
 }
-header.banner:hover{background-position:center 43%}
+header.banner:hover{background-position:center 46%}
 .banner-overlay{
-  background:linear-gradient(90deg,rgba(8,17,27,.84) 0%,rgba(14,23,34,.58) 46%,rgba(14,23,34,.18) 100%);
+  background:linear-gradient(90deg,rgba(5,13,23,.74) 0%,rgba(8,18,29,.46) 48%,rgba(8,18,29,.10) 100%);
 }
 @media(max-width:576px){
-  header.banner{background-position:center 48%}
-  header.banner:hover{background-position:center 48%}
+  header.banner{background-position:center 50%}
+  header.banner:hover{background-position:center 50%}
 }
