@@ -16,12 +16,14 @@
   </head>
   <body>
     <a class="skip-link" href="#mainContent">Ir para o conteúdo</a>
-    <div id="splash">
+    <noscript><div class="privacy-note">Esta página precisa de JavaScript para calcular e apresentar os dados da fonte canônica.</div></noscript>
+
+    <div id="splash" role="status" aria-live="polite">
       <h1>Distribuição de Efetivo DAI/2</h1>
       <p>Carregando dados...</p>
     </div>
 
-    <div id="onboarding" class="hidden">
+    <div id="onboarding" class="hidden" role="dialog" aria-modal="true" aria-label="Introdução ao Portal DAI/2">
       <div class="onboarding-step" data-step="1">
         <h2>Bem-vindo ao Portal DAI/2</h2>
         <p>Aqui você tem uma visão geral da distribuição do efetivo dos Órgãos Externos, com acesso rápido aos detalhes de cada unidade.</p>
@@ -29,17 +31,17 @@
       </div>
       <div class="onboarding-step hidden" data-step="2">
         <h2>Pesquisa e “Claro”</h2>
-        <p>Encontre militares por nome ou posto/graduação e verifique rapidamente o “claro” (vagas disponíveis) em cada posto.</p>
+        <p>Encontre militares por nome ou posto/graduação e verifique rapidamente o “claro” por posto/graduação.</p>
         <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar</button><button class="btn-skip" type="button">Pular</button></div>
       </div>
       <div class="onboarding-step hidden" data-step="3">
         <h2>Gráficos Interativos</h2>
-        <p>Veja de forma visual o preenchimento das vagas previstas e o “claro” por posto/graduação. Clique no gráfico para conferir a lista nominal dos militares.</p>
+        <p>Veja de forma visual o preenchimento das vagas previstas e o “claro”. Ative um bloco para conferir a relação nominal do órgão.</p>
         <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar</button><button class="btn-skip" type="button">Pular</button></div>
       </div>
       <div class="onboarding-step hidden" data-step="4">
         <h2>Previsão de Efetivo</h2>
-        <p>Confira a previsão de efetivo pelo DDQOD ao clicar no botão. Explore todas as funcionalidades para facilitar sua consulta.</p>
+        <p>Confira a previsão de efetivo pelo DDQOD e os indicadores gerenciais disponíveis na camada pública.</p>
         <div class="onboarding-controls"><button class="btn-continue" type="button">Finalizar</button><button class="btn-skip" type="button">Pular</button></div>
       </div>
     </div>
@@ -51,19 +53,19 @@
         <h1 class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</h1>
 
         <section class="general-data" aria-label="Dados Gerais">
-          <p>Total Previsto: 101</p>
-          <p>Total Existente: 84</p>
-          <p>Total Claro: 23</p>
+          <p>Total Previsto: —</p>
+          <p>Total Existente: —</p>
+          <p>Total Claro: —</p>
         </section>
 
         <section class="quick-actions" aria-label="Atalhos de consulta">
-          <button id="birthdayToggleBtn" class="cta-button" type="button">Verificar aniversariantes do dia</button>
-          <button id="normasToggleBtn" class="cta-button cta-button-secondary" type="button">Instrumento Jurídico Correlato</button>
-          <button id="tpbToggleBtn" class="cta-button" type="button">TPB 2026 · DAI</button>
+          <button id="birthdayToggleBtn" class="cta-button" type="button" aria-controls="birthdayPanel" aria-expanded="false">Privacidade da camada pública</button>
+          <button id="normasToggleBtn" class="cta-button cta-button-secondary" type="button" aria-haspopup="dialog">Instrumento Jurídico Correlato</button>
+          <button id="tpbToggleBtn" class="cta-button" type="button" aria-haspopup="dialog">TPB 2026 · DAI</button>
         </section>
 
-        <section class="birthday-panel" id="birthdayPanel" aria-label="Aniversariantes do dia">
-          <div class="birthday-header"><h2>Aniversariantes do dia</h2><p id="localDateTime">Carregando data e hora local...</p></div>
+        <section class="birthday-panel" id="birthdayPanel" aria-label="Proteção de dados pessoais">
+          <div class="birthday-header"><h2>Proteção de dados</h2><p id="localDateTime">Camada pública protegida</p></div>
           <div id="birthdayContent" class="birthday-content"></div>
         </section>
 
@@ -97,58 +99,58 @@
         <div id="claroResult" aria-live="polite"></div>
 
         <section class="row" aria-label="Blocos dos Órgãos Externos">
-          <div class="block" data-orgao="AFAS"><h3>AFAS</h3><canvas id="chart-afas" aria-label="Situação AFAS"></canvas><div class="numbers">Previsto: 3 <br /> Existente: 2 <br /> Claro: 1</div></div>
-          <div class="block" data-orgao="ALMG"><h3>ALMG</h3><canvas id="chart-almg" aria-label="Situação ALMG"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
-          <div class="block" data-orgao="CEDEC"><h3>CEDEC</h3><canvas id="chart-cedec" aria-label="Situação CEDEC"></canvas><div class="numbers">Previsto: 10 <br /> Existente: 6 <br /> Claro: 4</div></div>
+          <div class="block" data-orgao="AFAS"><h3>AFAS</h3><canvas id="chart-afas" aria-label="Situação AFAS"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="ALMG"><h3>ALMG</h3><canvas id="chart-almg" aria-label="Situação ALMG"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="CEDEC"><h3>CEDEC</h3><canvas id="chart-cedec" aria-label="Situação CEDEC"></canvas><div class="numbers">Carregando...</div></div>
         </section>
 
         <section class="row">
-          <div class="block" data-orgao="COORDENAÇÃO DAI/2"><h3>COORDENAÇÃO DAI/2</h3><canvas id="chart-coordenacao-dai2" aria-label="Situação Coordenação DAI/2"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
-          <div class="block" data-orgao="CTPM"><h3>Colégio Tiradentes RMBH</h3><canvas id="chart-ctpm" aria-label="Situação CTPM"></canvas><div class="numbers">Previsto: 17 <br /> Existente: 15 <br /> Claro: 2</div></div>
+          <div class="block" data-orgao="COORDENAÇÃO DAI/2"><h3>COORDENAÇÃO DAI/2</h3><canvas id="chart-coordenacao-dai2" aria-label="Situação Coordenação DAI/2"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="CTPM"><h3>Colégio Tiradentes RMBH</h3><canvas id="chart-ctpm" aria-label="Situação CTPM"></canvas><div class="numbers">Carregando...</div></div>
         </section>
 
         <section class="row">
-          <div class="block" data-orgao="Fundação SALVAR"><h3>Assessoria Fundacional</h3><canvas id="chart-salvar" aria-label="Situação Fundação SALVAR"></canvas><div class="numbers">Previsto: 8 <br /> Existente: 8 <br /> Claro: 0</div></div>
-          <div class="block" data-orgao="GMG"><h3>GMG</h3><canvas id="chart-gmg" aria-label="Situação GMG"></canvas><div class="numbers">Previsto: 14 <br /> Existente: 9 <br /> Claro: 6</div></div>
-          <div class="block" data-orgao="Intendência"><h3>Intendência CAMG</h3><canvas id="chart-intendencia" aria-label="Situação Intendência CAMG"></canvas><div class="numbers">Previsto: 6 <br /> Existente: 6 <br /> Claro: 1</div></div>
+          <div class="block" data-orgao="Fundação SALVAR"><h3>Assessoria Fundacional</h3><canvas id="chart-salvar" aria-label="Situação Fundação SALVAR"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="GMG"><h3>GMG</h3><canvas id="chart-gmg" aria-label="Situação GMG"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="Intendência"><h3>Intendência CAMG</h3><canvas id="chart-intendencia" aria-label="Situação Intendência CAMG"></canvas><div class="numbers">Carregando...</div></div>
         </section>
 
         <section class="row">
-          <div class="block" data-orgao="MPMG"><h3>MPMG</h3><canvas id="chart-mpmg" aria-label="Situação MPMG"></canvas><div class="numbers">Previsto: 6 <br /> Existente: 6 <br /> Claro: 0</div></div>
-          <div class="block" data-orgao="OGE"><h3>OGE</h3><canvas id="chart-oge" aria-label="Situação OGE"></canvas><div class="numbers">Previsto: 5 <br /> Existente: 5 <br /> Claro: 0</div></div>
-          <div class="block" data-orgao="Secretaria Parlamentar"><h3>Secretaria Parlamentar</h3><canvas id="chart-secretaria-parlamentar" aria-label="Situação Secretaria Parlamentar"></canvas><div class="numbers">Previsto: 3 <br /> Existente: 1 <br /> Claro: 2</div></div>
+          <div class="block" data-orgao="MPMG"><h3>MPMG</h3><canvas id="chart-mpmg" aria-label="Situação MPMG"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="OGE"><h3>OGE</h3><canvas id="chart-oge" aria-label="Situação OGE"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="Secretaria Parlamentar"><h3>Secretaria Parlamentar</h3><canvas id="chart-secretaria-parlamentar" aria-label="Situação Secretaria Parlamentar"></canvas><div class="numbers">Carregando...</div></div>
         </section>
 
         <section class="row">
-          <div class="block" data-orgao="SEE"><h3>SEE</h3><canvas id="chart-see" aria-label="Situação SEE"></canvas><div class="numbers">Previsto: 1 <br /> Existente: 1 <br /> Claro: 0</div></div>
-          <div class="block" data-orgao="SEJUSP"><h3>SEJUSP</h3><canvas id="chart-sejusp" aria-label="Situação SEJUSP"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 1 <br /> Claro: 1</div></div>
-          <div class="block" data-orgao="SEMAD"><h3>SEMAD</h3><canvas id="chart-semad" aria-label="Situação SEMAD"></canvas><div class="numbers">Previsto: 0 <br /> Existente: 1 <br /> Claro: 0</div></div>
+          <div class="block" data-orgao="SEE"><h3>SEE</h3><canvas id="chart-see" aria-label="Situação SEE"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="SEJUSP"><h3>SEJUSP</h3><canvas id="chart-sejusp" aria-label="Situação SEJUSP"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="SEMAD"><h3>SEMAD</h3><canvas id="chart-semad" aria-label="Situação SEMAD"></canvas><div class="numbers">Carregando...</div></div>
         </section>
 
         <section class="row">
-          <div class="block" data-orgao="SENASP"><h3>SENASP/MJ</h3><canvas id="chart-senasp" aria-label="Situação SENASP"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
-          <div class="block" data-orgao="SES"><h3>SES</h3><canvas id="chart-ses" aria-label="Situação SES"></canvas><div class="numbers">Previsto: 2 <br /> Existente: 2 <br /> Claro: 0</div></div>
-          <div class="block" data-orgao="TJMG"><h3>TJMG</h3><canvas id="chart-tjmg" aria-label="Situação TJMG"></canvas><div class="numbers">Previsto: 8 <br /> Existente: 6 <br /> Claro: 2</div></div>
+          <div class="block" data-orgao="SENASP"><h3>SENASP/MJ</h3><canvas id="chart-senasp" aria-label="Situação SENASP"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="SES"><h3>SES</h3><canvas id="chart-ses" aria-label="Situação SES"></canvas><div class="numbers">Carregando...</div></div>
+          <div class="block" data-orgao="TJMG"><h3>TJMG</h3><canvas id="chart-tjmg" aria-label="Situação TJMG"></canvas><div class="numbers">Carregando...</div></div>
         </section>
 
         <section class="row">
-          <div class="block" data-orgao="TJMMG"><h3>TJMMG</h3><canvas id="chart-tjmmg" aria-label="Situação TJMMG"></canvas><div class="numbers">Previsto: 10 <br /> Existente: 9 <br /> Claro: 3</div></div>
+          <div class="block" data-orgao="TJMMG"><h3>TJMMG</h3><canvas id="chart-tjmmg" aria-label="Situação TJMMG"></canvas><div class="numbers">Carregando...</div></div>
         </section>
 
-        <section class="list-toggle"><button id="showListBtn" type="button">Clique aqui para visualizar a Previsão de Efetivo pelo DDQOD</button></section>
+        <section class="list-toggle"><button id="showListBtn" type="button" aria-controls="militaryList" aria-expanded="false">Clique aqui para visualizar a Previsão de Efetivo pelo DDQOD</button></section>
         <section class="military-list" id="militaryList"><ul></ul></section>
       </section>
     </main>
 
-    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true" tabindex="-1">
       <div class="modal-content"><button class="close close-button" id="modalClose" type="button" aria-label="Fechar">&times;</button><h4 id="modalTitle">Relação de Militares</h4><div id="militares-list"></div></div>
     </div>
 
-    <div id="normasModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="normasModalTitle" aria-hidden="true">
+    <div id="normasModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="normasModalTitle" aria-hidden="true" tabindex="-1">
       <div class="modal-content modal-wide"><button class="close close-button" id="normasModalClose" type="button" aria-label="Fechar">&times;</button><h4 id="normasModalTitle">Disponibilização de militares - fundamentos por órgão</h4><div id="normasContent" class="normas-content"></div></div>
     </div>
 
-    <div id="tpbModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="tpbModalTitle" aria-hidden="true">
+    <div id="tpbModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="tpbModalTitle" aria-hidden="true" tabindex="-1">
       <div class="modal-content modal-wide tpb-modal-content"><button class="close close-button" id="tpbModalClose" type="button" aria-label="Fechar">&times;</button><h4 id="tpbModalTitle">TPB 2026 · DAI</h4><div id="tpbContent" class="tpb-content"></div></div>
     </div>
 
@@ -158,10 +160,7 @@
       <p>&copy; 2026 Todos os Direitos Reservados</p>
     </footer>
     <script src="data/data.js?v=2.0.0"></script>
-    <script src="data/contacts.js?v=2026.09.05"></script>
-    <script src="data/emails.js?v=2026.09.06"></script>
-    <script src="data/tpb.js?v=2026.09.03"></script>
-    <script src="assets/js/app.js?v=2.2.0"></script>
-    <script src="assets/js/email-actions.js?v=1.0.0"></script>
+    <script src="data/tpb.js?v=2026.09.06-public"></script>
+    <script src="assets/js/app.js?v=2.3.0"></script>
   </body>
 </html>
