@@ -22,10 +22,24 @@ jobs:
           set -euo pipefail
           mkdir -p assets/img
           UA='Mozilla/5.0 (compatible; DAI2AssetBot/1.0)'
-          URL='https://pbs.twimg.com/media/G264CFTXsAE1qz4.jpg?format=jpg&name=orig'
-          curl -fL --retry 5 --retry-delay 2 --connect-timeout 15 --max-time 90 -A "$UA" "$URL" -o assets/img/banner-cbmmg.jpg
+          rm -f assets/img/banner-cbmmg.jpg assets/img/banner-cbmmg-source.txt
+          SOURCES=(
+            'https://pbs.twimg.com/media/G264CFTXsAE1qz4?format=jpg&name=orig'
+            'https://pbs.twimg.com/media/G264CFTXsAE1qz4?format=jpg&name=large'
+            'https://i.pinimg.com/originals/11/a1/77/11a177ae248e628148fdb30fdf448f9e.jpg'
+          )
+          for URL in "${SOURCES[@]}"; do
+            echo "Tentando $URL"
+            if curl -fL --retry 3 --retry-delay 2 --connect-timeout 15 --max-time 90 -A "$UA" "$URL" -o assets/img/banner-cbmmg.jpg; then
+              if test -s assets/img/banner-cbmmg.jpg && file assets/img/banner-cbmmg.jpg | grep -Eqi 'JPEG|image data'; then
+                printf '%s\n' "$URL" > assets/img/banner-cbmmg-source.txt
+                break
+              fi
+            fi
+            rm -f assets/img/banner-cbmmg.jpg
+          done
           test -s assets/img/banner-cbmmg.jpg
-          file assets/img/banner-cbmmg.jpg | grep -Eqi 'JPEG|image data'
+          python -m pip install --quiet pillow
           python - <<'PY'
           from PIL import Image
           p='assets/img/banner-cbmmg.jpg'
@@ -34,11 +48,12 @@ jobs:
               if im.width < 1600:
                   raise SystemExit(f'Imagem insuficiente para hero: largura {im.width}px')
           PY
+          echo "Fonte selecionada: $(cat assets/img/banner-cbmmg-source.txt)"
       - name: Commitar asset local
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/img/banner-cbmmg.jpg
+          git add assets/img/banner-cbmmg.jpg assets/img/banner-cbmmg-source.txt
           if git diff --cached --quiet; then
             echo 'Banner já internalizado.'
             exit 0
