@@ -1,13 +1,14 @@
 {
   "asset": "hero DAI/2",
-  "type": "photograph",
-  "title": "Viaturas e militares do CBMMG na Cidade Administrativa de Minas Gerais",
-  "photographer": "CBMMG / perfil oficial @Bombeiros_MG; crédito individual não informado na publicação consultada",
-  "photographer_handle": "Bombeiros_MG",
-  "source_page": "https://x.com/Bombeiros_MG/status/1976719740182622502",
-  "image_url": "https://pbs.twimg.com/media/G264CFTXsAE1qz4.jpg?format=jpg&name=orig&asset=photo-1778876087506-47da0c3e6d98",
-  "license": "Fonte institucional oficial do CBMMG; a publicação consultada não informa licença específica de reutilização",
-  "published": "2025-10-10",
+  "type": "photograph-composite",
+  "title": "Viatura do CBMMG — composição panorâmica corporativa",
+  "photographer": "Autor não identificado na referência visual consultada",
+  "photographer_handle": "não informado",
+  "source_page": "https://br.pinterest.com/search/pins/?q=CBMMG%20Corpo%20de%20Bombeiros%20Minas%20Gerais",
+  "source_image_url": "https://i.pinimg.com/originals/11/a1/77/11a177ae248e628148fdb30fdf448f9e.jpg",
+  "image_url": "assets/img/banner-cbmmg.jpg?asset=photo-1778876087506-47da0c3e6d98",
+  "license": "Licença específica não informada na referência consultada; imagem utilizada como referência visual solicitada e internalizada no projeto.",
   "retrieved": "2026-09-07",
-  "use": "Banner corporativo/aesthetic do Portal DAI/2; viaturas, militares do CBMMG e identidade visual do Governo de Minas"
+  "processing": "Composição 2400x900 a partir da fotografia original: fundo derivado desfocado/escurecido, fotografia nítida integrada à direita e área de leitura preservada à esquerda.",
+  "use": "Banner corporativo/aesthetic do Portal DAI/2 com referência visual explícita ao CBMMG"
 }
