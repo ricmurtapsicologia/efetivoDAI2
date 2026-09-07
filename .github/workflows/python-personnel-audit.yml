@@ -31,8 +31,22 @@ jobs:
           python-version: '3.12'
       - name: Audit personnel allowlist
         run: python scripts/personnel_pipeline.py audit --input data/data.js --report artifacts/personnel-audit.json
-      - name: Audit production invariants
+      - name: Audit production invariants + public privacy boundary
         run: python scripts/site_audit.py
+      - name: Install browser audit
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Start local portal
+        run: |
+          python -m http.server 8000 --bind 127.0.0.1 > /tmp/dai2-http.log 2>&1 &
+          echo $! > /tmp/dai2-http.pid
+          sleep 2
+      - name: E2E + QA + Accessibility + UX + UI
+        env:
+          DAI2_BASE_URL: http://127.0.0.1:8000
+        run: python scripts/browser_e2e.py
       - name: Public GitHub Pages smoke 30/30
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: python scripts/live_smoke.py
