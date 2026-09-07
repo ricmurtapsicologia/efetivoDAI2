@@ -25,13 +25,13 @@ jobs:
   production-gates:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - name: Audit personnel allowlist
         run: python scripts/personnel_pipeline.py audit --input data/data.js --report artifacts/personnel-audit.json
-      - name: Audit production invariants + public privacy boundary
+      - name: Audit production invariants + WhatsApp directory
         run: python scripts/site_audit.py
       - name: Install browser audit
         run: |
@@ -52,7 +52,7 @@ jobs:
         run: python scripts/live_smoke.py
       - name: Upload audit report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: dai2-audit
           path: artifacts/personnel-audit.json
