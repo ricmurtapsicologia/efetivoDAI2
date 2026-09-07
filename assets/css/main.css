@@ -6,7 +6,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:va
 .skip-link{position:absolute;left:-9999px;top:0;z-index:10000;background:#fff;color:#111;padding:10px 14px;border:2px solid #111;border-radius:6px}
 .skip-link:focus{left:12px;top:12px}
 .system-note{font-size:14px;color:#495057;padding:10px;text-align:center;background:#fff}
-#splash{position:fixed;top:0;left:0;width:100%;height:100%;background-color:var(--onboarding-bg);background-image:linear-gradient(rgba(15,23,42,.54),rgba(15,23,42,.46)),url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2400&q=90');background-repeat:no-repeat;background-position:center center;background-size:cover;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;z-index:9999;transition:opacity 1s ease}
+#splash{position:fixed;top:0;left:0;width:100%;height:100%;background-color:var(--onboarding-bg);background-image:linear-gradient(rgba(15,23,42,.54),rgba(15,23,42,.46)),url('https://images.unsplash.com/photo-1778876087506-47da0c3e6d98?auto=format&fit=crop&w=2400&q=90');background-repeat:no-repeat;background-position:center center;background-size:cover;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;z-index:9999;transition:opacity 1s ease}
 #splash.hidden{opacity:0;pointer-events:none}
 #splash h1{font-size:2rem;margin-bottom:.5rem;text-align:center;padding:0 10px;text-shadow:0 3px 18px rgba(0,0,0,.45)}
 #splash p{font-size:1rem;text-align:center;padding:0 10px;text-shadow:0 2px 10px rgba(0,0,0,.4)}
@@ -23,7 +23,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:va
 .btn-continue:hover{background-color:var(--light-bg)}
 .btn-skip{background:transparent;border:2px solid #fff;color:#fff}
 .btn-skip:hover{background:rgba(255,255,255,.2)}
-header.banner{width:100%;height:420px;position:relative;overflow:hidden;background-color:#334155;background-image:url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2400&q=90');background-repeat:no-repeat;background-position:center 45%;background-size:cover;transition:background-position .6s ease-in-out}
+header.banner{width:100%;height:420px;position:relative;overflow:hidden;background-color:#334155;background-image:url('https://images.unsplash.com/photo-1778876087506-47da0c3e6d98?auto=format&fit=crop&w=2400&q=90');background-repeat:no-repeat;background-position:center 45%;background-size:cover;transition:background-position .6s ease-in-out}
 header.banner:hover{background-position:center 38%}
 .banner-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(17,24,39,.72) 0%,rgba(17,24,39,.44) 48%,rgba(17,24,39,.18) 100%)}
 header.banner .banner-text{position:absolute;left:max(6vw,42px);bottom:58px;color:#fff;font-size:2.55rem;font-weight:700;text-align:left;text-shadow:0 3px 18px rgba(0,0,0,.5);width:min(720px,82%);line-height:1.12;z-index:1}
@@ -65,8 +65,10 @@ section.container{max-width:1200px;margin:20px auto;padding:20px;background-colo
 .modal-divider{border:0;border-top:1px solid #ddd;margin:10px 0}
 .modal-clear-summary{margin-top:16px;padding:14px;background:#fff8f8;border:1px solid #f3c6c6;border-radius:10px;text-align:left}
 .modal-clear-summary p{margin:0;word-break:break-word}
+.whatsapp-number{color:#0d5f55;font-weight:650}
 .whatsapp-action{display:inline-flex;align-items:center;justify-content:center;margin-top:9px;min-height:44px;padding:9px 14px;border:0;border-radius:9px;background:#128c7e;color:#fff;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 2px 8px rgba(18,140,126,.2)}
 .whatsapp-action:hover{background:#0d7469}
+.whatsapp-action:disabled{background:#adb5bd;color:#fff;cursor:not-allowed;box-shadow:none}
 footer{text-align:center;padding:20px;font-size:14px;color:#555;background-color:var(--light-bg);margin-top:20px}
 .quick-actions{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:12px;max-width:780px;margin:18px auto 26px}
 .cta-button{padding:13px 18px;min-height:48px;border:none;border-radius:10px;background:#2e7d32;color:#fff;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.08);transition:transform var(--transition-speed),box-shadow var(--transition-speed),background-color var(--transition-speed)}
