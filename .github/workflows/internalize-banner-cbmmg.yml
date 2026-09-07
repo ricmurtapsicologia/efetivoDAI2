@@ -17,51 +17,65 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Selecionar e internalizar fotografia CBMMG
+      - name: Criar hero panorâmico a partir de fotografia CBMMG
         run: |
           set -euo pipefail
           mkdir -p assets/img
           python -m pip install --quiet pillow
           UA='Mozilla/5.0 (compatible; DAI2AssetBot/1.0)'
-          rm -f /tmp/banner-candidate.jpg
-          SELECTED=''
-          SOURCES=(
-            'https://www.bombeiros.mg.gov.br/storage/images/17120885802.jpeg'
-            'https://i.pinimg.com/originals/11/a1/77/11a177ae248e628148fdb30fdf448f9e.jpg'
-          )
-          for URL in "${SOURCES[@]}"; do
-            echo "Tentando $URL"
-            rm -f /tmp/banner-candidate.jpg
-            if ! curl -fL --retry 4 --retry-delay 2 --connect-timeout 20 --max-time 120 -A "$UA" "$URL" -o /tmp/banner-candidate.jpg; then
-              continue
-            fi
-            if test -s /tmp/banner-candidate.jpg && file /tmp/banner-candidate.jpg | grep -Eqi 'JPEG|image data'; then
-              SELECTED="$URL"
-              break
-            fi
-          done
-          test -n "$SELECTED"
+          URL='https://i.pinimg.com/originals/11/a1/77/11a177ae248e628148fdb30fdf448f9e.jpg'
+          curl -fL --retry 4 --retry-delay 2 --connect-timeout 15 --max-time 90 -A "$UA" "$URL" -o /tmp/banner-candidate.jpg
           test -s /tmp/banner-candidate.jpg
-          SELECTED="$SELECTED" python - <<'PY'
-          from PIL import Image, ImageEnhance, ImageFilter
+          file /tmp/banner-candidate.jpg | grep -Eqi 'JPEG|image data'
+          SOURCE_URL="$URL" python - <<'PY'
+          from PIL import Image, ImageEnhance, ImageFilter, ImageOps
           import os
+
           src='/tmp/banner-candidate.jpg'
           dst='assets/img/banner-cbmmg.jpg'
-          with Image.open(src) as im:
-              im = im.convert('RGB')
-              print(f'Fonte original: {im.width}x{im.height}')
-              if im.width < 2400:
-                  ratio = 2400 / im.width
-                  new_size = (2400, round(im.height * ratio))
-                  im = im.resize(new_size, Image.Resampling.LANCZOS)
-                  im = ImageEnhance.Contrast(im).enhance(1.035)
-                  im = im.filter(ImageFilter.UnsharpMask(radius=1.1, percent=105, threshold=3))
-              im.save(dst, 'JPEG', quality=91, optimize=True, progressive=True)
-              print(f'Banner final: {im.width}x{im.height}')
+          W,H=2400,900
+          with Image.open(src) as source:
+              source=source.convert('RGB')
+              print(f'Fonte CBMMG: {source.width}x{source.height}')
+
+              # Base cinematográfica: a própria fotografia ampliada, desfocada e escurecida.
+              bg=ImageOps.fit(source,(W,H),method=Image.Resampling.LANCZOS,centering=(0.5,0.5))
+              bg=bg.filter(ImageFilter.GaussianBlur(22))
+              bg=ImageEnhance.Brightness(bg).enhance(0.56)
+              bg=ImageEnhance.Color(bg).enhance(0.82)
+
+              # Fotografia nítida em destaque à direita, preservando o veículo/identidade visual.
+              fg_h=900
+              fg_w=round(source.width*(fg_h/source.height))
+              fg=source.resize((fg_w,fg_h),Image.Resampling.LANCZOS)
+              fg=ImageEnhance.Contrast(fg).enhance(1.04)
+              fg=fg.filter(ImageFilter.UnsharpMask(radius=1.1,percent=105,threshold=3))
+
+              # Máscara de transição suave para integrar o recorte ao fundo.
+              mask=Image.new('L',(fg_w,fg_h),255)
+              edge=max(80,round(fg_w*0.16))
+              for x in range(edge):
+                  a=round(255*(x/edge)**1.65)
+                  for y in range(fg_h):
+                      mask.putpixel((x,y),a)
+              x0=W-fg_w
+              bg.paste(fg,(x0,0),mask)
+
+              # Vinheta lateral esquerda para garantir leitura do título.
+              overlay=Image.new('L',(W,H),0)
+              for x in range(W):
+                  t=x/W
+                  alpha=round(135*max(0,1-t/0.72)**1.35)
+                  for y in range(H):
+                      overlay.putpixel((x,y),alpha)
+              black=Image.new('RGB',(W,H),(4,11,19))
+              bg=Image.composite(black,bg,overlay)
+              bg.save(dst,'JPEG',quality=91,optimize=True,progressive=True)
+              print(f'Hero final: {W}x{H}')
+
           with open('assets/img/banner-cbmmg-source.txt','w',encoding='utf-8') as f:
-              f.write(os.environ['SELECTED']+'\n')
+              f.write(os.environ['SOURCE_URL']+'\n')
           PY
-          echo "Fonte selecionada: $SELECTED"
       - name: Commitar asset local
         run: |
           git config user.name 'github-actions[bot]'
@@ -71,6 +85,6 @@ jobs:
             echo 'Banner CBMMG já está internalizado.'
             exit 0
           fi
-          git commit -m 'assets: internalizar banner institucional CBMMG'
+          git commit -m 'assets: compor banner panorâmico CBMMG'
           git pull --rebase origin dai2-banner-cbmmg-aesthetic-2026-09-07
           git push origin HEAD:dai2-banner-cbmmg-aesthetic-2026-09-07
