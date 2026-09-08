@@ -11,56 +11,126 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Distribuição de Efetivo DAI/2" />
     <meta name="twitter:description" content="Visualize a distribuição atualizada do efetivo da DAI/2 para órgãos externos." />
-    <meta name="theme-color" content="#2e7d32" />
+    <meta name="theme-color" content="#0b2338" />
+    <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin />
+    <link rel="preconnect" href="https://i.pinimg.com" crossorigin />
     <link rel="stylesheet" href="assets/css/main.css?v=2.3.0" />
-    <link rel="stylesheet" href="assets/css/banner-cbmmg.css?v=2026.09.07.2" />
+    <link rel="stylesheet" href="assets/css/banner-cbmmg.css?v=2026.09.08.1" />
   </head>
   <body>
     <a class="skip-link" href="#mainContent">Ir para o conteúdo</a>
     <noscript><div class="system-note">Esta página precisa de JavaScript para calcular e apresentar os dados.</div></noscript>
 
-    <div id="splash" role="status" aria-live="polite">
-      <h1>Distribuição de Efetivo DAI/2</h1>
-      <p>Carregando dados...</p>
+    <div id="splash" role="status" aria-live="polite" aria-label="Carregando Portal DAI/2">
+      <div class="splash-card">
+        <img class="splash-logo" src="https://i.pinimg.com/736x/5b/1e/9f/5b1e9f547379eee022fc6ecc7328d573.jpg" alt="DAI/2 - Diretoria de Assuntos Institucionais" />
+        <span class="splash-kicker">CBMMG · DAI/2</span>
+        <h1>Portal DAI/2</h1>
+        <p>Preparando as informações do efetivo.</p>
+        <span class="splash-loader" aria-hidden="true"></span>
+      </div>
     </div>
 
     <div id="onboarding" class="hidden" role="dialog" aria-modal="true" aria-label="Introdução ao Portal DAI/2">
-      <div class="onboarding-step" data-step="1">
-        <h2>Bem-vindo ao Portal DAI/2</h2>
-        <p>Uma visão geral da distribuição do efetivo dos Órgãos Externos, com acesso rápido aos detalhes de cada unidade.</p>
-        <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar</button><button class="btn-skip" type="button">Pular</button></div>
-      </div>
-      <div class="onboarding-step hidden" data-step="2">
-        <h2>Pesquisa e claro</h2>
-        <p>Encontre militares por nome ou posto/graduação e consulte o claro por posto/graduação.</p>
-        <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar</button><button class="btn-skip" type="button">Pular</button></div>
-      </div>
-      <div class="onboarding-step hidden" data-step="3">
-        <h2>Gráficos interativos</h2>
-        <p>Veja o preenchimento das vagas previstas. Ative um bloco para conferir a relação nominal do órgão e o contato por WhatsApp.</p>
-        <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar</button><button class="btn-skip" type="button">Pular</button></div>
-      </div>
-      <div class="onboarding-step hidden" data-step="4">
-        <h2>Previsão e TPB</h2>
-        <p>Confira a previsão de efetivo pelo DDQOD e acompanhe a situação do TPB 2026.</p>
-        <div class="onboarding-controls"><button class="btn-continue" type="button">Finalizar</button><button class="btn-skip" type="button">Pular</button></div>
+      <div class="onboarding-card">
+        <header class="onboarding-brand">
+          <img src="https://i.pinimg.com/736x/5b/1e/9f/5b1e9f547379eee022fc6ecc7328d573.jpg" alt="DAI/2 - Diretoria de Assuntos Institucionais" />
+          <div class="onboarding-brand-copy">
+            <strong>DAI/2</strong>
+            <span>Diretoria de Assuntos Institucionais</span>
+          </div>
+        </header>
+
+        <div class="onboarding-step" data-step="1">
+          <div class="onboarding-progress" aria-label="Etapa 1 de 4">
+            <span class="progress-count">1 de 4</span>
+            <span class="progress-dots" aria-hidden="true"><i class="active"></i><i></i><i></i><i></i></span>
+          </div>
+          <h2>Bem-vindo ao Portal DAI/2</h2>
+          <p>O portal apresenta a distribuição do efetivo dos Órgãos Externos, com acesso rápido às informações essenciais.</p>
+          <div class="onboarding-features" aria-label="Recursos do portal">
+            <div class="feature active"><span>01</span><strong>Distribuição do efetivo</strong></div>
+            <div class="feature"><span>02</span><strong>Pesquisa e claro</strong></div>
+            <div class="feature"><span>03</span><strong>Gráficos interativos</strong></div>
+            <div class="feature"><span>04</span><strong>Previsão e TPB</strong></div>
+          </div>
+          <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar <span aria-hidden="true">→</span></button><button class="btn-skip" type="button">Pular</button></div>
+        </div>
+
+        <div class="onboarding-step hidden" data-step="2">
+          <div class="onboarding-progress" aria-label="Etapa 2 de 4">
+            <span class="progress-count">2 de 4</span>
+            <span class="progress-dots" aria-hidden="true"><i></i><i class="active"></i><i></i><i></i></span>
+          </div>
+          <h2>Pesquisa e claro</h2>
+          <p>Encontre militares por nome ou posto/graduação e consulte o claro por posto/graduação.</p>
+          <div class="onboarding-features" aria-label="Recursos do portal">
+            <div class="feature"><span>01</span><strong>Distribuição do efetivo</strong></div>
+            <div class="feature active"><span>02</span><strong>Pesquisa e claro</strong></div>
+            <div class="feature"><span>03</span><strong>Gráficos interativos</strong></div>
+            <div class="feature"><span>04</span><strong>Previsão e TPB</strong></div>
+          </div>
+          <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar <span aria-hidden="true">→</span></button><button class="btn-skip" type="button">Pular</button></div>
+        </div>
+
+        <div class="onboarding-step hidden" data-step="3">
+          <div class="onboarding-progress" aria-label="Etapa 3 de 4">
+            <span class="progress-count">3 de 4</span>
+            <span class="progress-dots" aria-hidden="true"><i></i><i></i><i class="active"></i><i></i></span>
+          </div>
+          <h2>Gráficos interativos</h2>
+          <p>Veja o preenchimento das vagas previstas e ative cada órgão para consultar a relação nominal e o contato disponível.</p>
+          <div class="onboarding-features" aria-label="Recursos do portal">
+            <div class="feature"><span>01</span><strong>Distribuição do efetivo</strong></div>
+            <div class="feature"><span>02</span><strong>Pesquisa e claro</strong></div>
+            <div class="feature active"><span>03</span><strong>Gráficos interativos</strong></div>
+            <div class="feature"><span>04</span><strong>Previsão e TPB</strong></div>
+          </div>
+          <div class="onboarding-controls"><button class="btn-continue" type="button">Continuar <span aria-hidden="true">→</span></button><button class="btn-skip" type="button">Pular</button></div>
+        </div>
+
+        <div class="onboarding-step hidden" data-step="4">
+          <div class="onboarding-progress" aria-label="Etapa 4 de 4">
+            <span class="progress-count">4 de 4</span>
+            <span class="progress-dots" aria-hidden="true"><i></i><i></i><i></i><i class="active"></i></span>
+          </div>
+          <h2>Previsão e TPB</h2>
+          <p>Confira a previsão de efetivo pelo DDQOD e acompanhe a situação do TPB 2026.</p>
+          <div class="onboarding-features" aria-label="Recursos do portal">
+            <div class="feature"><span>01</span><strong>Distribuição do efetivo</strong></div>
+            <div class="feature"><span>02</span><strong>Pesquisa e claro</strong></div>
+            <div class="feature"><span>03</span><strong>Gráficos interativos</strong></div>
+            <div class="feature active"><span>04</span><strong>Previsão e TPB</strong></div>
+          </div>
+          <div class="onboarding-controls"><button class="btn-continue" type="button">Acessar o portal <span aria-hidden="true">→</span></button><button class="btn-skip" type="button">Pular</button></div>
+        </div>
       </div>
     </div>
 
     <main id="mainContent" class="hidden">
       <header class="banner" role="banner">
         <div class="banner-overlay"></div>
-        <div class="banner-text"><span>DAI/2</span>Distribuição de Efetivo em Órgãos Externos</div>
+        <div class="hero-shell">
+          <div class="banner-text">
+            <span>DAI/2</span>
+            <h1>Efetivo em Órgãos Externos</h1>
+            <p>Transparência e planejamento a serviço da missão.</p>
+          </div>
+        </div>
       </header>
 
       <section class="container">
-        <h1 class="title">Distribuição de Efetivo da DAI/2 Órgãos Externos</h1>
+        <div class="section-heading">
+          <span>DAI/2</span>
+          <h2 class="title">Visão geral do efetivo</h2>
+        </div>
 
         <section class="general-data" aria-label="Dados Gerais">
           <p>Total Previsto: —</p>
           <p>Total Existente: —</p>
           <p>Total Claro: —</p>
         </section>
+        <p class="data-freshness">Dados consolidados pela DAI/2<span id="dataCutoff"></span></p>
 
         <section class="quick-actions" aria-label="Atalhos de consulta">
           <button id="normasToggleBtn" class="cta-button cta-button-secondary" type="button" aria-haspopup="dialog">Instrumento Jurídico Correlato</button>
@@ -155,11 +225,19 @@
     <footer>
       <p>Corpo de Bombeiros Militar de Minas Gerais - Diretoria de Assuntos Institucionais - Órgãos Externos</p>
       <p>Compromisso e Excelência no serviço público.</p>
+      <p class="image-credit">Imagem do hero: Cidade Administrativa MG · <a href="https://commons.wikimedia.org/wiki/File:Cidade_Administrativa_MG_1.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer">CC BY 3.0</a></p>
       <p>&copy; 2026 Todos os Direitos Reservados</p>
     </footer>
     <script src="data/data.js?v=2.0.0"></script>
     <script src="data/contacts.js?v=2026.09.07"></script>
     <script src="data/tpb.js?v=2026.09.06-public"></script>
+    <script>
+      (() => {
+        const node = document.getElementById('dataCutoff');
+        const cutoff = window.DAI2_META && window.DAI2_META.dataCutoff;
+        if (node && cutoff) node.textContent = ` · Base ${cutoff}`;
+      })();
+    </script>
     <script src="assets/js/app.js?v=2.5.0"></script>
   </body>
 </html>
