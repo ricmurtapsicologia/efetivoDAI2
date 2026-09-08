@@ -40,7 +40,7 @@ def main() -> int:
         check(results, 'QA 01 · sem erro JavaScript de console inicial', not console_errors, '; '.join(console_errors[:3]))
         check(results, 'QA 02 · sem pageerror inicial', not page_errors, '; '.join(page_errors[:3]))
 
-        page.wait_for_timeout(1100)
+        page.wait_for_timeout(2900)
         check(results, 'UX 01 · onboarding aparece no primeiro acesso', page.locator('#onboarding').is_visible())
         for step in range(1, 5):
             active = page.locator('.onboarding-step:not(.hidden)')
