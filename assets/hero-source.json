@@ -1,15 +1,15 @@
 {
   "asset": "hero DAI/2",
-  "type": "photograph-composite",
-  "title": "Viatura do CBMMG — composição panorâmica corporativa",
-  "photographer": "Autor não identificado na referência visual consultada",
-  "photographer_handle": "não informado",
-  "source_page": "https://br.pinterest.com/search/pins/?q=CBMMG%20Corpo%20de%20Bombeiros%20Minas%20Gerais",
-  "source_image_url": "https://i.pinimg.com/originals/11/a1/77/11a177ae248e628148fdb30fdf448f9e.jpg",
-  "image_url": "assets/img/banner-cbmmg.jpg?asset=photo-1778876087506-47da0c3e6d98",
-  "license": "Licença específica não informada na referência consultada; manter a referência de origem registrada antes de qualquer reutilização fora deste portal.",
-  "retrieved": "2026-09-07",
-  "processing": "Composição 2400x900 a partir da fotografia original: fundo derivado desfocado/escurecido, fotografia nítida integrada à direita e área de leitura preservada à esquerda.",
-  "use": "Banner corporativo/aesthetic do Portal DAI/2 com referência visual explícita ao CBMMG",
-  "stability": "Imagem final internalizada em assets/img/banner-cbmmg.jpg; o runtime não depende do host externo."
+  "type": "photograph",
+  "title": "Cidade Administrativa MG 1",
+  "photographer": "Leo Drumond / Agência Nitro",
+  "photographer_handle": "CidadeAdmnistrativa (Wikimedia Commons)",
+  "source_page": "https://commons.wikimedia.org/wiki/File:Cidade_Administrativa_MG_1.jpg",
+  "source_image_url": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Cidade_Administrativa_MG_1.jpg",
+  "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Cidade_Administrativa_MG_1.jpg?asset=photo-1778876087506-47da0c3e6d98",
+  "license": "Creative Commons Attribution 3.0 Unported (CC BY 3.0)",
+  "retrieved": "2026-09-08",
+  "processing": "Uso responsivo em background-size: cover, com recorte por viewport e sobreposição de gradientes em CSS para contraste e legibilidade; sem alteração destrutiva do arquivo de origem.",
+  "use": "Hero institucional do Portal DAI/2, com referência visual à Cidade Administrativa de Minas Gerais e foco em gestão pública.",
+  "stability": "Origem pública e licenciada no Wikimedia Commons; URL e atribuição ficam registradas no repositório e no rodapé da página."
 }
