@@ -1,16 +1,31 @@
-/* Banner DAI/2 — fotografia de viatura do CBMMG selecionada em pesquisa visual no Pinterest,
-   internalizada e tratada como hero panorâmico 2400x900 para estabilidade e leitura.
-   O splash permanece inalterado. */
+/* DAI/2 — ajustes visuais solicitados em 08/09/2026.
+   Hero principal: imagem Pinterest indicada pelo coordenador.
+   Onboarding: restaura a fotografia institucional de bombeiros usada anteriormente na entrada da página.
+   Demais componentes permanecem inalterados. */
 header.banner{
-  background-image:url('../img/banner-cbmmg.jpg?asset=photo-1778876087506-47da0c3e6d98');
+  background-image:url('https://i.pinimg.com/736x/d6/b9/fc/d6b9fc0d7a5a7a21e9cce2022b11aadb.jpg');
   background-position:center 50%;
   background-size:cover;
+  background-repeat:no-repeat;
 }
 header.banner:hover{background-position:center 46%}
 .banner-overlay{
   background:linear-gradient(90deg,rgba(5,13,23,.74) 0%,rgba(8,18,29,.46) 48%,rgba(8,18,29,.10) 100%);
 }
+
+#onboarding{
+  background-color:#2e7d32;
+  background-image:linear-gradient(rgba(15,23,42,.58),rgba(15,23,42,.52)),url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg');
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-size:cover;
+}
+#onboarding .onboarding-step{
+  text-shadow:0 2px 12px rgba(0,0,0,.5);
+}
+
 @media(max-width:576px){
   header.banner{background-position:center 50%}
   header.banner:hover{background-position:center 50%}
+  #onboarding{background-position:center center}
 }
