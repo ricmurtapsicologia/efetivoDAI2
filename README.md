@@ -4,7 +4,7 @@ Painel estático do CBMMG/DAI para consulta gerencial da distribuição do efeti
 
 ## Interface 2.5.0 · auditoria completa em 3 camadas
 
-A versão 2.5.0 preserva a arquitetura visual original do portal e mantém o contato funcional por WhatsApp visível e direto em cada registro.
+A versão 2.5.0 preserva a arquitetura funcional do portal e mantém o contato funcional por WhatsApp visível e direto em cada registro.
 
 Foram preservados: splash inicial, onboarding, banner, título, quadro de dados gerais, atalhos, legenda de cores, campos de pesquisa, organização em linhas, 18 blocos dos órgãos, botão de previsão DDQOD, modais e rodapé.
 
@@ -22,9 +22,13 @@ Principais regras da versão:
 - CI executa auditoria de invariantes e testes em navegador: E2E + QA + Acessibilidade + UX + UI;
 - após merge em `main`, o smoke público 30/30 valida a URL efetivamente publicada.
 
-## Identidade visual do banner
+## Identidade visual do banner e onboarding
 
-O banner principal usa uma composição panorâmica 2400×900 criada a partir de uma fotografia de viatura do CBMMG encontrada em pesquisa visual no Pinterest. O ativo foi internalizado no próprio repositório para evitar hotlink e recebeu tratamento de fundo, contraste e área de leitura. A referência e o tratamento ficam registrados em `assets/hero-source.json` e `assets/img/banner-cbmmg-source.txt`.
+O refino visual de 08/09/2026 adotou abordagem mobile-first, reduziu redundâncias textuais e reorganizou a primeira dobra em três elementos: hero institucional, visão geral do efetivo e onboarding sobre a própria página.
+
+O hero usa a fotografia `Cidade Administrativa MG 1`, em resolução original de 3.500×2.333 px, disponibilizada no Wikimedia Commons sob licença CC BY 3.0. O portal aplica apenas recorte responsivo e gradientes de contraste em CSS. A procedência, licença e forma de uso estão registradas em `assets/hero-source.json` e `assets/img/banner-cbmmg-source.txt`, com atribuição também no rodapé público.
+
+A splash não utiliza fotografia de pessoas. O onboarding mantém as quatro etapas originais — distribuição do efetivo, pesquisa e claro, gráficos interativos, previsão e TPB — e usa a identidade visual da DAI/2 informada para a abertura.
 
 ## Fontes de corte
 
