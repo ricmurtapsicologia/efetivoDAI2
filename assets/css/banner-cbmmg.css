@@ -1,31 +1,500 @@
-/* DAI/2 — ajustes visuais solicitados em 08/09/2026.
-   Hero principal: imagem Pinterest indicada pelo coordenador.
-   Onboarding: restaura a fotografia institucional de bombeiros usada anteriormente na entrada da página.
-   Demais componentes permanecem inalterados. */
-header.banner{
-  background-image:url('https://i.pinimg.com/736x/d6/b9/fc/d6b9fc0d7a5a7a21e9cce2022b11aadb.jpg');
-  background-position:center 50%;
-  background-size:cover;
-  background-repeat:no-repeat;
-}
-header.banner:hover{background-position:center 46%}
-.banner-overlay{
-  background:linear-gradient(90deg,rgba(5,13,23,.74) 0%,rgba(8,18,29,.46) 48%,rgba(8,18,29,.10) 100%);
+/* DAI/2 · Interface institucional 08/09/2026
+   - mobile first
+   - hero com fotografia HD da Cidade Administrativa (CC BY 3.0 / Wikimedia Commons)
+   - splash sem pessoas
+   - onboarding original em 4 etapas, apresentado sobre a página
+   - indicadores permanecem dinâmicos; não há números fixados neste CSS */
+
+:root{
+  --dai-navy:#0b2338;
+  --dai-navy-2:#123b5a;
+  --dai-blue:#0d6fd8;
+  --dai-blue-soft:#eaf4ff;
+  --dai-green:#178253;
+  --dai-green-soft:#edf9f3;
+  --dai-amber:#a86708;
+  --dai-amber-soft:#fff7e9;
+  --dai-ink:#102235;
+  --dai-muted:#617287;
+  --dai-line:#dfe7ef;
+  --dai-red:#d92f3c;
+  --dai-surface:#ffffff;
+  --dai-radius:20px;
 }
 
+body{
+  font-family:"Segoe UI Variable","Segoe UI",Inter,system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  background:#f4f7fa;
+  color:var(--dai-ink);
+}
+
+/* A página permanece renderizada atrás da splash/onboarding. */
+#mainContent.hidden{display:block!important}
+
+/* ---------- Splash ---------- */
+#splash{
+  background:
+    radial-gradient(circle at 50% 26%,rgba(38,115,166,.28),transparent 38%),
+    linear-gradient(145deg,#081a2a 0%,#0b2338 54%,#123b5a 100%)!important;
+  color:#fff;
+  padding:24px;
+  isolation:isolate;
+}
+#splash::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.75),transparent 88%);
+  pointer-events:none;
+}
+.splash-card{
+  position:relative;
+  z-index:1;
+  width:min(88vw,440px);
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+.splash-logo{
+  width:min(68vw,270px);
+  max-height:180px;
+  object-fit:contain;
+  background:#fff;
+  border-radius:18px;
+  padding:10px;
+  box-shadow:0 24px 60px rgba(0,0,0,.28);
+  margin-bottom:14px;
+}
+.splash-kicker{
+  font-size:.76rem;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#bcd7ec;
+}
+#splash h1{
+  font-size:clamp(1.85rem,7vw,2.7rem);
+  line-height:1.05;
+  letter-spacing:-.035em;
+  margin:2px 0 0;
+  text-shadow:none;
+}
+#splash p{
+  margin:0;
+  font-size:.98rem;
+  color:#d8e5ef;
+  text-shadow:none;
+}
+.splash-loader{
+  width:42px;
+  height:3px;
+  border-radius:99px;
+  margin-top:14px;
+  background:linear-gradient(90deg,rgba(255,255,255,.25),#fff,rgba(255,255,255,.25));
+  background-size:200% 100%;
+  animation:dai-loading 1.15s linear infinite;
+}
+@keyframes dai-loading{to{background-position:-200% 0}}
+
+/* ---------- Onboarding ---------- */
 #onboarding{
-  background-color:#2e7d32;
-  background-image:linear-gradient(rgba(15,23,42,.58),rgba(15,23,42,.52)),url('https://img.freepik.com/premium-photo/firefighters-wearing-full-uniforms-amid-smoke_808101-3655.jpg');
-  background-repeat:no-repeat;
-  background-position:center center;
-  background-size:cover;
+  background:rgba(6,20,33,.68)!important;
+  background-image:none!important;
+  backdrop-filter:blur(9px) saturate(.9);
+  -webkit-backdrop-filter:blur(9px) saturate(.9);
+  padding:16px;
+  overflow:auto;
+  align-items:center;
+}
+.onboarding-card{
+  width:min(100%,620px);
+  max-height:calc(100vh - 32px);
+  overflow:auto;
+  background:rgba(255,255,255,.985);
+  color:var(--dai-ink);
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:24px;
+  box-shadow:0 30px 90px rgba(0,0,0,.34);
+  padding:20px;
+}
+.onboarding-brand{
+  display:grid;
+  grid-template-columns:84px minmax(0,1fr);
+  gap:16px;
+  align-items:center;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--dai-line);
+}
+.onboarding-brand img{
+  width:84px;
+  height:84px;
+  object-fit:contain;
+  border-radius:14px;
+  background:#fff;
+}
+.onboarding-brand-copy{
+  min-width:0;
+  padding-left:16px;
+  border-left:2px solid #d8e2eb;
+}
+.onboarding-brand-copy strong{
+  display:block;
+  font-size:1.55rem;
+  line-height:1;
+  letter-spacing:-.03em;
+  color:var(--dai-navy);
+}
+.onboarding-brand-copy span{
+  display:block;
+  margin-top:7px;
+  color:var(--dai-muted);
+  font-size:.78rem;
+  line-height:1.35;
+  font-weight:650;
+  text-transform:uppercase;
+  letter-spacing:.045em;
 }
 #onboarding .onboarding-step{
-  text-shadow:0 2px 12px rgba(0,0,0,.5);
+  max-width:none;
+  width:100%;
+  text-align:center;
+  text-shadow:none!important;
+  padding:18px 0 0;
+  animation:dai-card-in .34s ease-out;
+}
+@keyframes dai-card-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#onboarding .onboarding-step.hidden{display:none}
+.onboarding-progress{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  margin-bottom:16px;
+}
+.progress-count{
+  color:var(--dai-muted);
+  font-size:.78rem;
+  font-weight:750;
+  letter-spacing:.04em;
+}
+.progress-dots{display:flex;gap:8px}
+.progress-dots i{
+  display:block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#d5e0ea;
+}
+.progress-dots i.active{
+  width:22px;
+  border-radius:99px;
+  background:var(--dai-blue);
+}
+#onboarding .onboarding-step h2{
+  margin:0 auto 10px;
+  max-width:500px;
+  color:var(--dai-navy);
+  font-size:clamp(1.72rem,7vw,2.45rem);
+  line-height:1.04;
+  letter-spacing:-.045em;
+  font-weight:800;
+}
+#onboarding .onboarding-step>p{
+  max-width:500px;
+  margin:0 auto 20px;
+  color:var(--dai-muted);
+  font-size:.98rem;
+  line-height:1.55;
+}
+.onboarding-features{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin:0 auto 20px;
+}
+.feature{
+  min-height:92px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:12px 8px;
+  border:1px solid #e4ebf2;
+  border-radius:15px;
+  background:#f8fafc;
+  color:#5d6f82;
+}
+.feature span{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:.72rem;
+  font-weight:800;
+  background:#e7eef5;
+  color:#587086;
+}
+.feature strong{
+  max-width:110px;
+  font-size:.79rem;
+  line-height:1.23;
+  font-weight:700;
+}
+.feature.active{
+  background:var(--dai-blue-soft);
+  border-color:#bedcff;
+  color:#075ead;
+}
+.feature.active span{
+  background:var(--dai-blue);
+  color:#fff;
+}
+#onboarding .onboarding-controls{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+#onboarding .onboarding-controls button{
+  width:100%;
+  min-height:52px;
+  border-radius:13px;
+  font-size:1rem;
+  font-weight:750;
+  letter-spacing:-.01em;
+  padding:12px 18px;
+}
+#onboarding .btn-continue{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  background:linear-gradient(135deg,#075db7,#0d78e5);
+  color:#fff;
+  border:0;
+  box-shadow:0 10px 24px rgba(13,111,216,.25);
+}
+#onboarding .btn-continue:hover{background:linear-gradient(135deg,#064f9b,#0b69c9)}
+#onboarding .btn-skip{
+  background:#fff;
+  color:#243b51;
+  border:1px solid #bfd0df;
+}
+#onboarding .btn-skip:hover{background:#f5f8fb}
+
+/* ---------- Hero ---------- */
+header.banner{
+  height:360px;
+  min-height:360px;
+  background-color:var(--dai-navy);
+  background-image:url('https://upload.wikimedia.org/wikipedia/commons/c/cb/Cidade_Administrativa_MG_1.jpg');
+  background-repeat:no-repeat;
+  background-position:center 48%;
+  background-size:cover;
+  transition:none;
+}
+header.banner:hover{background-position:center 48%}
+.banner-overlay{
+  background:
+    linear-gradient(90deg,rgba(4,17,29,.92) 0%,rgba(7,30,48,.77) 48%,rgba(7,30,48,.26) 100%),
+    linear-gradient(0deg,rgba(5,18,30,.38),rgba(5,18,30,.02) 58%);
+}
+.hero-shell{
+  position:relative;
+  z-index:1;
+  height:100%;
+  max-width:1200px;
+  margin:0 auto;
+  padding:30px 22px 52px;
+  display:flex;
+  align-items:flex-end;
+}
+header.banner .banner-text{
+  position:static;
+  width:min(100%,680px);
+  transform:none;
+  text-align:left;
+  color:#fff;
+  text-shadow:none;
+}
+header.banner .banner-text>span{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 12px;
+  color:#dcecf8;
+  font-size:.77rem;
+  font-weight:800;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+}
+header.banner .banner-text>span::before{
+  content:"";
+  width:28px;
+  height:3px;
+  border-radius:99px;
+  background:var(--dai-red);
+}
+header.banner .banner-text h1{
+  margin:0;
+  max-width:620px;
+  color:#fff;
+  font-size:clamp(2.25rem,10vw,4.45rem);
+  line-height:.96;
+  letter-spacing:-.055em;
+  font-weight:820;
+  text-wrap:balance;
+}
+header.banner .banner-text p{
+  margin:17px 0 0;
+  max-width:560px;
+  color:#e3edf5;
+  font-size:clamp(1rem,3.9vw,1.22rem);
+  line-height:1.45;
+  font-weight:450;
 }
 
-@media(max-width:576px){
-  header.banner{background-position:center 50%}
-  header.banner:hover{background-position:center 50%}
-  #onboarding{background-position:center center}
+/* ---------- Primeira dobra / indicadores ---------- */
+section.container{
+  position:relative;
+  z-index:3;
+  max-width:1180px;
+  margin:-30px 12px 24px;
+  padding:22px 18px 28px;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 18px 55px rgba(15,35,55,.12);
+}
+.section-heading{
+  text-align:center;
+  margin:2px auto 18px;
+}
+.section-heading>span{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:#687b8f;
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.section-heading>span::before{
+  content:"";
+  width:26px;
+  height:2px;
+  background:var(--dai-red);
+  border-radius:99px;
+}
+.title{
+  border:0;
+  padding:0;
+  margin:8px 0 0;
+  color:var(--dai-ink);
+  font-size:clamp(1.55rem,6vw,2.35rem);
+  line-height:1.08;
+  letter-spacing:-.035em;
+  font-weight:790;
+}
+.general-data{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+  padding:0;
+  margin:0;
+  background:transparent;
+  box-shadow:none;
+  border-radius:0;
+}
+.general-data p{
+  min-height:126px;
+  margin:0;
+  padding:20px 16px;
+  border:1px solid #e3eaf1;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  font-size:2.15rem;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:-.045em;
+  color:#0e63bb;
+}
+.general-data p strong{
+  display:block;
+  font-size:.86rem;
+  line-height:1.25;
+  font-weight:720;
+  letter-spacing:0;
+  color:#31485e;
+}
+.general-data p:nth-child(1){background:linear-gradient(145deg,#f6faff,#eaf4ff);color:#0d64bc}
+.general-data p:nth-child(2){background:linear-gradient(145deg,#f5fcf8,#eaf8f1);color:#14784d}
+.general-data p:nth-child(3){background:linear-gradient(145deg,#fffaf2,#fff2dc);color:#9a5c00}
+.data-freshness{
+  margin:14px auto 20px;
+  color:#6b7b8c;
+  font-size:.78rem;
+  text-align:center;
+  line-height:1.45;
+}
+.quick-actions{margin:18px auto 28px}
+
+.image-credit{
+  font-size:11px;
+  color:#7b8791;
+}
+.image-credit a{color:inherit;text-underline-offset:2px}
+
+/* ---------- Breakpoints ---------- */
+@media(min-width:520px){
+  .onboarding-card{padding:24px 28px 26px}
+  .onboarding-brand{grid-template-columns:104px minmax(0,1fr)}
+  .onboarding-brand img{width:104px;height:104px}
+  .onboarding-features{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .feature{min-height:110px}
+  .feature strong{font-size:.74rem}
+  .general-data{grid-template-columns:repeat(3,1fr)}
+  .general-data p{min-height:142px}
+}
+
+@media(min-width:760px){
+  header.banner{height:480px;min-height:480px;background-position:center 45%}
+  header.banner:hover{background-position:center 45%}
+  .hero-shell{padding:42px 44px 78px}
+  section.container{margin:-52px auto 30px;padding:30px 34px 34px}
+  .general-data{gap:16px}
+  .general-data p{font-size:2.5rem}
+}
+
+@media(min-width:1100px){
+  header.banner{height:520px;min-height:520px;background-position:center 43%}
+  header.banner:hover{background-position:center 43%}
+  .hero-shell{padding-left:58px;padding-right:58px}
+  section.container{margin-top:-58px}
+}
+
+@media(max-width:380px){
+  .onboarding-card{padding:16px}
+  .onboarding-brand{grid-template-columns:72px minmax(0,1fr);gap:12px}
+  .onboarding-brand img{width:72px;height:72px}
+  .onboarding-brand-copy{padding-left:12px}
+  .onboarding-brand-copy strong{font-size:1.35rem}
+  .onboarding-brand-copy span{font-size:.68rem}
+  .feature{min-height:86px;padding:9px 6px}
+  .feature strong{font-size:.72rem}
+  #onboarding .onboarding-step>p{font-size:.9rem}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .splash-loader{animation:none}
+  #onboarding .onboarding-step{animation:none}
 }
