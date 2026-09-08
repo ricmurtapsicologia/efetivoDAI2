@@ -1,5 +1,8 @@
-Referência visual encontrada via Pinterest em pesquisa por CBMMG.
-Imagem-fonte: https://i.pinimg.com/originals/11/a1/77/11a177ae248e628148fdb30fdf448f9e.jpg
-Consulta: 07/09/2026
-Tratamento: composição panorâmica 2400x900 internalizada no projeto, com fundo derivado desfocado/escurecido e fotografia nítida em destaque.
-Observação: a referência consultada não informa licença específica de reutilização.
+Hero institucional DAI/2 — Cidade Administrativa de Minas Gerais.
+Página-fonte: https://commons.wikimedia.org/wiki/File:Cidade_Administrativa_MG_1.jpg
+Imagem-fonte: https://upload.wikimedia.org/wikipedia/commons/c/cb/Cidade_Administrativa_MG_1.jpg
+Autor/fotógrafo: Leo Drumond / Agência Nitro; arquivo publicado no Wikimedia Commons por CidadeAdmnistrativa.
+Licença: Creative Commons Attribution 3.0 Unported (CC BY 3.0).
+Consulta: 08/09/2026.
+Uso no portal: background responsivo com background-size: cover e gradientes de contraste aplicados em CSS; sem alteração destrutiva da imagem-fonte.
+Atribuição e link da licença também constam no rodapé público.
