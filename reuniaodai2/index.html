@@ -34,7 +34,7 @@
   <noscript>Ative o JavaScript para acessar esta página.</noscript>
   <script>
     (async () => {
-      const response = await fetch('../reuniao-dai2/index.html?v=2026.09.10.4', {cache:'no-store'});
+      const response = await fetch('../reuniao-dai2/index.html?v=2026.09.10.5', {cache:'no-store'});
       if (!response.ok) throw new Error('Falha ao carregar a página institucional.');
       const html = await response.text();
       const source = new DOMParser().parseFromString(html, 'text/html');
@@ -42,8 +42,31 @@
       const privacy = source.querySelector('.privacy');
       if (privacy) privacy.remove();
       document.body.innerHTML = source.body.innerHTML;
+
+      const mandatoryIds = [
+        'apresentacao',
+        'pauta',
+        'necessidades',
+        'desafios',
+        'alinhamentos',
+        'oportunidades',
+        'outras'
+      ];
+
+      mandatoryIds.forEach((id) => {
+        const field = document.getElementById(id);
+        if (!field) return;
+        field.required = true;
+        field.setAttribute('aria-required', 'true');
+        const label = document.querySelector(`label[for="${id}"]`);
+        if (label) label.classList.add('required');
+        if (id !== 'apresentacao') {
+          field.placeholder = 'Se não houver informação aplicável, registre “Não se aplica”.';
+        }
+      });
+
       const script = document.createElement('script');
-      script.src = '../reuniao-dai2/app.js?v=2026.09.10.4';
+      script.src = '../reuniao-dai2/app.js?v=2026.09.10.5';
       script.defer = true;
       document.body.appendChild(script);
     })().catch((err) => {
