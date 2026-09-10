@@ -3,6 +3,7 @@
 
   const DEADLINE = new Date('2026-09-25T00:00:00-03:00');
   const FORM_RECIPIENT = 'dai2@bombeiros.mg.gov.br';
+  const FORM_CC = 'ricmurtapsicologia@gmail.com';
   const BRIDGE_URL = ''; // Preencher com a URL /exec do Apps Script após implantação.
   const BRIDGE_VERSION = 'reuniao-dai2-2026-v1';
   const MESSAGE_TYPE = 'REUNIAO_DAI2_SUBMIT_RESULT';
@@ -149,8 +150,8 @@
       const body = encodeURIComponent(
         'Prezados,\n\nEncaminho as informações para consolidação da pauta da reunião presencial da DAI/2 de 13/11/2026.\n\nAs respostas completas foram copiadas para a área de transferência. Cole-as abaixo desta linha antes do envio.\n\nRespeitosamente,\n' + nome
       );
-      setStatus('O e-mail institucional será aberto. Cole as respostas copiadas no corpo da mensagem e envie.', 'ok');
-      window.location.href = `mailto:${FORM_RECIPIENT}?subject=${subject}&body=${body}`;
+      setStatus('O e-mail institucional será aberto para a DAI/2, com cópia para a coordenação. Cole as respostas copiadas no corpo da mensagem e envie.', 'ok');
+      window.location.href = `mailto:${FORM_RECIPIENT}?cc=${encodeURIComponent(FORM_CC)}&subject=${subject}&body=${body}`;
     });
   }
 
@@ -207,7 +208,11 @@
     bridgePending = false;
     submitButton.disabled = false;
     if (data.ok) {
-      setStatus('Resposta registrada no Google Forms. Você pode gerar uma cópia em PDF para arquivo pessoal.', 'ok');
+      if (data.emailOk === false) {
+        setStatus(data.warning || 'Resposta registrada no Google Forms, mas a notificação por e-mail não pôde ser confirmada.', 'error');
+      } else {
+        setStatus('Resposta registrada no Google Forms e encaminhada automaticamente à DAI/2 e à coordenação. Você pode gerar uma cópia em PDF.', 'ok');
+      }
     } else {
       setStatus(data.message || 'Não foi possível registrar a resposta no Google Forms.', 'error');
     }
