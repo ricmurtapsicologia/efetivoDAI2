@@ -17,13 +17,11 @@ jobs:
           BASE='https://ricmurtapsicologia.github.io/efetivoDAI2/reuniao-dai2/'
           APP='https://ricmurtapsicologia.github.io/efetivoDAI2/reuniao-dai2/app.js'
           CSS='https://ricmurtapsicologia.github.io/efetivoDAI2/reuniao-dai2/styles.css'
-
           for i in {1..30}; do
             curl -fsSL "$PAGE" -o /tmp/page-source.html || true
             if grep -q 'privacy.remove()' /tmp/page-source.html 2>/dev/null; then break; fi
             sleep 5
           done
-
           grep -q 'privacy.remove()' /tmp/page-source.html
           ! grep -q 'As respostas são registradas no Google Forms e na planilha vinculada' /tmp/page-source.html
           curl -fsSL "$BASE" -o /tmp/base.html
@@ -51,32 +49,12 @@ jobs:
         run: |
           set -euo pipefail
           ENDPOINT='https://script.google.com/macros/s/AKfycbzb5if6p9WAnspybyGFdM5XUZQvk85tGWsV278eDYY0QVT267xrqCkJ9FLf1BbzArVS/exec'
-          NOW_MS=$(($(date +%s%N)/1000000))
-          START_MS=$((NOW_MS-5000))
-          SUBMISSION_ID="dai2-e2e-${GITHUB_RUN_ID}"
-          PAYLOAD=$(python3 - "$SUBMISSION_ID" "$START_MS" "$NOW_MS" <<'PY'
-import json,sys
-sid,start,now=sys.argv[1],int(sys.argv[2]),int(sys.argv[3])
-print(json.dumps({
-  'version':'reuniao-dai2-2026-v1',
-  'submissionId':sid,
-  'startedAt':start,
-  'submittedAt':now,
-  'answers':{
-    'Nome completo':'TESTE E2E AUTOMÁTICO — DESCONSIDERAR',
-    'E-mail funcional':'ricmurtapsicologia@gmail.com',
-    'Posto/Graduação':'Maj',
-    'Órgão Externo':'Coordenação DAI/2',
-    'Situação prevista em 13/11':'Presença prevista',
-    'Assuntos da apresentação':'TESTE E2E AUTOMÁTICO — validação técnica de ponta a ponta; desconsiderar na consolidação da pauta.',
-    'Assuntos relevantes para a pauta':'TESTE E2E — DESCONSIDERAR'
-  }
-},ensure_ascii=False,separators=(',',':')))
-PY
-          )
+          export NOW_MS=$(($(date +%s%N)/1000000))
+          export START_MS=$((NOW_MS-5000))
+          export SUBMISSION_ID="dai2-e2e-${GITHUB_RUN_ID}"
+          PAYLOAD=$(python3 -c 'import json,os; print(json.dumps({"version":"reuniao-dai2-2026-v1","submissionId":os.environ["SUBMISSION_ID"],"startedAt":int(os.environ["START_MS"]),"submittedAt":int(os.environ["NOW_MS"]),"answers":{"Nome completo":"TESTE E2E AUTOMÁTICO — DESCONSIDERAR","E-mail funcional":"ricmurtapsicologia@gmail.com","Posto/Graduação":"Maj","Órgão Externo":"Coordenação DAI/2","Situação prevista em 13/11":"Presença prevista","Assuntos da apresentação":"TESTE E2E AUTOMÁTICO — validação técnica de ponta a ponta; desconsiderar na consolidação da pauta.","Assuntos relevantes para a pauta":"TESTE E2E — DESCONSIDERAR"}},ensure_ascii=False,separators=(",",":")))')
           curl -fsSL --data-urlencode "payload=$PAYLOAD" "$ENDPOINT" -o /tmp/e2e-response.html
           grep -q 'REUNIAO_DAI2_SUBMIT_RESULT' /tmp/e2e-response.html
           grep -q '"ok":true' /tmp/e2e-response.html
           grep -q '"emailOk":true' /tmp/e2e-response.html
-          echo "$SUBMISSION_ID" > /tmp/e2e-submission-id.txt
-          cat /tmp/e2e-submission-id.txt
+          echo "$SUBMISSION_ID"
