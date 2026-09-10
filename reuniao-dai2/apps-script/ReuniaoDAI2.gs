@@ -1,7 +1,11 @@
 /**
  * ReuniaoDAI2.gs
  * Google Apps Script para criar o Google Forms oficial da reunião DAI/2,
- * vincular a planilha de respostas e atuar como ponte segura para a página GitHub Pages.
+ * vincular a planilha de respostas, receber a página GitHub Pages e
+ * notificar automaticamente a DAI/2 e a coordenação a cada resposta.
+ *
+ * Fluxo canônico:
+ * Página DAI/2 -> Apps Script -> Google Forms -> Google Sheets -> e-mail DAI/2 + Coordenação
  *
  * Uso:
  * 1. Criar um projeto em script.google.com e colar este arquivo.
@@ -24,7 +28,10 @@ const CFG = Object.freeze({
   PROPERTY_SHEET_ID: 'REUNIAO_DAI2_SHEET_ID',
   MESSAGE_TYPE: 'REUNIAO_DAI2_SUBMIT_RESULT',
   CACHE_TTL_SECONDS: 21600,
-  MIN_FILL_MS: 1500
+  MIN_FILL_MS: 1500,
+  NOTIFY_TO: 'dai2@bombeiros.mg.gov.br',
+  NOTIFY_CC: 'ricmurtapsicologia@gmail.com',
+  TIME_ZONE: 'America/Sao_Paulo'
 });
 
 function setupReuniaoDAI2() {
@@ -62,6 +69,8 @@ function setupReuniaoDAI2() {
     formUrl: form.getPublishedUrl(),
     editUrl: form.getEditUrl(),
     spreadsheetUrl: SpreadsheetApp.openById(sheetId).getUrl(),
+    notifyTo: CFG.NOTIFY_TO,
+    notifyCc: CFG.NOTIFY_CC,
     deadline: CFG.DEADLINE
   };
   console.log(JSON.stringify(result));
@@ -145,15 +154,111 @@ function doPost(e) {
       const ir = createItemResponse_(entry.item, entry.type, value);
       if (ir) response.withItemResponse(ir);
     });
+
     response.submit();
     cache.put(key, '1', CFG.CACHE_TTL_SECONDS);
-    return bridgeHtml_({ok:true,submissionId:payload.submissionId});
+
+    let emailOk = true;
+    let emailWarning = '';
+    try {
+      notifyRecipients_(payload.answers, payload.submissionId);
+    } catch (mailErr) {
+      emailOk = false;
+      emailWarning = 'Resposta registrada, mas houve falha na notificação por e-mail.';
+      console.error('Notificação por e-mail: ' + safeError_(mailErr));
+    }
+
+    return bridgeHtml_({
+      ok:true,
+      submissionId:payload.submissionId,
+      emailOk:emailOk,
+      warning:emailWarning
+    });
   } catch (err) {
     console.error('ReuniaoDAI2: ' + safeError_(err));
     return bridgeHtml_({ok:false,message:safeError_(err)});
   } finally {
     lock.releaseLock();
   }
+}
+
+function notifyRecipients_(answers, submissionId) {
+  const nome = String(answers['Nome completo'] || 'Assessor').trim();
+  const pg = String(answers['Posto/Graduação'] || '').trim();
+  const orgao = String(answers['Órgão Externo'] || 'Órgão externo').trim();
+  const emailFuncional = String(answers['E-mail funcional'] || '').trim();
+  const submittedAt = Utilities.formatDate(new Date(), CFG.TIME_ZONE, 'dd/MM/yyyy HH:mm:ss');
+  const sheetId = PropertiesService.getScriptProperties().getProperty(CFG.PROPERTY_SHEET_ID);
+  const sheetUrl = sheetId ? 'https://docs.google.com/spreadsheets/d/' + sheetId + '/edit' : '';
+
+  const orderedTitles = [
+    'Nome completo',
+    'E-mail funcional',
+    'Posto/Graduação',
+    'Órgão Externo',
+    'Situação prevista em 13/11',
+    'Link de material de apoio',
+    'Assuntos da apresentação',
+    'Assuntos relevantes para a pauta',
+    'Principais necessidades',
+    'Principais desafios',
+    'Pontos de alinhamento CBMMG x órgão externo',
+    'Riscos oportunidades projetos boas práticas ou decisões',
+    'Outras informações ou pautas'
+  ];
+
+  const textBlocks = orderedTitles
+    .filter(function(title){ return !isBlank_(answers[title]); })
+    .map(function(title){ return title.toUpperCase() + '\n' + String(answers[title]).trim(); });
+
+  const htmlBlocks = orderedTitles
+    .filter(function(title){ return !isBlank_(answers[title]); })
+    .map(function(title){
+      return '<div style="margin:0 0 16px"><div style="font-size:12px;font-weight:700;color:#607286;text-transform:uppercase;letter-spacing:.04em">' +
+        escapeHtml_(title) + '</div><div style="font-size:15px;color:#14283a;white-space:pre-wrap">' +
+        escapeHtml_(String(answers[title]).trim()) + '</div></div>';
+    }).join('');
+
+  const subject = 'Reunião DAI/2 · nova resposta · ' + orgao + ' · ' + [pg, nome].filter(Boolean).join(' ');
+  const body = [
+    'REUNIÃO PRESENCIAL DAI/2 — 13/11/2026',
+    'Nova resposta registrada no Google Forms',
+    '',
+    'Registro: ' + submittedAt,
+    'Identificador: ' + submissionId,
+    '',
+    textBlocks.join('\n\n'),
+    '',
+    sheetUrl ? 'Planilha de respostas: ' + sheetUrl : '',
+    '',
+    'Coordenação: Richelmy Murta, Major BM — Coordenador da DAI/2'
+  ].filter(function(v){ return v !== ''; }).join('\n');
+
+  const htmlBody = '<div style="font-family:Arial,sans-serif;max-width:760px;margin:auto;color:#14283a">' +
+    '<div style="background:#0b2338;color:#fff;padding:20px;border-radius:12px 12px 0 0">' +
+      '<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.8">CBMMG · DAI/2</div>' +
+      '<h2 style="margin:6px 0 0;font-size:22px">Nova resposta registrada</h2>' +
+    '</div>' +
+    '<div style="border:1px solid #dfe7ef;border-top:0;padding:20px;border-radius:0 0 12px 12px">' +
+      '<p style="margin-top:0"><b>Reunião:</b> 13/11/2026 · 09h00–12h00<br>' +
+      '<b>Registro:</b> ' + escapeHtml_(submittedAt) + '<br>' +
+      '<b>Identificador:</b> ' + escapeHtml_(submissionId) + '</p>' +
+      htmlBlocks +
+      (sheetUrl ? '<p><a href="' + escapeHtml_(sheetUrl) + '">Abrir planilha de respostas</a></p>' : '') +
+      '<p style="font-size:12px;color:#6a7989;margin-bottom:0">Coordenação: Richelmy Murta, Major BM — Coordenador da DAI/2</p>' +
+    '</div></div>';
+
+  const options = {
+    to: CFG.NOTIFY_TO,
+    cc: CFG.NOTIFY_CC,
+    subject: subject,
+    body: body,
+    htmlBody: htmlBody,
+    name: 'DAI/2 · Reunião Presencial'
+  };
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailFuncional)) options.replyTo = emailFuncional;
+
+  MailApp.sendEmail(options);
 }
 
 function getForm_() {
@@ -224,6 +329,15 @@ function isBlank_(v) {
 
 function safeError_(err) {
   return err && err.message ? String(err.message).slice(0,180) : 'Erro não identificado.';
+}
+
+function escapeHtml_(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function bridgeHtml_(data) {
