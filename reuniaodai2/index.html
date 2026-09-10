@@ -14,7 +14,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://ricmurtapsicologia.github.io/efetivoDAI2/reuniaodai2/" />
   <link rel="icon" href="../favicon.ico" />
-  <link rel="stylesheet" href="../reuniao-dai2/styles.css?v=2026.09.10.1" />
+  <link rel="stylesheet" href="../reuniao-dai2/styles.css?v=2026.09.10.3" />
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -34,14 +34,16 @@
   <noscript>Ative o JavaScript para acessar esta página.</noscript>
   <script>
     (async () => {
-      const response = await fetch('../reuniao-dai2/index.html?v=2026.09.10.2', {cache:'no-store'});
+      const response = await fetch('../reuniao-dai2/index.html?v=2026.09.10.3', {cache:'no-store'});
       if (!response.ok) throw new Error('Falha ao carregar a página institucional.');
       const html = await response.text();
       const source = new DOMParser().parseFromString(html, 'text/html');
       source.querySelectorAll('script').forEach(el => el.remove());
+      const privacy = source.querySelector('.privacy');
+      if (privacy) privacy.textContent = 'As respostas são registradas no Google Forms e na planilha vinculada. A cada envio, a DAI/2 e a coordenação recebem notificação automática por e-mail. O PDF é uma cópia local para arquivo do respondente.';
       document.body.innerHTML = source.body.innerHTML;
       const script = document.createElement('script');
-      script.src = '../reuniao-dai2/app.js?v=2026.09.10.2';
+      script.src = '../reuniao-dai2/app.js?v=2026.09.10.3';
       script.defer = true;
       document.body.appendChild(script);
     })().catch((err) => {
