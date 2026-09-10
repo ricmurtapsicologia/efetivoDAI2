@@ -1,0 +1,40 @@
+name: Reuniao DAI2 - Auditoria 30/30
+
+on:
+  push:
+    paths:
+      - 'reuniao-dai2/**'
+      - '.github/workflows/reuniao-dai2-audit.yml'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: JavaScript syntax check
+        run: node --check reuniao-dai2/app.js
+
+      - name: Auditoria canonica 30/30
+        run: node reuniao-dai2/audit.mjs | tee reuniao-dai2/audit-result.txt
+
+      - name: Link and asset smoke test
+        run: |
+          python3 -m http.server 8000 >/tmp/reuniao-dai2-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID' EXIT
+          sleep 2
+          curl --fail --silent --show-error http://127.0.0.1:8000/reuniao-dai2/ >/tmp/index.html
+          curl --fail --silent --show-error http://127.0.0.1:8000/reuniao-dai2/styles.css >/tmp/styles.css
+          curl --fail --silent --show-error http://127.0.0.1:8000/reuniao-dai2/app.js >/tmp/app.js
+          grep -q 'Richelmy Murta, Major BM' /tmp/index.html
+          grep -q 'Salvar cópia em PDF' /tmp/index.html
+          grep -q "const BRIDGE_URL = ''" /tmp/app.js
+
+      - name: Upload audit result
+        uses: actions/upload-artifact@v4
+        with:
+          name: reuniao-dai2-auditoria
+          path: reuniao-dai2/audit-result.txt
