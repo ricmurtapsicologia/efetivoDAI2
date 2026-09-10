@@ -4,7 +4,7 @@
   const DEADLINE = new Date('2026-09-25T00:00:00-03:00');
   const FORM_RECIPIENT = 'dai2@bombeiros.mg.gov.br';
   const FORM_CC = 'ricmurtapsicologia@gmail.com';
-  const BRIDGE_URL = ''; // Preencher com a URL /exec do Apps Script após implantação.
+  const BRIDGE_URL = 'https://script.google.com/macros/s/AKfycbzb5if6p9WAnspybyGFdM5XUZQvk85tGWsV278eDYY0QVT267xrqCkJ9FLf1BbzArVS/exec';
   const BRIDGE_VERSION = 'reuniao-dai2-2026-v1';
   const MESSAGE_TYPE = 'REUNIAO_DAI2_SUBMIT_RESULT';
   const startedAt = Date.now();
@@ -14,7 +14,6 @@
   const status = document.getElementById('formStatus');
   const channel = document.getElementById('channelStatus');
   const submitButton = document.getElementById('submitButton');
-  const bridgeFrame = document.getElementById('bridgeFrame');
 
   let lastSubmissionId = '';
   let bridgePending = false;
@@ -38,13 +37,8 @@
 
   function updateChannelBadge() {
     if (!channel) return;
-    if (BRIDGE_URL) {
-      channel.textContent = 'Canal de resposta: Google Forms integrado';
-      channel.classList.add('connected');
-    } else {
-      channel.textContent = 'Canal de resposta: envio institucional por e-mail';
-      channel.classList.remove('connected');
-    }
+    channel.textContent = 'Canal de resposta: Google Forms integrado';
+    channel.classList.add('connected');
   }
 
   function formAnswers() {
@@ -150,13 +144,12 @@
       const body = encodeURIComponent(
         'Prezados,\n\nEncaminho as informações para consolidação da pauta da reunião presencial da DAI/2 de 13/11/2026.\n\nAs respostas completas foram copiadas para a área de transferência. Cole-as abaixo desta linha antes do envio.\n\nRespeitosamente,\n' + nome
       );
-      setStatus('O e-mail institucional será aberto para a DAI/2, com cópia para a coordenação. Cole as respostas copiadas no corpo da mensagem e envie.', 'ok');
+      setStatus('Não foi possível usar o registro automático. O e-mail institucional será aberto como contingência.', 'error');
       window.location.href = `mailto:${FORM_RECIPIENT}?cc=${encodeURIComponent(FORM_CC)}&subject=${subject}&body=${body}`;
     });
   }
 
   function submitToBridge() {
-    if (!BRIDGE_URL) return submitByEmail();
     const payload = {
       version: BRIDGE_VERSION,
       submissionId: makeSubmissionId(),
@@ -186,7 +179,7 @@
       if (!bridgePending) return;
       bridgePending = false;
       submitButton.disabled = false;
-      setStatus('Não foi possível confirmar o registro automático. Suas respostas permanecem na página; use o envio institucional por e-mail.', 'error');
+      setStatus('Não foi possível confirmar o registro automático. As respostas permanecem na página.', 'error');
     }, 15000);
   }
 
@@ -201,7 +194,7 @@
   });
 
   window.addEventListener('message', (event) => {
-    if (!BRIDGE_URL || !bridgePending) return;
+    if (!bridgePending) return;
     if (!/^https:\/\/script\.google(?:usercontent)?\.com$/.test(event.origin)) return;
     const data = event.data || {};
     if (data.type !== MESSAGE_TYPE) return;
