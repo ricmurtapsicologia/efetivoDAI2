@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Reunião Presencial DAI/2 · 13 Nov 2026</title>
+  <meta name="description" content="Página oficial de preparação para a reunião presencial da DAI/2 em 13 de novembro de 2026, no Plenário do Prédio Minas, CAMG." />
+  <meta name="theme-color" content="#0b2338" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Reunião Presencial DAI/2 · 13 Nov 2026" />
+  <meta property="og:description" content="09h–12h · Plenário do Prédio Minas · CAMG. Assessores: enviar informações e pautas até 24/09/2026." />
+  <meta property="og:url" content="https://ricmurtapsicologia.github.io/efetivoDAI2/reuniaodai2/" />
+  <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/c/cb/Cidade_Administrativa_MG_1.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://ricmurtapsicologia.github.io/efetivoDAI2/reuniaodai2/" />
+  <link rel="icon" href="../favicon.ico" />
+  <link rel="stylesheet" href="../reuniao-dai2/styles.css?v=2026.09.10.1" />
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Event",
+    "name":"Reunião Presencial DAI/2 — Órgãos Externos",
+    "startDate":"2026-11-13T09:00:00-03:00",
+    "endDate":"2026-11-13T12:00:00-03:00",
+    "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
+    "eventStatus":"https://schema.org/EventScheduled",
+    "location":{"@type":"Place","name":"Plenário do Prédio Minas — Cidade Administrativa de Minas Gerais","address":{"@type":"PostalAddress","streetAddress":"Rodovia Papa João Paulo II, 4143","addressLocality":"Belo Horizonte","addressRegion":"MG","postalCode":"31630-900","addressCountry":"BR"}},
+    "organizer":{"@type":"Organization","name":"CBMMG · Diretoria de Assuntos Institucionais · DAI/2"}
+  }
+  </script>
+</head>
+<body>
+  <div id="pageLoader" style="min-height:100vh;display:grid;place-items:center;font-family:Segoe UI,Arial,sans-serif;color:#0b2338">Carregando página institucional DAI/2…</div>
+  <noscript>Ative o JavaScript para acessar esta página.</noscript>
+  <script>
+    (async () => {
+      const response = await fetch('../reuniao-dai2/index.html?v=2026.09.10.2', {cache:'no-store'});
+      if (!response.ok) throw new Error('Falha ao carregar a página institucional.');
+      const html = await response.text();
+      const source = new DOMParser().parseFromString(html, 'text/html');
+      source.querySelectorAll('script').forEach(el => el.remove());
+      document.body.innerHTML = source.body.innerHTML;
+      const script = document.createElement('script');
+      script.src = '../reuniao-dai2/app.js?v=2026.09.10.2';
+      script.defer = true;
+      document.body.appendChild(script);
+    })().catch((err) => {
+      document.body.innerHTML = '<main style="max-width:760px;margin:80px auto;padding:24px;font-family:Segoe UI,Arial,sans-serif"><h1>Reunião Presencial DAI/2</h1><p>Não foi possível carregar a página neste momento.</p><p>' + String(err.message || err) + '</p></main>';
+    });
+  </script>
+</body>
+</html>
