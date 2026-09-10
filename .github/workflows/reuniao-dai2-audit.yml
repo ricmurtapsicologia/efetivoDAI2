@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'reuniao-dai2/**'
+      - 'reuniaodai2/**'
       - '.github/workflows/reuniao-dai2-audit.yml'
   workflow_dispatch:
 
@@ -27,11 +28,13 @@ jobs:
           trap 'kill $SERVER_PID' EXIT
           sleep 2
           curl --fail --silent --show-error http://127.0.0.1:8000/reuniao-dai2/ >/tmp/index.html
+          curl --fail --silent --show-error http://127.0.0.1:8000/reuniaodai2/ >/tmp/public-index.html
           curl --fail --silent --show-error http://127.0.0.1:8000/reuniao-dai2/styles.css >/tmp/styles.css
           curl --fail --silent --show-error http://127.0.0.1:8000/reuniao-dai2/app.js >/tmp/app.js
           grep -q 'Richelmy Murta, Major BM' /tmp/index.html
           grep -q 'Salvar cópia em PDF' /tmp/index.html
-          grep -q "const BRIDGE_URL = ''" /tmp/app.js
+          grep -q 'reuniaodai2' /tmp/public-index.html
+          grep -Eq "const BRIDGE_URL = 'https://script\.google\.com/macros/s/.+/exec';" /tmp/app.js
 
       - name: Upload audit result
         uses: actions/upload-artifact@v4
