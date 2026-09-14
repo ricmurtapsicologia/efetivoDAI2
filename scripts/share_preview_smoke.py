@@ -8,8 +8,8 @@ import time
 import urllib.request
 
 PAGE = "https://ricmurtapsicologia.github.io/efetivoDAI2/"
-IMAGE = "https://upload.wikimedia.org/wikipedia/commons/c/cb/Cidade_Administrativa_MG_1.jpg?share=20260914-v2"
-IMAGE_MARKER = "Cidade_Administrativa_MG_1.jpg"
+IMAGE = "https://ricmurtapsicologia.github.io/efetivoDAI2/assets/img/cidade-administrativa-preview.jpg"
+IMAGE_MARKER = "cidade-administrativa-preview.jpg"
 UAS = [
     "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
     "WhatsApp/2.0",
@@ -65,7 +65,7 @@ def main() -> int:
             last_error = str(exc)
         time.sleep(5)
     else:
-        print(f"FAIL | deploy não convergiu para OG da Cidade Administrativa | {last_error or 'imagem OG esperada ausente'}")
+        print(f"FAIL | deploy não convergiu para OG local da Cidade Administrativa | {last_error or 'imagem OG esperada ausente'}")
         return 1
 
     results = []
@@ -76,6 +76,8 @@ def main() -> int:
     og_image_url = meta(html, "og:image:url")
     og_secure = meta(html, "og:image:secure_url")
     og_type = meta(html, "og:image:type")
+    og_width = meta(html, "og:image:width")
+    og_height = meta(html, "og:image:height")
     og_title = meta(html, "og:title")
     og_desc = meta(html, "og:description")
     twitter_image = meta(html, "twitter:image", attr="name")
@@ -85,41 +87,42 @@ def main() -> int:
     results.append(check("03 sem rastreador ChatGPT", "chatgpt" not in (canonical + og_url + og_image + twitter_image).lower()))
     results.append(check("04 título OG presente", og_title == "DAI/2 — Efetivo em Órgãos Externos", og_title))
     results.append(check("05 descrição OG presente", bool(og_desc), og_desc))
-    results.append(check("06 og:image = Cidade Administrativa", og_image == IMAGE and IMAGE_MARKER in og_image, og_image))
+    results.append(check("06 og:image = preview Cidade Administrativa", og_image == IMAGE and IMAGE_MARKER in og_image, og_image))
     results.append(check("07 og:image:url alinhada", og_image_url == IMAGE, og_image_url))
     results.append(check("08 og:image:secure_url alinhada", og_secure == IMAGE, og_secure))
     results.append(check("09 image_src alinhada", image_src == IMAGE, image_src))
     results.append(check("10 og:image MIME declarado", og_type == "image/jpeg", og_type))
-    results.append(check("11 twitter:image alinhada", twitter_image == IMAGE, twitter_image))
-    results.append(check("12 preview não aponta para banner local antigo", "assets/img/banner-cbmmg.jpg" not in html))
+    results.append(check("11 dimensões sociais 1200x630", og_width == "1200" and og_height == "630", f"{og_width}x{og_height}"))
+    results.append(check("12 twitter:image alinhada", twitter_image == IMAGE, twitter_image))
+    results.append(check("13 preview não aponta para banner local antigo", "assets/img/banner-cbmmg.jpg" not in html))
 
     for ua in UAS:
         try:
             with request(PAGE + f"?ua_probe={int(time.time())}", ua) as response:
                 crawler_html = response.read().decode("utf-8", errors="replace")
                 page_ok = int(response.status) == 200 and IMAGE in crawler_html and IMAGE_MARKER in crawler_html
-            results.append(check(f"13 página entregue ao crawler {ua.split('/')[0]}", page_ok))
+            results.append(check(f"14 página entregue ao crawler {ua.split('/')[0]}", page_ok))
         except Exception as exc:
-            results.append(check(f"13 página entregue ao crawler {ua.split('/')[0]}", False, str(exc)))
+            results.append(check(f"14 página entregue ao crawler {ua.split('/')[0]}", False, str(exc)))
 
     try:
-        with request(IMAGE, UAS[0]) as response:
+        with request(IMAGE + f"?asset_probe={int(time.time())}", UAS[0]) as response:
             content_type = (response.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
             data = response.read()
             status = int(response.status)
-        results.append(check("14 imagem pública HTTP 200", status == 200, str(status)))
-        results.append(check("15 imagem servida como JPEG", content_type in {"image/jpeg", "image/jpg"}, content_type))
-        results.append(check("16 imagem possui assinatura JPEG", data[:2] == b"\xff\xd8" and data[-2:] == b"\xff\xd9", f"{len(data)} bytes"))
-        results.append(check("17 imagem em faixa segura de tamanho", 10_000 <= len(data) <= 10_000_000, f"{len(data)} bytes"))
+        results.append(check("15 imagem pública HTTP 200", status == 200, str(status)))
+        results.append(check("16 imagem servida como JPEG", content_type in {"image/jpeg", "image/jpg"}, content_type))
+        results.append(check("17 imagem possui assinatura JPEG", data[:2] == b"\xff\xd8" and data[-2:] == b"\xff\xd9", f"{len(data)} bytes"))
+        results.append(check("18 imagem em faixa segura de tamanho", 10_000 <= len(data) <= 1_500_000, f"{len(data)} bytes"))
     except Exception as exc:
-        results.append(check("14-17 imagem pública acessível", False, str(exc)))
+        results.append(check("15-18 imagem pública acessível", False, str(exc)))
 
     passed = sum(1 for value in results if value)
     total = len(results)
     print(f"RESULTADO SHARE PREVIEW: {passed}/{total}")
     if passed != total:
         return 1
-    print("SHARE PREVIEW: APROVADO — Cidade Administrativa é a única imagem social declarada")
+    print("SHARE PREVIEW: APROVADO — Cidade Administrativa local, 1200x630, acessível a crawlers sociais")
     return 0
 
 
