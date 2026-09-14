@@ -1,4 +1,4 @@
-name: Hotfix preview Cidade Administrativa
+name: Hotfix preview logo DAI2
 
 on:
   push:
@@ -19,41 +19,35 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: Download hero source
+      - name: Download DAI2 logo from Pinterest
         run: |
           curl -fL --retry 3 --retry-delay 2 \
             -A 'Mozilla/5.0 (compatible; DAI2PreviewBuilder/1.0)' \
-            'https://upload.wikimedia.org/wikipedia/commons/c/cb/Cidade_Administrativa_MG_1.jpg' \
-            -o /tmp/cidade-administrativa.jpg
-          test -s /tmp/cidade-administrativa.jpg
+            'https://i.pinimg.com/736x/5b/1e/9f/5b1e9f547379eee022fc6ecc7328d573.jpg' \
+            -o /tmp/dai2-logo.jpg
+          test -s /tmp/dai2-logo.jpg
       - name: Build 1200x630 social preview
         run: |
           python -m pip install --quiet pillow
           python - <<'PY'
-          from PIL import Image
-          src = Image.open('/tmp/cidade-administrativa.jpg').convert('RGB')
-          target_ratio = 1200 / 630
-          ratio = src.width / src.height
-          if ratio > target_ratio:
-              new_w = round(src.height * target_ratio)
-              left = (src.width - new_w) // 2
-              src = src.crop((left, 0, left + new_w, src.height))
-          else:
-              new_h = round(src.width / target_ratio)
-              top = max(0, (src.height - new_h) // 2)
-              src = src.crop((0, top, src.width, top + new_h))
-          src = src.resize((1200, 630), Image.Resampling.LANCZOS)
-          src.save('assets/img/cidade-administrativa-preview.jpg', 'JPEG', quality=88, optimize=True, progressive=True)
-          print('preview:', src.size)
+          from PIL import Image, ImageOps
+          src = Image.open('/tmp/dai2-logo.jpg').convert('RGB')
+          canvas = Image.new('RGB', (1200, 630), '#0b2338')
+          logo = ImageOps.contain(src, (980, 520), Image.Resampling.LANCZOS)
+          x = (1200 - logo.width) // 2
+          y = (630 - logo.height) // 2
+          canvas.paste(logo, (x, y))
+          canvas.save('assets/img/dai2-logo-preview.jpg', 'JPEG', quality=90, optimize=True, progressive=True)
+          print('preview:', canvas.size, 'logo:', logo.size)
           PY
       - name: Commit preview asset
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/img/cidade-administrativa-preview.jpg
+          git add assets/img/dai2-logo-preview.jpg
           if git diff --cached --quiet; then
             echo 'Preview already current.'
           else
-            git commit -m 'Adiciona preview local da Cidade Administrativa'
+            git commit -m 'Adiciona preview social com logo DAI2'
             git push origin HEAD:main
           fi
