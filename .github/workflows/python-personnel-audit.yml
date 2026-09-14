@@ -47,6 +47,9 @@ jobs:
         env:
           DAI2_BASE_URL: http://127.0.0.1:8000
         run: python scripts/browser_e2e.py
+      - name: WhatsApp/Open Graph preview smoke
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: python scripts/share_preview_smoke.py
       - name: Public GitHub Pages smoke 30/30
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: python scripts/live_smoke.py
