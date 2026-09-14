@@ -1,0 +1,59 @@
+name: Hotfix preview Cidade Administrativa
+
+on:
+  push:
+    paths:
+      - '.github/workflows/hotfix-preview-asset.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Download hero source
+        run: |
+          curl -fL --retry 3 --retry-delay 2 \
+            -A 'Mozilla/5.0 (compatible; DAI2PreviewBuilder/1.0)' \
+            'https://upload.wikimedia.org/wikipedia/commons/c/cb/Cidade_Administrativa_MG_1.jpg' \
+            -o /tmp/cidade-administrativa.jpg
+          test -s /tmp/cidade-administrativa.jpg
+      - name: Build 1200x630 social preview
+        run: |
+          python -m pip install --quiet pillow
+          python - <<'PY'
+          from PIL import Image
+          src = Image.open('/tmp/cidade-administrativa.jpg').convert('RGB')
+          target_ratio = 1200 / 630
+          ratio = src.width / src.height
+          if ratio > target_ratio:
+              new_w = round(src.height * target_ratio)
+              left = (src.width - new_w) // 2
+              src = src.crop((left, 0, left + new_w, src.height))
+          else:
+              new_h = round(src.width / target_ratio)
+              top = max(0, (src.height - new_h) // 2)
+              src = src.crop((0, top, src.width, top + new_h))
+          src = src.resize((1200, 630), Image.Resampling.LANCZOS)
+          src.save('assets/img/cidade-administrativa-preview.jpg', 'JPEG', quality=88, optimize=True, progressive=True)
+          print('preview:', src.size)
+          PY
+      - name: Commit preview asset
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/img/cidade-administrativa-preview.jpg
+          if git diff --cached --quiet; then
+            echo 'Preview already current.'
+          else
+            git commit -m 'Adiciona preview local da Cidade Administrativa'
+            git push origin HEAD:main
+          fi
