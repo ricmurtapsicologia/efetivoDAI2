@@ -116,6 +116,7 @@ def main():
     silvana_phone = normalize_phone(contacts.get('Silvana Tiengo'))
     hero_id = 'photo-1778876087506-47da0c3e6d98'
     frontend = index + "\n" + app + "\n" + contacts_text + "\n" + tpb_text
+    ctpm_planned = sum(int(ddqod["CTPM"].get(rank,0) or 0) for rank in RANKS)
 
     tests = [
       ("01 URL pública responde HTTP 200", index_status == 200),
@@ -135,11 +136,11 @@ def main():
       ("15 ação WhatsApp direta no app", 'normalizeWhatsApp' in app and 'https://wa.me/${phone}?text=' in app and 'whatsapp-number' in app),
       ("16 e-mail/aniversário não publicados", 'DAI2_EMAILS' not in frontend and 'DAI2_BIRTHDAYS' not in frontend and 'mailto:' not in frontend),
       ("17 texto técnico de claro removido", 'Claro calculado por posto/graduação' not in app),
-      ("18 previsto DDQOD = 101", planned == 101),
+      ("18 previsto DDQOD = 100 e CTPM = 16", planned == 100 and ctpm_planned == 16),
       ("19 efetivo = 84", len(personnel) == 84),
       ("20 SEMAD previsto 0 e extra-DDQOD 1", sum(int(ddqod["SEMAD"].get(rank,0) or 0) for rank in RANKS) == 0 and by_org.get("SEMAD",0) == 1),
       ("21 Silvana está na AFAS", any(person["name"] == "Silvana Tiengo" and person["org"] == "AFAS" for person in personnel)),
-      ("22 Claro P/G = 23", claro == 23),
+      ("22 Claro P/G = 22", claro == 22),
       ("23 excedente P/G DDQOD = 5", excess == 5),
       ("24 TPB carregado e redesenhado", tpb_status == 200 and not tpb_rows and 'Situação do TPB 2026' in index and 'tpb-overview' in app),
       ("25 corte TPB = 03/09/2026", tpb_meta.get("cutoff") == "03/09/2026"),
