@@ -44,10 +44,11 @@ TPB: `Dashboard TPB DAI 2026 - controle por ata - 03-09-2026.xlsx`, corte 03/09/
 
 Invariantes da base atual:
 
-- previsto oficial DDQOD: 101;
+- previsto oficial DDQOD: 100;
 - efetivo atual total: 84;
+- CTPM RMBH: 16 previstos, 15 existentes e 1 claro;
 - SEMAD extra-DDQOD: 1;
-- claro por P/G: 23;
+- claro por P/G: 22;
 - excedentes por P/G nos órgãos DDQOD: 5.
 
 ## TPB agregado no corte de 03/09/2026
