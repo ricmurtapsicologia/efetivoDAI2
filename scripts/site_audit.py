@@ -126,12 +126,14 @@ def main() -> int:
             claro += max(planned_rank - existing_rank, 0)
             if org != 'SEMAD':
                 excess += max(existing_rank - planned_rank, 0)
-    if planned != 101: errors.append(f'DDQOD previsto={planned}, esperado 101')
+    if planned != 100: errors.append(f'DDQOD previsto={planned}, esperado 100')
+    if sum(int(ddqod.get('CTPM',{}).get(rank,0) or 0) for rank in RANKS) != 16:
+        errors.append('CTPM deve ter 16 vagas previstas')
     if len(personnel) != 84: errors.append(f'efetivo={len(personnel)}, esperado 84')
     if by_org.get('SEMAD',0) != 1: errors.append('SEMAD deve ter 1 extra-DDQOD')
     if sum(int(ddqod.get('SEMAD',{}).get(rank,0) or 0) for rank in RANKS) != 0:
         errors.append('SEMAD não pode ter vaga prevista no DDQOD consultado')
-    if claro != 23: errors.append(f'claro P/G={claro}, esperado 23')
+    if claro != 22: errors.append(f'claro P/G={claro}, esperado 22')
     if excess != 5: errors.append(f'excedente P/G DDQOD={excess}, esperado 5')
 
     observed_tpb = {key:int(tpb_meta.get('expected',{}).get(key,-1)) for key in EXPECTED_TPB}
@@ -152,7 +154,7 @@ def main() -> int:
         errors.append('redesign estrutural detectado; layout original deve ser preservado')
     if re.search(r'<div class="numbers">\s*Previsto:', index):
         errors.append('dados de efetivo duplicados/hardcoded no HTML dos blocos')
-    if 'Total Previsto: 101' in index or 'Total Existente: 84' in index or 'Total Claro: 23' in index:
+    if 'Total Previsto: 100' in index or 'Total Existente: 84' in index or 'Total Claro: 22' in index:
         errors.append('totais canônicos duplicados/hardcoded no HTML')
 
     required_refs = [
