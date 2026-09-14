@@ -67,9 +67,11 @@ def main() -> int:
         check(results, 'QA 03 · hero corresponde ao ativo governado', 'photo-1778876087506-47da0c3e6d98' in hero_info.get('url',''), hero_info.get('url',''))
 
         general = page.locator('.general-data').inner_text()
-        check(results, 'QA 04 · totais canônicos renderizados', all(value in general for value in ['101','84','23']), general.replace('\n',' | '))
+        check(results, 'QA 04 · totais canônicos renderizados', all(value in general for value in ['100','84','22']), general.replace('\n',' | '))
         check(results, 'UX 02 · texto técnico de claro removido', 'Claro calculado por posto/graduação' not in general)
         check(results, 'UX 03 · bloco visual de privacidade removido', page.locator('#birthdayPanel').count() == 0 and 'Proteção de dados' not in page.locator('body').inner_text())
+        ctpm_text = page.locator('.block[data-orgao="CTPM"]').inner_text()
+        check(results, 'QA 05 · CTPM renderiza previsto 16, existente 15 e claro 1', all(term in ctpm_text for term in ['Previsto: 16','Existente: 15','Claro P/G: 1']), ctpm_text.replace('\n',' | '))
 
         first_block = page.locator('.block[data-orgao="AFAS"]')
         first_block.focus()
@@ -101,7 +103,7 @@ def main() -> int:
         page.locator('#searchInput').fill('Diego Natalino dos Santos')
         page.locator('#searchButton').click()
         diego_text = page.locator('#searchResult').inner_text()
-        check(results, 'QA 05 · número legado de Diego é normalizado para 9 dígitos', '+55 (31) 98849-7210' in diego_text, diego_text.replace('\n',' | ')[:260])
+        check(results, 'QA 06 · número legado de Diego é normalizado para 9 dígitos', '+55 (31) 98849-7210' in diego_text, diego_text.replace('\n',' | ')[:260])
 
         page.locator('#rankSelect').select_option('Sgt/SubTen')
         page.locator('#rankButton').click()
@@ -110,7 +112,7 @@ def main() -> int:
 
         page.locator('#showListBtn').click()
         check(results, 'E2E 16 · lista DDQOD expande', page.locator('#militaryList').is_visible())
-        check(results, 'QA 06 · SEMAD aparece como extra-DDQOD', '0 previsto no DDQOD' in page.locator('#militaryList').inner_text())
+        check(results, 'QA 07 · SEMAD aparece como extra-DDQOD', '0 previsto no DDQOD' in page.locator('#militaryList').inner_text())
 
         body_text = page.locator('body').inner_text()
         check(results, 'Data 01 · números WhatsApp são efetivamente visíveis', '+55 (' in body_text)
@@ -118,14 +120,14 @@ def main() -> int:
 
         page.locator('#normasToggleBtn').click()
         check(results, 'E2E 17 · modal jurídico abre', page.locator('#normasModal').is_visible())
-        check(results, 'QA 07 · modal jurídico contém fonte/ressalva', 'fonte primária prevalecem' in page.locator('#normasContent').inner_text().lower())
+        check(results, 'QA 08 · modal jurídico contém fonte/ressalva', 'fonte primária prevalecem' in page.locator('#normasContent').inner_text().lower())
         page.keyboard.press('Escape')
 
         page.locator('#tpbToggleBtn').click()
         tpb_text = page.locator('#tpbContent').inner_text()
         check(results, 'E2E 18 · TPB abre', page.locator('#tpbModal').is_visible())
         check(results, 'UX 04 · TPB usa linguagem intuitiva', all(term in tpb_text for term in ['concluídos','Ação necessária','Sem data registrada']))
-        check(results, 'QA 08 · KPIs TPB conferem', all(value in tpb_text for value in ['85','69','16','9','7','15']), tpb_text.replace('\n',' | ')[:260])
+        check(results, 'QA 09 · KPIs TPB conferem', all(value in tpb_text for value in ['85','69','16','9','7','15']), tpb_text.replace('\n',' | ')[:260])
         check(results, 'Data 03 · TPB permanece sem lista nominal', page.locator('#tpbContent .tpb-item').count() == 0 and page.locator('#tpbContent input').count() == 0)
         page.keyboard.press('Escape')
 
@@ -163,10 +165,10 @@ def main() -> int:
         body_size = page.locator('body').evaluate("el => parseFloat(getComputedStyle(el).fontSize)")
         check(results, 'UI 05 · hierarquia tipográfica preservada', title_size >= 24 and body_size >= 14, f'title={title_size}px body={body_size}px')
 
-        check(results, 'QA 09 · sem erros JavaScript ao final', not console_errors and not page_errors, f'console={console_errors[:3]} page={page_errors[:3]}')
+        check(results, 'QA 10 · sem erros JavaScript ao final', not console_errors and not page_errors, f'console={console_errors[:3]} page={page_errors[:3]}')
         local_failures = [url for url in failed_requests if url.startswith(BASE)]
         local_bad = [f'{status} {url}' for status,url in bad_responses if url.startswith(BASE)]
-        check(results, 'QA 10 · assets locais sem falha de rede/HTTP', not local_failures and not local_bad, '; '.join((local_failures + local_bad)[:5]))
+        check(results, 'QA 11 · assets locais sem falha de rede/HTTP', not local_failures and not local_bad, '; '.join((local_failures + local_bad)[:5]))
 
         browser.close()
 
