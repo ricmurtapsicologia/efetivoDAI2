@@ -8,8 +8,8 @@ import time
 import urllib.request
 
 PAGE = "https://ricmurtapsicologia.github.io/efetivoDAI2/"
-IMAGE = "https://ricmurtapsicologia.github.io/efetivoDAI2/assets/img/cidade-administrativa-preview.jpg"
-IMAGE_MARKER = "cidade-administrativa-preview.jpg"
+IMAGE = "https://ricmurtapsicologia.github.io/efetivoDAI2/assets/img/dai2-logo-preview.jpg"
+IMAGE_MARKER = "dai2-logo-preview.jpg"
 UAS = [
     "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
     "WhatsApp/2.0",
@@ -65,7 +65,7 @@ def main() -> int:
             last_error = str(exc)
         time.sleep(5)
     else:
-        print(f"FAIL | deploy não convergiu para OG local da Cidade Administrativa | {last_error or 'imagem OG esperada ausente'}")
+        print(f"FAIL | deploy não convergiu para OG local da logo DAI/2 | {last_error or 'imagem OG esperada ausente'}")
         return 1
 
     results = []
@@ -87,7 +87,7 @@ def main() -> int:
     results.append(check("03 sem rastreador ChatGPT", "chatgpt" not in (canonical + og_url + og_image + twitter_image).lower()))
     results.append(check("04 título OG presente", og_title == "DAI/2 — Efetivo em Órgãos Externos", og_title))
     results.append(check("05 descrição OG presente", bool(og_desc), og_desc))
-    results.append(check("06 og:image = preview Cidade Administrativa", og_image == IMAGE and IMAGE_MARKER in og_image, og_image))
+    results.append(check("06 og:image = preview logo DAI/2", og_image == IMAGE and IMAGE_MARKER in og_image, og_image))
     results.append(check("07 og:image:url alinhada", og_image_url == IMAGE, og_image_url))
     results.append(check("08 og:image:secure_url alinhada", og_secure == IMAGE, og_secure))
     results.append(check("09 image_src alinhada", image_src == IMAGE, image_src))
@@ -122,7 +122,7 @@ def main() -> int:
     print(f"RESULTADO SHARE PREVIEW: {passed}/{total}")
     if passed != total:
         return 1
-    print("SHARE PREVIEW: APROVADO — Cidade Administrativa local, 1200x630, acessível a crawlers sociais")
+    print("SHARE PREVIEW: APROVADO — logo DAI/2 local, 1200x630, acessível a crawlers sociais")
     return 0
 
 
