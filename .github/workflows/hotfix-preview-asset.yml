@@ -40,14 +40,35 @@ jobs:
           canvas.save('assets/img/dai2-logo-preview.jpg', 'JPEG', quality=90, optimize=True, progressive=True)
           print('preview:', canvas.size, 'logo:', logo.size)
           PY
-      - name: Commit preview asset
+      - name: Patch Open Graph to DAI2 logo preview
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          index = Path('index.html')
+          text = index.read_text(encoding='utf-8')
+          old = 'https://ricmurtapsicologia.github.io/efetivoDAI2/assets/img/cidade-administrativa-preview.jpg'
+          new = 'https://ricmurtapsicologia.github.io/efetivoDAI2/assets/img/dai2-logo-preview.jpg'
+          if old not in text and new not in text:
+              raise SystemExit('Preview URL esperado não encontrado em index.html')
+          text = text.replace(old, new)
+          text = text.replace('Cidade Administrativa de Minas Gerais — banner do Portal DAI/2', 'Logo institucional DAI/2 — Diretoria de Assuntos Institucionais')
+          index.write_text(text, encoding='utf-8')
+
+          smoke = Path('scripts/share_preview_smoke.py')
+          s = smoke.read_text(encoding='utf-8')
+          s = s.replace('assets/img/cidade-administrativa-preview.jpg', 'assets/img/dai2-logo-preview.jpg')
+          s = s.replace('cidade-administrativa-preview.jpg', 'dai2-logo-preview.jpg')
+          s = s.replace('Cidade Administrativa', 'logo DAI/2')
+          smoke.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit preview asset and metadata
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/img/dai2-logo-preview.jpg
+          git add assets/img/dai2-logo-preview.jpg index.html scripts/share_preview_smoke.py
           if git diff --cached --quiet; then
             echo 'Preview already current.'
           else
-            git commit -m 'Adiciona preview social com logo DAI2'
+            git commit -m 'Troca preview social para logo institucional DAI2'
             git push origin HEAD:main
           fi
