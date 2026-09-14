@@ -1,4 +1,5 @@
 name: DAI2 production gates
+# Preview social atual: logo institucional DAI/2
 
 on:
   pull_request:
