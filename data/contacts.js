@@ -81,7 +81,6 @@ window.DAI2_CONTACTS={
 "Gustavo Duarte Oliveira":"(31) 97243-7139",
 "Josaine Thais do Carmo":"(31) 98788-1588",
 "Thiago Bruno de Albuquerque Morais":"(31) 99137-8635",
-"Wagner Magno Alves dos Santos":"(31) 98978-4116",
 "Warleysson Flávio Cláudio Melo":"(31) 98658-3144",
 "Matheus Thomaz da Silva":"(31) 98865-3835"
 };
