@@ -53,44 +53,31 @@
 
   function renderLegal(){const root=$('#normasContent');clear(root);root.appendChild(el('p','norma-intro','Síntese gerencial dos fundamentos e instrumentos correlatos por órgão. O ato individual vigente e a fonte primária prevalecem.'));const grid=el('div','normas-grid');Object.entries(legalDB).forEach(([title,group])=>{const section=el('section','norma-group');section.appendChild(el('h5','',title));if(group.intro)section.appendChild(el('p','norma-intro',group.intro));(group.items||[]).forEach(item=>{const itemEl=el('div','norma-item');itemEl.appendChild(el('strong','',orgDisplay[item.orgao]||item.orgao));if(item.fundamento)itemEl.appendChild(el('p','',`Referência: ${item.fundamento}`));if(item.base)itemEl.appendChild(el('p','',item.base));if(item.adicional)itemEl.appendChild(el('p','',`Adicional: ${item.adicional}`));section.appendChild(itemEl);});grid.appendChild(section);});root.appendChild(grid);}
 
-  function addTpbKpi(parent,label,value,cls=''){const card=el('div',`tpb-kpi ${cls}`.trim());card.append(el('strong','',String(value)),el('span','',label));parent.appendChild(card);}
   function renderTpb(){
-    const root=$('#tpbContent'),meta=tpbMeta.current||{},x=tpbMeta.expected||{};
-    const scope=Number(x.scope||0),done=Number(x.done||0),notDone=Number(x.notDone||0);
-    const disp=Number(x.dispensed||0),action=Number(x.actionable||0),check=Number(x.dateToConfirm||0);
-    const pct=scope?done/scope*100:0;
+    const root=$('#tpbContent'),current=tpbMeta.current||{};
     clear(root);
-
-    const current=el('section','tpb-overview');
-    current.append(
-      el('span','tpb-eyebrow','POSIÇÃO ADMINISTRATIVA MAIS RECENTE'),
-      el('strong','',meta.label||'Situação atual em verificação'),
-      el('p','',meta.detail||''),
-      el('p','',`Referência: ${meta.source||'—'} · posição de ${meta.asOf||'—'}.`),
-      el('p','tpb-source',meta.limitation||'')
+    const hero=el('section','tpb-overview');
+    hero.append(
+      el('span','tpb-eyebrow',`POSIÇÃO ADMINISTRATIVA · ${current.asOf||'—'}`),
+      el('strong','',current.statusLabel||'TPB 2026 — situação a confirmar'),
+      el('p','',current.conclusionLabel||''),
+      el('p','',current.sourceSummary||'')
     );
-    root.appendChild(current);
-
-    const heading=el('h5','',tpbMeta.historicalLabel||'Indicadores históricos');
-    root.appendChild(heading);
-    const summary=el('div','tpb-summary'),gauge=el('div','tpb-gauge'),svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 240 145');svg.setAttribute('role','img');
-    svg.setAttribute('aria-label',`Histórico de ${tpbMeta.cutoff||'—'}: ${pct.toFixed(1)} por cento concluído, ${done} de ${scope}`);
-    const track=document.createElementNS('http://www.w3.org/2000/svg','path'),prog=document.createElementNS('http://www.w3.org/2000/svg','path');
-    track.setAttribute('class','tpb-gauge-track');track.setAttribute('d','M20 120 A100 100 0 0 1 220 120');track.setAttribute('pathLength','100');
-    prog.setAttribute('class','tpb-gauge-progress');prog.setAttribute('d','M20 120 A100 100 0 0 1 220 120');prog.setAttribute('pathLength','100');
-    prog.style.strokeDasharray=`${pct} 100`;svg.append(track,prog);
-    gauge.append(svg,el('div','tpb-percent',`${pct.toFixed(1).replace('.',',')}%`),el('div','tpb-caption',`Histórico em ${tpbMeta.cutoff||'—'}: ${done} de ${scope}`));
-    const kpis=el('div','tpb-kpis');
-    addTpbKpi(kpis,'Efetivo no escopo histórico',scope);
-    addTpbKpi(kpis,'Concluídos no corte histórico',done,'is-success');
-    addTpbKpi(kpis,'Não concluídos no corte histórico',notDone,'is-neutral');
-    addTpbKpi(kpis,'Dispensados no corte histórico',disp,'is-muted');
-    addTpbKpi(kpis,'Ação necessária naquele corte',action,'is-alert');
-    addTpbKpi(kpis,'Sem data registrada naquele corte',check,'is-warning');
-    summary.append(gauge,kpis);root.appendChild(summary);
-    root.appendChild(el('p','tpb-source',`Estatística arquivada, não atual: ${tpbMeta.sourceLabel||'Dashboard TPB DAI 2026'} · corte ${tpbMeta.cutoff||'—'}.`));
-    if(tpbMeta.review?.notice)root.appendChild(el('p','tpb-source',`Nota de conferência: ${tpbMeta.review.notice}`));
+    root.appendChild(hero);
+    const cards=el('div','tpb-current-metrics');
+    const pending=el('section','tpb-current-stat is-success');
+    pending.append(el('strong','',String(current.pendingDeclared??'—')),el('span','','Pendências declaradas no efetivo ativo da DAI'));
+    const completion=el('section','tpb-current-stat');
+    completion.append(el('strong','','Todos'),el('span','','Militares ativos declarados concluintes (sem quantitativo nominal no ofício)'));
+    cards.append(pending,completion);root.appendChild(cards);
+    const source=el('section','tpb-documentary-note');
+    source.append(
+      el('strong','','Fonte e alcance da informação'),
+      el('p','',`${current.source||'—'} · SEI ${current.sourceSei||'—'} · posição de ${current.asOf||'—'}.`),
+      el('p','',current.limitation||''),
+      el('p','',`Série estatística anterior (${tpbMeta.historicCutoff||'—'}) arquivada no controle interno. Não corresponde à situação atual.`)
+    );
+    root.appendChild(source);
   }
 
   function bindBlocks(){$$('.block').forEach(block=>{const run=()=>openOrg(block.dataset.orgao);block.addEventListener('click',run);block.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();run();}});});}
