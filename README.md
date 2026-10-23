@@ -26,7 +26,7 @@ Principais regras da versão:
 
 O refino visual de 08/09/2026 adotou abordagem mobile-first, reduziu redundâncias textuais e reorganizou a primeira dobra em três elementos: hero institucional, visão geral do efetivo e onboarding sobre a própria página.
 
-O hero usa a fotografia `Cidade Administrativa MG 1`, em resolução original de 3.500×2.333 px, disponibilizada no Wikimedia Commons sob licença CC BY 3.0. O portal aplica apenas recorte responsivo e gradientes de contraste em CSS. A procedência, licença e forma de uso estão registradas em `assets/hero-source.json` e `assets/img/banner-cbmmg-source.txt`, com atribuição também no rodapé público.
+O hero usa a fotografia `Cidade Administrativa MG 1`, em resolução original de 3.500×2.333 px, disponibilizada no Wikimedia Commons sob licença CC BY 3.0. O portal aplica apenas recorte responsivo e gradientes de contraste em CSS. A procedência, licença e forma de uso estão registradas em `assets/hero-source.json` e `assets/img/banner-cbmmg-source.txt`, com atribuição acessível no controle discreto «Créditos da imagem», no próprio hero; o rodapé permanece exclusivamente institucional.
 
 A splash não utiliza fotografia de pessoas. O onboarding mantém as quatro etapas originais — distribuição do efetivo, pesquisa e claro, gráficos interativos, previsão e TPB — e usa a identidade visual da DAI/2 informada para a abertura.
 
