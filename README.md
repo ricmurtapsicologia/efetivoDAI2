@@ -51,16 +51,14 @@ Invariantes da base atual:
 - claro por P/G: 22;
 - excedentes por P/G nos órgãos DDQOD: 4.
 
-## TPB: posição administrativa de 14/10 e histórico de 03/09/2026
+## TPB: situação institucional em 14/10/2026
 
-- escopo controlado: 85;
-- TPB feito: 69;
-- TPB não feito: 16;
-- dispensas: 9;
-- não feito e sem dispensa: 7;
-- feito sem data consolidada: 15.
+- Pendências declaradas: 0, conforme Ofício CBMMG/DAI-2 nº 569/2026 (SEI 151390924).
+- Todos os militares atualmente em atividade na DAI são declarados concluintes no ofício, sem fornecimento do número individualizado.
+- O painel não infere 83/83 ou 100% da base de efetivo, cuja data e universo de referência não coincidem necessariamente com os do documento.
+- Série histórica de 03/09/2026 preservada no Drive institucional, retirada da apresentação pública para evitar contradição com a posição mais recente.
 
-A declaração de 14/10 não disponibiliza denominador nominal que permita recalcular, com rigor, um índice numérico atual. Por isso os indicadores de 03/09 permanecem históricos e a posição corrente é textual, com atribuição ao ofício. Os registros nominais, datas pessoais, dados médicos e históricos de situação não integram a camada pública.
+Os registros nominais, datas pessoais, dados médicos e históricos de situação não integram a camada pública.
 
 ## Validação
 
