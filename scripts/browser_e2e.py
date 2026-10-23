@@ -67,7 +67,7 @@ def main() -> int:
         check(results, 'QA 03 · hero corresponde ao ativo governado', 'photo-1778876087506-47da0c3e6d98' in hero_info.get('url',''), hero_info.get('url',''))
 
         general = page.locator('.general-data').inner_text()
-        check(results, 'QA 04 · totais canônicos renderizados', all(value in general for value in ['100','84','22']), general.replace('\n',' | '))
+        check(results, 'QA 04 · totais canônicos renderizados', all(value in general for value in ['100','83','22']), general.replace('\n',' | '))
         check(results, 'UX 02 · texto técnico de claro removido', 'Claro calculado por posto/graduação' not in general)
         check(results, 'UX 03 · bloco visual de privacidade removido', page.locator('#birthdayPanel').count() == 0 and 'Proteção de dados' not in page.locator('body').inner_text())
         ctpm_text = page.locator('.block[data-orgao="CTPM"]').inner_text()
@@ -126,8 +126,8 @@ def main() -> int:
         page.locator('#tpbToggleBtn').click()
         tpb_text = page.locator('#tpbContent').inner_text()
         check(results, 'E2E 18 · TPB abre', page.locator('#tpbModal').is_visible())
-        check(results, 'UX 04 · TPB usa linguagem intuitiva', all(term in tpb_text for term in ['concluídos','Ação necessária','Sem data registrada']))
-        check(results, 'QA 09 · KPIs TPB conferem', all(value in tpb_text for value in ['85','69','16','9','7','15']), tpb_text.replace('\n',' | ')[:260])
+        check(results, 'UX 04 · TPB usa linguagem intuitiva', all(term in tpb_text for term in ['Sem pendências declaradas','Base histórica','Ação necessária','Sem data registrada']))
+        check(results, 'QA 09 · KPIs TPB conferem', all(value in tpb_text for value in ['85','69','16','9','7','15','151390924','14/10/2026','03/09/2026']), tpb_text.replace('\n',' | ')[:260])
         check(results, 'Data 03 · TPB permanece sem lista nominal', page.locator('#tpbContent .tpb-item').count() == 0 and page.locator('#tpbContent input').count() == 0)
         page.keyboard.press('Escape')
 
