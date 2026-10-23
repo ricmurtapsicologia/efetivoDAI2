@@ -287,6 +287,52 @@ body{
 }
 #onboarding .btn-skip:hover{background:#f5f8fb}
 
+/* Crédito acessível no próprio hero, preservando o rodapé institucional enxuto. */
+.hero-attribution{
+  position:absolute;
+  right:clamp(14px,3vw,40px);
+  bottom:10px;
+  z-index:3;
+  width:min(360px,calc(100% - 28px));
+  color:#fff;
+  font-size:12px;
+  text-align:right;
+}
+.hero-attribution>summary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  min-width:112px;
+  padding:10px 12px;
+  border-radius:9px;
+  background:rgba(6,22,37,.72);
+  color:#fff;
+  cursor:pointer;
+  list-style:none;
+  font-weight:650;
+}
+.hero-attribution>summary::-webkit-details-marker{display:none}
+.hero-attribution>summary::marker{content:""}
+.hero-attribution>summary:hover{background:rgba(6,22,37,.94)}
+.hero-attribution>summary:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.hero-attribution-panel{
+  margin-top:0;
+  margin-bottom:8px;
+  background:rgba(5,22,36,.96);
+  border:1px solid rgba(255,255,255,.28);
+  padding:12px;
+  border-radius:10px;
+  line-height:1.6;
+  text-align:left;
+  overflow-wrap:anywhere;
+}
+.hero-attribution-panel a{color:#fff;text-decoration:underline;text-underline-offset:2px}
+@media(max-width:576px){
+  .hero-attribution{right:12px;bottom:4px;font-size:11px}
+  .hero-attribution>summary{padding:8px 10px}
+}
+
 /* ---------- Hero ---------- */
 header.banner{
   height:360px;
