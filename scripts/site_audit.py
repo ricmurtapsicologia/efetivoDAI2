@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RANKS = ['Sd/Cb','Sgt/SubTen','Ten','Cap','Maj','Ten-Cel']
 ALLOWED_PERSONNEL = {'rank','name','org','subunit'}
-EXPECTED_TPB = {'scope':85,'done':69,'notDone':16,'dispensed':9,'actionable':7,'dateToConfirm':15}
+EXPECTED_TPB_STATUS = {'pendingDeclared': 0}
 BANNED_FRONTEND = [
     'BGBM a localizar', 'Ato de movimentação', 'A vincular', 'A localizar',
     'base interna autorizada', 'neutralizados na camada executiva',
@@ -136,14 +136,15 @@ def main() -> int:
     if claro != 22: errors.append(f'claro P/G={claro}, esperado 22')
     if excess != 4: errors.append(f'excedente P/G DDQOD={excess}, esperado 4')
 
-    if tpb_meta.get('current',{}).get('asOf') != '14/10/2026' or '151390924' not in tpb_meta.get('current',{}).get('source',''):
-        errors.append('TPB: posição administrativa 14/10/2026 e respectiva fonte ausentes')
-    if tpb_meta.get('cutoff') != '03/09/2026' or 'histórica' not in tpb_meta.get('historicalLabel','').lower():
-        errors.append('TPB: indicadores antigos não identificados como históricos')
-    observed_tpb = {key:int(tpb_meta.get('expected',{}).get(key,-1)) for key in EXPECTED_TPB}
-    for key, expected in EXPECTED_TPB.items():
-        if observed_tpb[key] != expected:
-            errors.append(f'TPB agregado {key}={observed_tpb[key]}, esperado {expected}')
+    if tpb_meta.get('current',{}).get('asOf') != '14/10/2026' or tpb_meta.get('current',{}).get('sourceSei') != '151390924':
+        errors.append('TPB: fonte institucional de 14/10/2026 ausente')
+    if tpb_meta.get('current',{}).get('pendingDeclared') != EXPECTED_TPB_STATUS['pendingDeclared']:
+        errors.append('TPB: zero pendências declaradas não confirmado na base')
+    if 'expected' in tpb_meta or 'historicCutoff' not in tpb_meta:
+        errors.append('TPB: dados históricos expostos como atuais ou rastreio de arquivo ausente')
+    if 'tpb-gauge' in app or 'tpb-kpis' in app or '69 concluídos' in app:
+        errors.append('TPB: indicadores históricos ainda desenhados no modal')
+    observed_tpb = {'asOf': tpb_meta.get('current',{}).get('asOf'), 'pendingDeclared': tpb_meta.get('current',{}).get('pendingDeclared')}
 
     required_layout = [
         'id="splash"','id="onboarding"','class="banner"','class="container"',
@@ -163,9 +164,9 @@ def main() -> int:
 
     required_refs = [
         'data/contacts.js?v=2026.10.09.1',
-        'data/tpb.js?v=2026.10.23',
-        'assets/js/app.js?v=2026.10.23',
-        'assets/css/main.css?v=2.3.0'
+        'data/tpb.js?v=2026.10.23.2',
+        'assets/js/app.js?v=2026.10.23.2',
+        'assets/css/main.css?v=2026.10.23.2'
     ]
     if any(ref not in index for ref in required_refs):
         errors.append('versionamento/referências do frontend incompletos')
