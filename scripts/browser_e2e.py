@@ -126,8 +126,10 @@ def main() -> int:
         page.locator('#tpbToggleBtn').click()
         tpb_text = page.locator('#tpbContent').inner_text()
         check(results, 'E2E 18 · TPB abre', page.locator('#tpbModal').is_visible())
-        check(results, 'UX 04 · TPB usa linguagem intuitiva', all(term in tpb_text for term in ['Sem pendências declaradas','Base histórica','Ação necessária','Sem data registrada']))
-        check(results, 'QA 09 · KPIs TPB conferem', all(value in tpb_text for value in ['85','69','16','9','7','15','151390924','14/10/2026','03/09/2026']), tpb_text.replace('\n',' | ')[:260])
+        check(results, 'UX 04 · TPB apresenta situação corrente clara', all(term in tpb_text for term in ['0','Todos','14/10/2026','Ofício CBMMG/DAI-2 nº 569/2026']))
+        check(results, 'QA 09 · nenhuma métrica histórica exposta como atual', page.locator('#tpbContent .tpb-current-stat').count() == 2 and not any(term in tpb_text for term in ['81,2%','69 de 85','7 militares exigem ação','Não concluídos no corte histórico']))
+        check(results, 'QA 10 · origem SEI e ressalva evidenciadas', '151390924' in tpb_text and 'atos de convocação não substituem atas' in tpb_text.lower())
+
         check(results, 'Data 03 · TPB permanece sem lista nominal', page.locator('#tpbContent .tpb-item').count() == 0 and page.locator('#tpbContent input').count() == 0)
         page.keyboard.press('Escape')
 
