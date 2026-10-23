@@ -71,7 +71,7 @@ def main():
     for _ in range(30):
         try:
             status, index = fetch("")
-            if status == 200 and 'assets/js/app.js?v=2.5.0' in index and 'data/contacts.js?v=2026.09.07' in index and 'class="banner"' in index:
+            if status == 200 and 'assets/js/app.js?v=2026.10.23' in index and 'data/contacts.js?v=2026.09.07' in index and 'class="banner"' in index:
                 break
         except Exception as exc:
             last = exc
@@ -83,8 +83,8 @@ def main():
     index_status, index = fetch("")
     data_status, data = fetch("data/data.js?v=2.0.0")
     contacts_status, contacts_text = fetch("data/contacts.js?v=2026.09.07")
-    tpb_status, tpb_text = fetch("data/tpb.js?v=2026.09.06-public")
-    app_status, app = fetch("assets/js/app.js?v=2.5.0")
+    tpb_status, tpb_text = fetch("data/tpb.js?v=2026.10.23")
+    app_status, app = fetch("assets/js/app.js?v=2026.10.23")
     css_status, css = fetch("assets/css/main.css?v=2.3.0")
     hero_status, hero_text = fetch("assets/hero-source.json")
 
@@ -129,21 +129,21 @@ def main():
       ("08 layout original: 18 blocos", index.count('class="block"') == 18),
       ("09 redesign estrutural removido", 'mobile-nav' not in index and 'section-card' not in index and 'org-grid' not in index),
       ("10 CSS 2.3 carregado", css_status == 200 and 'assets/css/main.css?v=2.3.0' in index),
-      ("11 app 2.5 carregado", app_status == 200 and 'assets/js/app.js?v=2.5.0' in index),
+      ("11 app 2.5 carregado", app_status == 200 and 'assets/js/app.js?v=2026.10.23' in index),
       ("12 diretório WhatsApp carregado", contacts_status == 200 and 'data/contacts.js?v=2026.09.07' in index and contacts_meta.get('display') == 'public'),
-      ("13 cobertura WhatsApp = 84/84", len(contacts) == 84 and contact_names == names and valid_contacts),
+      ("13 cobertura WhatsApp = 83/83", len(contacts) == 83 and contact_names == names and valid_contacts),
       ("14 WhatsApp direto de Silvana normaliza corretamente", silvana_phone == '5531991743862'),
       ("15 ação WhatsApp direta no app", 'normalizeWhatsApp' in app and 'https://wa.me/${phone}?text=' in app and 'whatsapp-number' in app),
       ("16 e-mail/aniversário não publicados", 'DAI2_EMAILS' not in frontend and 'DAI2_BIRTHDAYS' not in frontend and 'mailto:' not in frontend),
       ("17 texto técnico de claro removido", 'Claro calculado por posto/graduação' not in app),
       ("18 previsto DDQOD = 100 e CTPM = 16", planned == 100 and ctpm_planned == 16),
-      ("19 efetivo = 84", len(personnel) == 84),
+      ("19 efetivo = 83", len(personnel) == 83),
       ("20 SEMAD previsto 0 e extra-DDQOD 1", sum(int(ddqod["SEMAD"].get(rank,0) or 0) for rank in RANKS) == 0 and by_org.get("SEMAD",0) == 1),
       ("21 Silvana está na AFAS", any(person["name"] == "Silvana Tiengo" and person["org"] == "AFAS" for person in personnel)),
       ("22 Claro P/G = 22", claro == 22),
-      ("23 excedente P/G DDQOD = 5", excess == 5),
-      ("24 TPB carregado e redesenhado", tpb_status == 200 and not tpb_rows and 'Situação do TPB 2026' in index and 'tpb-overview' in app),
-      ("25 corte TPB = 03/09/2026", tpb_meta.get("cutoff") == "03/09/2026"),
+      ("23 excedente P/G DDQOD = 4", excess == 4),
+      ("24 TPB carregado e redesenhado", tpb_status == 200 and not tpb_rows and 'Situação do TPB 2026' in index and 'tpb-overview' in app and 'POSIÇÃO ADMINISTRATIVA MAIS RECENTE' in app),
+      ("25 TPB atual oficial 14/10 e histórico 03/09", tpb_meta.get("current",{}).get("asOf") == "14/10/2026" and "151390924" in tpb_meta.get("current",{}).get("source","") and tpb_meta.get("cutoff") == "03/09/2026"),
       ("26 escopo TPB = 85", int(expected.get("scope",-1)) == 85),
       ("27 TPB concluído = 69", int(expected.get("done",-1)) == 69),
       ("28 não concluído = 16 / dispensas = 9", int(expected.get("notDone",-1)) == 16 and int(expected.get("dispensed",-1)) == 9),
