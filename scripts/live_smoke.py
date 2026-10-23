@@ -71,7 +71,7 @@ def main():
     for _ in range(30):
         try:
             status, index = fetch("")
-            if status == 200 and 'assets/js/app.js?v=2026.10.23' in index and 'data/contacts.js?v=2026.09.07' in index and 'class="banner"' in index:
+            if status == 200 and 'assets/js/app.js?v=2026.10.23' in index and 'data/contacts.js?v=2026.10.09.1' in index and 'class="banner"' in index:
                 break
         except Exception as exc:
             last = exc
@@ -81,8 +81,8 @@ def main():
         return 1
 
     index_status, index = fetch("")
-    data_status, data = fetch("data/data.js?v=2.0.0")
-    contacts_status, contacts_text = fetch("data/contacts.js?v=2026.09.07")
+    data_status, data = fetch("data/data.js?v=2026.10.09.1")
+    contacts_status, contacts_text = fetch("data/contacts.js?v=2026.10.09.1")
     tpb_status, tpb_text = fetch("data/tpb.js?v=2026.10.23")
     app_status, app = fetch("assets/js/app.js?v=2026.10.23")
     css_status, css = fetch("assets/css/main.css?v=2.3.0")
@@ -130,7 +130,7 @@ def main():
       ("09 redesign estrutural removido", 'mobile-nav' not in index and 'section-card' not in index and 'org-grid' not in index),
       ("10 CSS 2.3 carregado", css_status == 200 and 'assets/css/main.css?v=2.3.0' in index),
       ("11 app 2.5 carregado", app_status == 200 and 'assets/js/app.js?v=2026.10.23' in index),
-      ("12 diretório WhatsApp carregado", contacts_status == 200 and 'data/contacts.js?v=2026.09.07' in index and contacts_meta.get('display') == 'public'),
+      ("12 diretório WhatsApp carregado", contacts_status == 200 and 'data/contacts.js?v=2026.10.09.1' in index and contacts_meta.get('display') == 'public'),
       ("13 cobertura WhatsApp = 83/83", len(contacts) == 83 and contact_names == names and valid_contacts),
       ("14 WhatsApp direto de Silvana normaliza corretamente", silvana_phone == '5531991743862'),
       ("15 ação WhatsApp direta no app", 'normalizeWhatsApp' in app and 'https://wa.me/${phone}?text=' in app and 'whatsapp-number' in app),
