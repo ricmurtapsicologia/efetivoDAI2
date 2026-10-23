@@ -193,6 +193,12 @@ def main() -> int:
         errors.append('texto explicativo de claro deveria estar removido')
     if 'normalizeWhatsApp' not in app or 'https://wa.me/${phone}?text=' not in app or 'whatsapp-number' not in app:
         errors.append('WhatsApp direto/visível por militar incompleto')
+    footer = index.split('<footer>',1)[-1].split('</footer>',1)[0]
+    if 'image-credit' in footer or 'Wikimedia Commons' in footer or 'CC BY 3.0' in footer:
+        errors.append('crédito da imagem ainda aparece no rodapé')
+    if 'class="hero-attribution"' not in index or 'Leo Drumond' not in index or 'creativecommons.org/licenses/by/3.0/' not in index:
+        errors.append('atribuição da imagem indisponível no hero')
+
     if 'Situação do TPB 2026' not in index or 'tpb-overview' not in app:
         errors.append('TPB intuitivo incompleto')
 
