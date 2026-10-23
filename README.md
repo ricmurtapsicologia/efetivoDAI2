@@ -36,7 +36,7 @@ Efetivo DAI/2: ficha-mestre dos órgãos externos, validação de 17/08/2026.
 
 DDQOD: Anexo C da Resolução nº 1.268/2025.
 
-TPB: `Dashboard TPB DAI 2026 - controle por ata - 03-09-2026.xlsx`, corte 03/09/2026. O frontend público recebe somente os agregados consolidados desse corte.
+TPB: Ofício CBMMG/DAI-2 nº 569/2026 (SEI 151390924), posição administrativa de 14/10/2026: todos os militares em atividade na DAI foram declarados concluintes. O recorte quantitativo de 03/09/2026 permanece identificável como histórico, sem ser apresentado como situação atual. Atos de convocação dos ciclos 26º, 28º, 29º, 30º e 32º não comprovam, isoladamente, participação ou aprovação.
 
 ## Regra do claro
 
@@ -51,7 +51,7 @@ Invariantes da base atual:
 - claro por P/G: 22;
 - excedentes por P/G nos órgãos DDQOD: 5.
 
-## TPB agregado no corte de 03/09/2026
+## TPB: posição administrativa de 14/10 e histórico de 03/09/2026
 
 - escopo controlado: 85;
 - TPB feito: 69;
@@ -60,7 +60,7 @@ Invariantes da base atual:
 - não feito e sem dispensa: 7;
 - feito sem data consolidada: 15.
 
-Os registros nominais, datas pessoais e históricos de situação não integram a camada pública.
+A declaração de 14/10 não disponibiliza denominador nominal que permita recalcular, com rigor, um índice numérico atual. Por isso os indicadores de 03/09 permanecem históricos e a posição corrente é textual, com atribuição ao ofício. Os registros nominais, datas pessoais, dados médicos e históricos de situação não integram a camada pública.
 
 ## Validação
 
