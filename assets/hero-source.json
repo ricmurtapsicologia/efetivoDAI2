@@ -11,5 +11,5 @@
   "retrieved": "2026-09-08",
   "processing": "Uso responsivo em background-size: cover, com recorte por viewport e sobreposição de gradientes em CSS para contraste e legibilidade; sem alteração destrutiva do arquivo de origem.",
   "use": "Hero institucional do Portal DAI/2, com referência visual à Cidade Administrativa de Minas Gerais e foco em gestão pública.",
-  "stability": "Origem pública e licenciada no Wikimedia Commons; URL e atribuição ficam registradas no repositório e no rodapé da página."
+  "stability": "Origem pública e licenciada no Wikimedia Commons; URL e atribuição são registradas no repositório e acessíveis pelo controle 'Créditos da imagem' no próprio hero, não no rodapé."
 }
