@@ -71,7 +71,7 @@ def main():
     for _ in range(30):
         try:
             status, index = fetch("")
-            if status == 200 and 'assets/js/app.js?v=2026.10.23' in index and 'data/contacts.js?v=2026.10.09.1' in index and 'class="banner"' in index:
+            if status == 200 and 'assets/js/app.js?v=2026.10.23.2' in index and 'data/contacts.js?v=2026.10.09.1' in index and 'class="banner"' in index:
                 break
         except Exception as exc:
             last = exc
@@ -83,9 +83,9 @@ def main():
     index_status, index = fetch("")
     data_status, data = fetch("data/data.js?v=2026.10.09.1")
     contacts_status, contacts_text = fetch("data/contacts.js?v=2026.10.09.1")
-    tpb_status, tpb_text = fetch("data/tpb.js?v=2026.10.23")
-    app_status, app = fetch("assets/js/app.js?v=2026.10.23")
-    css_status, css = fetch("assets/css/main.css?v=2.3.0")
+    tpb_status, tpb_text = fetch("data/tpb.js?v=2026.10.23.2")
+    app_status, app = fetch("assets/js/app.js?v=2026.10.23.2")
+    css_status, css = fetch("assets/css/main.css?v=2026.10.23.2")
     hero_status, hero_text = fetch("assets/hero-source.json")
 
     ddqod = assignment(data, "DAI2_DDQOD")
@@ -128,8 +128,8 @@ def main():
       ("07 bloco visual de privacidade removido", 'birthdayPanel' not in index and 'Proteção de dados' not in index and 'Privacidade da camada pública' not in index),
       ("08 layout original: 18 blocos", index.count('class="block"') == 18),
       ("09 redesign estrutural removido", 'mobile-nav' not in index and 'section-card' not in index and 'org-grid' not in index),
-      ("10 CSS 2.3 carregado", css_status == 200 and 'assets/css/main.css?v=2.3.0' in index),
-      ("11 app 2.5 carregado", app_status == 200 and 'assets/js/app.js?v=2026.10.23' in index),
+      ("10 CSS 2.3 carregado", css_status == 200 and 'assets/css/main.css?v=2026.10.23.2' in index),
+      ("11 app 2.5 carregado", app_status == 200 and 'assets/js/app.js?v=2026.10.23.2' in index),
       ("12 diretório WhatsApp carregado", contacts_status == 200 and 'data/contacts.js?v=2026.10.09.1' in index and contacts_meta.get('display') == 'public'),
       ("13 cobertura WhatsApp = 83/83", len(contacts) == 83 and contact_names == names and valid_contacts),
       ("14 WhatsApp direto de Silvana normaliza corretamente", silvana_phone == '5531991743862'),
@@ -142,12 +142,12 @@ def main():
       ("21 Silvana está na AFAS", any(person["name"] == "Silvana Tiengo" and person["org"] == "AFAS" for person in personnel)),
       ("22 Claro P/G = 22", claro == 22),
       ("23 excedente P/G DDQOD = 4", excess == 4),
-      ("24 TPB carregado e redesenhado", tpb_status == 200 and not tpb_rows and 'Situação do TPB 2026' in index and 'tpb-overview' in app and 'POSIÇÃO ADMINISTRATIVA MAIS RECENTE' in app),
-      ("25 TPB atual oficial 14/10 e histórico 03/09", tpb_meta.get("current",{}).get("asOf") == "14/10/2026" and "151390924" in tpb_meta.get("current",{}).get("source","") and tpb_meta.get("cutoff") == "03/09/2026"),
-      ("26 escopo TPB = 85", int(expected.get("scope",-1)) == 85),
-      ("27 TPB concluído = 69", int(expected.get("done",-1)) == 69),
-      ("28 não concluído = 16 / dispensas = 9", int(expected.get("notDone",-1)) == 16 and int(expected.get("dispensed",-1)) == 9),
-      ("29 exigem ação = 7 / sem data = 15", int(expected.get("actionable",-1)) == 7 and int(expected.get("dateToConfirm",-1)) == 15),
+      ("24 TPB atual: modal substituiu KPIs legados", tpb_status == 200 and not tpb_rows and 'tpb-current-stat' in app and 'tpb-gauge' not in app),
+      ("25 TPB fonte 14/10/2026", tpb_meta.get("current",{}).get("asOf") == "14/10/2026" and tpb_meta.get("current",{}).get("sourceSei") == "151390924"),
+      ("26 TPB sem pendências declaradas", tpb_meta.get("current",{}).get("pendingDeclared") == 0 and 'Pendências declaradas' in app),
+      ("27 TPB todos os ativos declarados concluintes", 'Todos os militares atualmente em atividade na DAI' in tpb_meta.get("current",{}).get("conclusionLabel","")),
+      ("28 indicadores históricos retirados do modal", 'expected' not in tpb_meta and 'tpb-kpis' not in app and 'tpb-summary' not in app),
+      ("29 histórico reservado ao arquivo de controle", tpb_meta.get("historicCutoff") == "03/09/2026" and 'Série estatística anterior' in app),
       ("30 a11y/UX/limite estrutural", not any(term in frontend for term in BANNED) and '.innerHTML' not in app and 'prefers-reduced-motion' in css and 'viewport-fit=cover' in index and 'role="dialog"' in index and 'class="skip-link"' in index and 'function trapFocus' in app and 'aria-expanded="false"' in index and not re.search(r'<div class="numbers">\s*Previsto:', index)),
     ]
 
