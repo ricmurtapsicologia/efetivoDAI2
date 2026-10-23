@@ -129,13 +129,17 @@ def main() -> int:
     if planned != 100: errors.append(f'DDQOD previsto={planned}, esperado 100')
     if sum(int(ddqod.get('CTPM',{}).get(rank,0) or 0) for rank in RANKS) != 16:
         errors.append('CTPM deve ter 16 vagas previstas')
-    if len(personnel) != 84: errors.append(f'efetivo={len(personnel)}, esperado 84')
+    if len(personnel) != 83: errors.append(f'efetivo={len(personnel)}, esperado 83')
     if by_org.get('SEMAD',0) != 1: errors.append('SEMAD deve ter 1 extra-DDQOD')
     if sum(int(ddqod.get('SEMAD',{}).get(rank,0) or 0) for rank in RANKS) != 0:
         errors.append('SEMAD não pode ter vaga prevista no DDQOD consultado')
     if claro != 22: errors.append(f'claro P/G={claro}, esperado 22')
-    if excess != 5: errors.append(f'excedente P/G DDQOD={excess}, esperado 5')
+    if excess != 4: errors.append(f'excedente P/G DDQOD={excess}, esperado 4')
 
+    if tpb_meta.get('current',{}).get('asOf') != '14/10/2026' or '151390924' not in tpb_meta.get('current',{}).get('source',''):
+        errors.append('TPB: posição administrativa 14/10/2026 e respectiva fonte ausentes')
+    if tpb_meta.get('cutoff') != '03/09/2026' or 'histórica' not in tpb_meta.get('historicalLabel','').lower():
+        errors.append('TPB: indicadores antigos não identificados como históricos')
     observed_tpb = {key:int(tpb_meta.get('expected',{}).get(key,-1)) for key in EXPECTED_TPB}
     for key, expected in EXPECTED_TPB.items():
         if observed_tpb[key] != expected:
@@ -159,8 +163,8 @@ def main() -> int:
 
     required_refs = [
         'data/contacts.js?v=2026.09.07',
-        'data/tpb.js?v=2026.09.06-public',
-        'assets/js/app.js?v=2.5.0',
+        'data/tpb.js?v=2026.10.23',
+        'assets/js/app.js?v=2026.10.23',
         'assets/css/main.css?v=2.3.0'
     ]
     if any(ref not in index for ref in required_refs):
