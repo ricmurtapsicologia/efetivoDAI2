@@ -45,11 +45,11 @@ TPB: Ofício CBMMG/DAI-2 nº 569/2026 (SEI 151390924), posição administrativa 
 Invariantes da base atual:
 
 - previsto oficial DDQOD: 100;
-- efetivo atual total: 84;
+- efetivo atual total: 83;
 - CTPM RMBH: 16 previstos, 15 existentes e 1 claro;
 - SEMAD extra-DDQOD: 1;
 - claro por P/G: 22;
-- excedentes por P/G nos órgãos DDQOD: 5.
+- excedentes por P/G nos órgãos DDQOD: 4.
 
 ## TPB: posição administrativa de 14/10 e histórico de 03/09/2026
 
