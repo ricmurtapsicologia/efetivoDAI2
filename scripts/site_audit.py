@@ -162,7 +162,7 @@ def main() -> int:
         errors.append('totais canônicos duplicados/hardcoded no HTML')
 
     required_refs = [
-        'data/contacts.js?v=2026.09.07',
+        'data/contacts.js?v=2026.10.09.1',
         'data/tpb.js?v=2026.10.23',
         'assets/js/app.js?v=2026.10.23',
         'assets/css/main.css?v=2.3.0'
