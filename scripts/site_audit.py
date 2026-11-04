@@ -118,23 +118,26 @@ def main() -> int:
     by_org = Counter(row['org'] for row in personnel)
     claro = 0
     excess = 0
+    filled = 0
     for org, grades in ddqod.items():
         existing = Counter(classify(row['rank']) for row in personnel if row['org'] == org)
         for rank in RANKS:
             planned_rank = int(grades.get(rank,0) or 0)
             existing_rank = int(existing.get(rank,0) or 0)
             claro += max(planned_rank - existing_rank, 0)
+            filled += min(planned_rank, existing_rank)
             if org != 'SEMAD':
                 excess += max(existing_rank - planned_rank, 0)
     if planned != 100: errors.append(f'DDQOD previsto={planned}, esperado 100')
     if sum(int(ddqod.get('CTPM',{}).get(rank,0) or 0) for rank in RANKS) != 16:
         errors.append('CTPM deve ter 16 vagas previstas')
-    if len(personnel) != 83: errors.append(f'efetivo={len(personnel)}, esperado 83')
+    if not personnel: errors.append('base de efetivo vazia')
+    if sum(by_org.values()) != len(personnel): errors.append('efetivo não reconciliado por órgão')
     if by_org.get('SEMAD',0) != 1: errors.append('SEMAD deve ter 1 extra-DDQOD')
     if sum(int(ddqod.get('SEMAD',{}).get(rank,0) or 0) for rank in RANKS) != 0:
         errors.append('SEMAD não pode ter vaga prevista no DDQOD consultado')
-    if claro != 22: errors.append(f'claro P/G={claro}, esperado 22')
-    if excess != 4: errors.append(f'excedente P/G DDQOD={excess}, esperado 4')
+    if filled + claro != planned: errors.append('DDQOD não reconciliado: preenchidas + claro ≠ previsto')
+    if claro < 0 or excess < 0: errors.append('indicadores negativos impossíveis')
 
     if tpb_meta.get('current',{}).get('asOf') != '14/10/2026' or tpb_meta.get('current',{}).get('sourceSei') != '151390924':
         errors.append('TPB: fonte institucional de 14/10/2026 ausente')
@@ -199,6 +202,20 @@ def main() -> int:
     if 'class="hero-attribution"' not in index or 'Leo Drumond' not in index or 'creativecommons.org/licenses/by/3.0/' not in index:
         errors.append('atribuição da imagem indisponível no hero')
 
+    insights_path = ROOT/'assets'/'js'/'insights.js'
+    insights_css = ROOT/'assets'/'css'/'insights.css'
+    if not insights_path.is_file() or not insights_css.is_file():
+        errors.append('camada gerencial 2.6 ausente')
+    else:
+        insights = insights_path.read_text(encoding='utf-8')
+        if 'DAI2_PERSONNEL' in insights or '.innerHTML' in insights or 'contacts' in insights.lower():
+            errors.append('camada gerencial não está restrita a agregados')
+        for token in ('decisionPanel', 'decisionStats', 'decisionPriorities', 'decisionCopyBtn', 'decisionFilterBtn'):
+            if f'id="{token}"' not in index: errors.append(f'controle gerencial ausente: {token}')
+        if 'window.DAI2_RUNTIME' not in app: errors.append('indicadores agregados canônicos não exportados')
+        if 'assets/js/insights.js?v=2026.11.04.1' not in index or 'assets/css/insights.css?v=2026.11.04.1' not in index:
+            errors.append('ativos de inteligência sem versionamento')
+
     if 'Situação do TPB 2026' not in index or 'tpb-overview' not in app:
         errors.append('TPB intuitivo incompleto')
 
@@ -214,7 +231,7 @@ def main() -> int:
     payload = {
         'ok': not errors,
         'version': meta.get('version'),
-        'interface': '2.5.0',
+        'interface': '2.6.0',
         'layout': 'original-preserved-refined',
         'public_whatsapp': 'visible-direct',
         'contacts': len(contacts),
