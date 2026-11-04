@@ -69,3 +69,20 @@ python scripts/browser_e2e.py
 ```
 
 O workflow `.github/workflows/python-personnel-audit.yml` executa os gates em PRs e em `main`. Em produção, `scripts/live_smoke.py` executa 30 verificações na URL pública.
+
+## Interface 2.6.0 · Inteligência gerencial (04/11/2026)
+
+O portal mantém a experiência original e acrescenta uma camada de apoio à decisão:
+
+- indicadores agregados dos 18 blocos extraídos da **mesma estrutura de métricas** utilizada pelos gráficos, sem duplicar o cálculo do claro;
+- ordenação dos maiores claros por órgão, **exclusivamente quantitativa**, sem qualificar automaticamente o risco operacional;
+- aviso de atualidade da fonte do efetivo (corte 17/08/2026, sem afirmar atualização não comprovada);
+- checklist de providências genéricas com salvamento **local por navegador**, sem sincronização com Trello, SEI ou Drive;
+- atalhos para os modais jurídicos e TPB, filtro reversível de órgãos com claro e cópia de síntese gerencial agregada;
+- testes de funcionamento, navegação e novos componentes integrados ao E2E e smoke público.
+
+A camada não introduz nomes, telefones, processos sigilosos, prazos ou pendências administrativos novos. Vigências de ACTs não são inferidas; a conferência do instrumento oficial continua obrigatória. O diretório de WhatsApp **pré-existente** permanece publicado como na versão 2.5 até que a autoridade responsável valide a pertinência de sua divulgação. GitHub Pages não disponibiliza autenticação para proteger dados restritos e o uso dessa infraestrutura não substitui avaliação institucional de publicidade e LGPD.
+
+A rotina de importação da ficha-mestre não emite telefones para `data/data.js`; as auditorias deixam de exigir a quantidade histórica fixa de militares e de claros, preservando verificações de consistência.
+
+**Limite de escopo:** o quadro de pendências institucional com responsáveis e prazos não é publicado sem fonte validada e controle de acesso. O checklist do portal é apenas auxiliar local, não um sistema gerencial compartilhado.
