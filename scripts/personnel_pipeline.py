@@ -15,7 +15,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-ALLOWED_FIELDS = ("rank", "name", "org", "subunit", "phone")
+ALLOWED_FIELDS = ("rank", "name", "org", "subunit")
 FORBIDDEN_HINTS = {
     "cpf", "rg", "email", "e-mail", "address", "endereco", "endereço",
     "matricula", "matrícula", "numero bm", "número bm", "sexo", "funcao", "função"
@@ -67,9 +67,6 @@ def validate_personnel(ddqod: dict[str, Any], personnel: list[dict[str, Any]]) -
             org_counts[org] += 1
             if org not in ddqod:
                 errors.append(f"row {index}: unknown org '{org}'")
-        phone = str(row.get("phone", "")).strip()
-        if phone and len(re.sub(r"\D", "", phone)) < 8:
-            warnings.append(f"row {index}: phone appears unusually short")
 
     duplicates = sorted(name for name, count in Counter(names).items() if count > 1)
     if duplicates:
@@ -130,7 +127,6 @@ def build_from_xlsx(args: argparse.Namespace) -> int:
         "name": {"nome", "nome completo"},
         "org": {"órgão", "orgao", "órgão externo", "orgao externo"},
         "subunit": {"unidade", "subunidade", "ctpm", "unidade ctpm"},
-        "phone": {"contato", "telefone", "celular"},
     }
     index_by_field: dict[str, int] = {}
     for field, names in aliases.items():
@@ -143,6 +139,7 @@ def build_from_xlsx(args: argparse.Namespace) -> int:
         raise SystemExit("missing required XLSX columns: " + ", ".join(missing))
 
     # Privacy gate: reject known sensitive columns instead of silently carrying them forward.
+    # Phone/contact columns are never emitted into public personnel output.
     sensitive_headers = [h for h in headers if any(token in h for token in FORBIDDEN_HINTS)]
     if sensitive_headers and not args.allow_sensitive_source:
         raise SystemExit(
