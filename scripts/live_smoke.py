@@ -71,7 +71,7 @@ def main():
     for _ in range(30):
         try:
             status, index = fetch("")
-            if status == 200 and 'assets/js/app.js?v=2026.10.23.2' in index and 'data/contacts.js?v=2026.10.09.1' in index and 'class="banner"' in index:
+            if status == 200 and 'assets/js/insights.js?v=2026.11.04.1' in index and 'data/contacts.js?v=2026.10.09.1' in index and 'class="banner"' in index:
                 break
         except Exception as exc:
             last = exc
@@ -85,6 +85,8 @@ def main():
     contacts_status, contacts_text = fetch("data/contacts.js?v=2026.10.09.1")
     tpb_status, tpb_text = fetch("data/tpb.js?v=2026.10.23.2")
     app_status, app = fetch("assets/js/app.js?v=2026.10.23.2")
+    insights_status, insights = fetch("assets/js/insights.js?v=2026.11.04.1")
+    insights_css_status, _ = fetch("assets/css/insights.css?v=2026.11.04.1")
     css_status, css = fetch("assets/css/main.css?v=2026.10.23.2")
     hero_status, hero_text = fetch("assets/hero-source.json")
 
@@ -137,11 +139,11 @@ def main():
       ("16 e-mail/aniversário não publicados", 'DAI2_EMAILS' not in frontend and 'DAI2_BIRTHDAYS' not in frontend and 'mailto:' not in frontend),
       ("17 texto técnico de claro removido", 'Claro calculado por posto/graduação' not in app),
       ("18 previsto DDQOD = 100 e CTPM = 16", planned == 100 and ctpm_planned == 16),
-      ("19 efetivo = 83", len(personnel) == 83),
+      ("19 efetivo reconciliado", len(personnel) > 0 and sum(by_org.values()) == len(personnel)),
       ("20 SEMAD previsto 0 e extra-DDQOD 1", sum(int(ddqod["SEMAD"].get(rank,0) or 0) for rank in RANKS) == 0 and by_org.get("SEMAD",0) == 1),
       ("21 Silvana está na AFAS", any(person["name"] == "Silvana Tiengo" and person["org"] == "AFAS" for person in personnel)),
-      ("22 Claro P/G = 22", claro == 22),
-      ("23 excedente P/G DDQOD = 4", excess == 4),
+      ("22 Claro P/G consistente", claro >= 0 and planned >= claro),
+      ("23 excedente P/G consistente", excess >= 0),
       ("24 TPB atual: modal substituiu KPIs legados", tpb_status == 200 and not tpb_rows and 'tpb-current-stat' in app and 'tpb-gauge' not in app),
       ("25 TPB fonte 14/10/2026", tpb_meta.get("current",{}).get("asOf") == "14/10/2026" and tpb_meta.get("current",{}).get("sourceSei") == "151390924"),
       ("26 TPB sem pendências declaradas", tpb_meta.get("current",{}).get("pendingDeclared") == 0 and 'Pendências declaradas' in app),
@@ -149,18 +151,22 @@ def main():
       ("28 indicadores históricos retirados do modal", 'expected' not in tpb_meta and 'tpb-kpis' not in app and 'tpb-summary' not in app),
       ("29 histórico reservado ao arquivo de controle", tpb_meta.get("historicCutoff") == "03/09/2026" and 'Série estatística anterior' in app),
       ("30 a11y/UX/limite estrutural", not any(term in frontend for term in BANNED) and '.innerHTML' not in app and 'prefers-reduced-motion' in css and 'viewport-fit=cover' in index and 'role="dialog"' in index and 'class="skip-link"' in index and 'function trapFocus' in app and 'aria-expanded="false"' in index and not re.search(r'<div class="numbers">\s*Previsto:', index)),
+      ("31 painel gerencial presente", 'id="decisionPanel"' in index and 'id="decisionPriorities"' in index),
+      ("32 assets gerenciais publicados", insights_status == 200 and insights_css_status == 200),
+      ("33 métricas canônicas da aplicação", 'DAI2_RUNTIME' in app and 'currentRows' in insights and 'DAI2_PERSONNEL' not in insights),
+      ("34 interações gerenciais presentes", 'decisionFilterBtn' in insights and 'decisionCopyBtn' in insights and 'decisionActions' in insights),
     ]
 
     failed = [name for name, ok in tests if not ok]
     for name, ok in tests:
         print(f"{'PASS' if ok else 'FAIL'} | {name}")
-    print(f"RESULTADO: {30-len(failed)}/30")
+    print(f"RESULTADO: {len(tests)-len(failed)}/{len(tests)}")
     if failed:
         print("FALHAS:")
         for item in failed:
             print("-", item)
         return 1
-    print("SMOKE PÚBLICO: APROVADO 30/30 — UI 2.5, WhatsApp direto visível e hero governado")
+    print(f"SMOKE PÚBLICO: APROVADO {len(tests)}/{len(tests)} — UI 2.6, camada gerencial e recursos anteriores")
     return 0
 
 

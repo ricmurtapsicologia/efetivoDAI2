@@ -1,0 +1,42 @@
+/* Painel de inteligencia gerencial, complementar ao layout 2.5 */
+.decision-panel{margin:18px 0 30px;border:1px solid #cfdae2;border-radius:16px;padding:24px;background:linear-gradient(135deg,#f4f9fc,#ffffff 65%);color:#203748;box-shadow:0 3px 12px rgba(16,42,58,.055)}
+.decision-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.decision-eyebrow{display:block;font-size:11px;letter-spacing:.14em;font-weight:800;color:#25556d;margin-bottom:5px}
+.decision-panel h2{font-size:25px;line-height:1.25;color:#163448;margin:0 0 5px}
+.decision-lead{font-size:14px;color:#456173;max-width:700px}
+.decision-freshness{display:inline-block;max-width:100%;padding:8px 11px;border-radius:8px;font-size:13px;font-weight:650}
+.decision-freshness.needs-review{background:#fff5e5;border:1px solid #f0d29c;color:#784e0a}
+.decision-freshness.is-current{background:#eaf5ef;border:1px solid #badac8;color:#1d6040}
+.decision-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.decision-stat{padding:17px 15px;background:#fff;border:1px solid #dce5ea;border-radius:12px;display:flex;flex-direction:column;min-height:124px}
+.decision-stat-title{font-size:13px;color:#4d6270;line-height:1.35}
+.decision-stat-value{font-size:33px;line-height:1.25;color:#163a51;margin:8px 0 4px}
+.decision-stat-hint{font-size:11px;color:#596d78;line-height:1.4}
+.decision-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.decision-column{padding:18px;border:1px solid #dde7ed;border-radius:12px;background:#fff}
+.decision-column h3{font-size:18px;color:#1d4058;margin-bottom:10px}
+.decision-hint{font-size:12px;color:#577080;margin:0 0 12px}
+.decision-priorities{display:flex;flex-direction:column;gap:8px}
+.decision-org{border:1px solid #e0e8ec;background:#f8fbfc;border-radius:9px;padding:10px 12px;min-height:49px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:3px;width:100%;color:#17384b}
+.decision-org:hover{background:#eef5f7;border-color:#a8c4d1}
+.decision-org-name{font-size:14px;font-weight:700}
+.decision-org-detail{font-size:12px;color:#4d6978}
+.decision-empty{color:#526b76}
+.decision-action{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #edf1f3;font-size:13px;color:#264354;line-height:1.45;cursor:pointer}
+.decision-action:last-child{border:0}
+.decision-action input{flex:none;min-width:18px;min-height:18px;accent-color:#215e58;margin-top:1px}
+.decision-governance{margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:#eaf1f5;border-radius:10px;padding:14px 16px}
+.decision-governance p{flex:1;min-width:230px;font-size:13px;color:#314e5f}
+.decision-governance-controls{display:flex;flex-wrap:wrap;gap:8px}
+.decision-secondary,.decision-primary{font:inherit;font-size:13px;font-weight:650;padding:9px 13px;min-height:44px;border-radius:9px;cursor:pointer}
+.decision-secondary{border:1px solid #9cb7c6;background:#fff;color:#254a61}
+.decision-secondary:hover{background:#f2f6f8}
+.decision-primary{border:1px solid #17415b;background:#17415b;color:#fff}
+.decision-primary:hover{background:#0d2f45}
+.decision-footer{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:17px}
+#decisionFeedback{font-size:12px;color:#275467}
+.decision-secondary:focus-visible,.decision-primary:focus-visible,.decision-org:focus-visible,.decision-action input:focus-visible{outline:3px solid #141e28;outline-offset:3px}
+.block[hidden]{display:none!important}
+@media(max-width:880px){.decision-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.decision-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.decision-panel{padding:16px;margin-bottom:22px}.decision-panel h2{font-size:22px}.decision-stats{gap:8px}.decision-stat{padding:13px 10px;min-height:110px}.decision-stat-value{font-size:28px}.decision-stat-hint{font-size:10px}.decision-column{padding:13px}.decision-footer button{flex:1}.decision-freshness{font-size:12px}}
+@media print{.decision-footer,.decision-governance-controls{display:none!important}.decision-panel{box-shadow:none;break-inside:avoid}}
