@@ -30,6 +30,7 @@
     <link rel="preconnect" href="https://i.pinimg.com" crossorigin />
     <link rel="stylesheet" href="assets/css/main.css?v=2026.10.23.2" />
     <link rel="stylesheet" href="assets/css/banner-cbmmg.css?v=2026.10.23-credit" />
+    <link rel="stylesheet" href="assets/css/insights.css?v=2026.11.04.1" />
   </head>
   <body>
     <a class="skip-link" href="#mainContent">Ir para o conteúdo</a>
@@ -160,6 +161,42 @@
           <button id="tpbToggleBtn" class="cta-button cta-button-feature" type="button" aria-haspopup="dialog">Situação do TPB 2026</button>
         </section>
 
+        <section id="decisionPanel" class="decision-panel" aria-labelledby="decisionTitle">
+          <div class="decision-header">
+            <div>
+              <span class="decision-eyebrow">DAI/2 · INTELIGÊNCIA GERENCIAL</span>
+              <h2 id="decisionTitle">Decisões e prioridades</h2>
+              <p class="decision-lead">Indicadores derivados do efetivo cadastrado. A ordem de claros é quantitativa e não substitui análise de risco ou decisão administrativa.</p>
+            </div>
+            <span id="decisionFreshness" class="decision-freshness" role="status">Verificando data da base...</span>
+          </div>
+          <div id="decisionStats" class="decision-stats" aria-label="Indicadores gerenciais agregados"></div>
+          <div class="decision-grid">
+            <article class="decision-column" aria-labelledby="decisionGapsTitle">
+              <h3 id="decisionGapsTitle">Maiores claros por órgão</h3>
+              <p class="decision-hint" id="decisionPriorityNote">Ordenação quantitativa; clique para consultar o órgão.</p>
+              <div id="decisionPriorities" class="decision-priorities"></div>
+            </article>
+            <article class="decision-column" aria-labelledby="decisionActionsTitle">
+              <h3 id="decisionActionsTitle">Próximas providências</h3>
+              <p class="decision-hint">Checklist auxiliar deste navegador. Não atualiza o SEI, a ficha-mestre nem o Trello.</p>
+              <div id="decisionActions"></div>
+            </article>
+          </div>
+          <div class="decision-governance">
+            <p id="decisionGovernance">Instrumentos correlatos e TPB: consultar as fontes oficiais.</p>
+            <div class="decision-governance-controls">
+              <button id="decisionLegalBtn" class="decision-secondary" type="button">Ver instrumentos</button>
+              <button id="decisionTpbBtn" class="decision-secondary" type="button">Consultar TPB</button>
+            </div>
+          </div>
+          <div class="decision-footer">
+            <button id="decisionCopyBtn" class="decision-primary" type="button">Copiar síntese gerencial</button>
+            <button id="decisionFilterBtn" class="decision-secondary" type="button" aria-pressed="false">Exibir apenas órgãos com claro</button>
+            <span id="decisionFeedback" role="status" aria-live="polite"></span>
+          </div>
+        </section>
+
         <section class="color-legend" aria-label="Legenda de Cores">
           <h2>Legenda de Cores</h2>
           <div class="legend-grid">
@@ -261,5 +298,6 @@
       })();
     </script>
     <script src="assets/js/app.js?v=2026.10.23.2"></script>
+    <script src="assets/js/insights.js?v=2026.11.04.1"></script>
   </body>
 </html>
