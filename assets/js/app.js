@@ -23,6 +23,7 @@
   const formatWhatsApp=raw=>{const e164=normalizeWhatsApp(raw);if(!e164)return String(raw||'Contato não cadastrado');const d=e164.slice(2);return `+55 (${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;};
   const grouped={};Object.keys(chartMap).forEach(o=>grouped[o]=[]);personnel.forEach(p=>{if(!grouped[p.org])grouped[p.org]=[];grouped[p.org].push(p);});Object.values(grouped).forEach(list=>list.sort((a,b)=>(rankWeight[classifyRank(b.rank)]||0)-(rankWeight[classifyRank(a.rank)]||0)||a.name.localeCompare(b.name,'pt-BR')));
   const metrics={};Object.keys(chartMap).forEach(org=>{const grades=ddqod[org]||{},existingByRank=Object.fromEntries(ranks.map(r=>[r,0]));(grouped[org]||[]).forEach(p=>{const r=classifyRank(p.rank);if(r)existingByRank[r]++;});const planned=ranks.reduce((s,r)=>s+Number(grades[r]||0),0),existing=(grouped[org]||[]).length,claro=ranks.reduce((s,r)=>s+Math.max(Number(grades[r]||0)-existingByRank[r],0),0),excess=ranks.reduce((s,r)=>s+Math.max(existingByRank[r]-Number(grades[r]||0),0),0),filled=ranks.reduce((s,r)=>s+Math.min(existingByRank[r],Number(grades[r]||0)),0);metrics[org]={planned,existing,claro,excess,filled,grades,existingByRank};});
+  window.DAI2_RUNTIME = Object.freeze({metrics, orgDisplay});
 
   let initialized=false,activeModal=null,lastFocus=null;
   const clear=n=>{while(n&&n.firstChild)n.removeChild(n.firstChild);};
