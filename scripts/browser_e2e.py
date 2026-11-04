@@ -114,6 +114,21 @@ def main() -> int:
         check(results, 'E2E 16 · lista DDQOD expande', page.locator('#militaryList').is_visible())
         check(results, 'QA 07 · SEMAD aparece como extra-DDQOD', '0 previsto no DDQOD' in page.locator('#militaryList').inner_text())
 
+        check(results, 'Decision 01 · painel gerencial visível', page.locator('#decisionPanel').is_visible())
+        check(results, 'Decision 02 · indicadores dinâmicos renderizados', page.locator('#decisionStats .decision-stat').count() == 4)
+        check(results, 'Decision 03 · prioridades quantitativas disponíveis', page.locator('#decisionPriorities .decision-org').count() > 0)
+        check(results, 'Decision 04 · aviso de corte original explícito', '17/08/2026' in page.locator('#decisionFreshness').inner_text())
+        action_check = page.locator('#decisionActions input').first
+        check(results, 'Decision 05 · checklist funcional', action_check.count() == 1)
+        if action_check.count() == 1:
+            action_check.check()
+            check(results, 'Decision 06 · checklist guarda estado local', page.evaluate("JSON.parse(localStorage.getItem('dai2_decision_checklist_v1') || '{}').base === true"))
+            action_check.uncheck()
+        page.locator('#decisionFilterBtn').click()
+        check(results, 'Decision 07 · filtro de claros aplica aria-pressed', page.locator('#decisionFilterBtn').get_attribute('aria-pressed') == 'true')
+        page.locator('#decisionFilterBtn').click()
+        check(results, 'Decision 08 · filtro reversível preserva blocos', page.locator('#decisionFilterBtn').get_attribute('aria-pressed') == 'false' and page.locator('.block:visible').count() == 18)
+
         body_text = page.locator('body').inner_text()
         check(results, 'Data 01 · números WhatsApp são efetivamente visíveis', '+55 (' in body_text)
         check(results, 'Data 02 · nenhum e-mail visível', EMAIL_RE.search(body_text) is None)
