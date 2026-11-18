@@ -1,0 +1,37 @@
+name: E2E ecossistema de páginas (GitHub Pages e Vercel)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/ecosystem_e2e.py'
+      - '.github/workflows/ecosystem-e2e.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preparar navegador Chromium
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Executar E2E em todas as páginas públicas
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/ecosystem_e2e.py
+      - name: Anexar relatório integral
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-e2e-ecossistema
+          path: artifacts/ecosystem-e2e/
+          if-no-files-found: warn
