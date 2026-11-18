@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""30-point post-deploy smoke: layout, invariantes, WhatsApp, a11y e UX."""
+"""Post-deploy smoke: escopo, integridade, WhatsApp, a11y e UX."""
 from __future__ import annotations
 
 import json
@@ -71,22 +71,20 @@ def main():
     for _ in range(30):
         try:
             status, index = fetch("")
-            if status == 200 and 'assets/js/insights.js?v=2026.11.04.1' in index and 'data/contacts.js?v=2026.10.09.1' in index and 'class="banner"' in index:
+            if status == 200 and 'data/data.js?v=2026.11.18.1' in index and 'data/contacts.js?v=2026.11.18.1' in index and 'class="banner"' in index:
                 break
         except Exception as exc:
             last = exc
         time.sleep(5)
     else:
-        print(f"FAIL: Pages não convergiu para interface 2.5.0: {last}")
+        print(f"FAIL: Pages não convergiu para interface 2.7.0: {last}")
         return 1
 
     index_status, index = fetch("")
-    data_status, data = fetch("data/data.js?v=2026.10.09.1")
-    contacts_status, contacts_text = fetch("data/contacts.js?v=2026.10.09.1")
+    data_status, data = fetch("data/data.js?v=2026.11.18.1")
+    contacts_status, contacts_text = fetch("data/contacts.js?v=2026.11.18.1")
     tpb_status, tpb_text = fetch("data/tpb.js?v=2026.10.23.2")
-    app_status, app = fetch("assets/js/app.js?v=2026.10.23.2")
-    insights_status, insights = fetch("assets/js/insights.js?v=2026.11.04.1")
-    insights_css_status, _ = fetch("assets/css/insights.css?v=2026.11.04.1")
+    app_status, app = fetch("assets/js/app.js?v=2026.11.18.1")
     css_status, css = fetch("assets/css/main.css?v=2026.10.23.2")
     hero_status, hero_text = fetch("assets/hero-source.json")
 
@@ -128,17 +126,17 @@ def main():
       ("05 layout original: container presente", 'class="container"' in index),
       ("06 layout original: dados gerais presente", 'class="general-data"' in index),
       ("07 bloco visual de privacidade removido", 'birthdayPanel' not in index and 'Proteção de dados' not in index and 'Privacidade da camada pública' not in index),
-      ("08 layout original: 18 blocos", index.count('class="block"') == 18),
+      ("08 layout atual: 17 blocos", index.count('class="block"') == 17),
       ("09 redesign estrutural removido", 'mobile-nav' not in index and 'section-card' not in index and 'org-grid' not in index),
       ("10 CSS 2.3 carregado", css_status == 200 and 'assets/css/main.css?v=2026.10.23.2' in index),
-      ("11 app 2.5 carregado", app_status == 200 and 'assets/js/app.js?v=2026.10.23.2' in index),
-      ("12 diretório WhatsApp carregado", contacts_status == 200 and 'data/contacts.js?v=2026.10.09.1' in index and contacts_meta.get('display') == 'public'),
-      ("13 cobertura WhatsApp = 83/83", len(contacts) == 83 and contact_names == names and valid_contacts),
+      ("11 app 2.5 carregado", app_status == 200 and 'assets/js/app.js?v=2026.11.18.1' in index),
+      ("12 diretório WhatsApp carregado", contacts_status == 200 and 'data/contacts.js?v=2026.11.18.1' in index and contacts_meta.get('display') == 'public'),
+      ("13 cobertura WhatsApp = 82/82", len(contacts) == 82 and contact_names == names and valid_contacts),
       ("14 WhatsApp direto de Silvana normaliza corretamente", silvana_phone == '5531991743862'),
       ("15 ação WhatsApp direta no app", 'normalizeWhatsApp' in app and 'https://wa.me/${phone}?text=' in app and 'whatsapp-number' in app),
       ("16 e-mail/aniversário não publicados", 'DAI2_EMAILS' not in frontend and 'DAI2_BIRTHDAYS' not in frontend and 'mailto:' not in frontend),
       ("17 texto técnico de claro removido", 'Claro calculado por posto/graduação' not in app),
-      ("18 previsto DDQOD = 100 e CTPM = 16", planned == 100 and ctpm_planned == 16),
+      ("18 previsto no recorte = 97 e CTPM = 16", planned == 97 and ctpm_planned == 16),
       ("19 efetivo reconciliado", len(personnel) > 0 and sum(by_org.values()) == len(personnel)),
       ("20 SEMAD previsto 0 e extra-DDQOD 1", sum(int(ddqod["SEMAD"].get(rank,0) or 0) for rank in RANKS) == 0 and by_org.get("SEMAD",0) == 1),
       ("21 Silvana está na AFAS", any(person["name"] == "Silvana Tiengo" and person["org"] == "AFAS" for person in personnel)),
@@ -151,10 +149,10 @@ def main():
       ("28 indicadores históricos retirados do modal", 'expected' not in tpb_meta and 'tpb-kpis' not in app and 'tpb-summary' not in app),
       ("29 histórico reservado ao arquivo de controle", tpb_meta.get("historicCutoff") == "03/09/2026" and 'Série estatística anterior' in app),
       ("30 a11y/UX/limite estrutural", not any(term in frontend for term in BANNED) and '.innerHTML' not in app and 'prefers-reduced-motion' in css and 'viewport-fit=cover' in index and 'role="dialog"' in index and 'class="skip-link"' in index and 'function trapFocus' in app and 'aria-expanded="false"' in index and not re.search(r'<div class="numbers">\s*Previsto:', index)),
-      ("31 painel gerencial presente", 'id="decisionPanel"' in index and 'id="decisionPriorities"' in index),
-      ("32 assets gerenciais publicados", insights_status == 200 and insights_css_status == 200),
-      ("33 métricas canônicas da aplicação", 'DAI2_RUNTIME' in app and 'currentRows' in insights and 'DAI2_PERSONNEL' not in insights),
-      ("34 interações gerenciais presentes", 'decisionFilterBtn' in insights and 'decisionCopyBtn' in insights and 'decisionActions' in insights),
+      ("31 módulo gerencial inteiramente removido", 'decisionPanel' not in index and 'insights.js' not in index and 'insights.css' not in index),
+      ("32 órgãos e lotações reconciliados", len(ddqod) == 17 and len(personnel) == 82 and set(by_org).issubset(set(ddqod))),
+      ("33 frontend sem exportação gerencial", 'window.DAI2_RUNTIME' not in app and 'decision-' not in index),
+      ("34 metadados e indicadores coerentes", assignment(data, 'DAI2_META').get('ddqodPlanned') == planned and claro == 20 and excess == 4),
     ]
 
     failed = [name for name, ok in tests if not ok]
@@ -166,7 +164,7 @@ def main():
         for item in failed:
             print("-", item)
         return 1
-    print(f"SMOKE PÚBLICO: APROVADO {len(tests)}/{len(tests)} — UI 2.6, camada gerencial e recursos anteriores")
+    print(f"SMOKE PÚBLICO: APROVADO {len(tests)}/{len(tests)} — UI 2.7 e recorte vigente")
     return 0
 
 

@@ -1,30 +1,20 @@
-# Camada Python — Efetivo DAI/2
+# Auditoria Python — Portal DAI/2
 
-## Estado de segurança
+A base de efetivo permanece em `data/data.js`. A camada Python audita e prepara possíveis atualizações, sem publicá-las automaticamente.
 
-Esta camada é aditiva. O portal atual continua consumindo `data/data.js` e nenhum arquivo do frontend foi alterado.
+- Campos permitidos em cada registro: `rank`, `name`, `org`, `subunit`.
+- Contatos funcionais ficam em `data/contacts.js` e são conferidos pela auditoria do portal.
+- Órgãos sem previsão cadastrada ou dados inválidos são sinalizados antes da publicação.
+- Dados sensíveis da fonte XLSX não devem aparecer na camada pública.
 
-Ponto de rollback: `backup/pre-python-20260809`.
-
-## O que já funciona
-
-- `python scripts/personnel_pipeline.py audit` valida a base atual sem alterá-la;
-- bloqueia campos fora da allowlist pública (`rank`, `name`, `org`, `subunit`, `phone`);
-- detecta nomes duplicados, órgãos inexistentes, campos obrigatórios vazios e inconsistências básicas;
-- compara quantidade existente com DDQOD e sinaliza excessos como alerta;
-- `build` aceita futura planilha XLSX, gera somente `artifacts/data.generated.js` e um relatório de diferenças;
-- a planilha de origem com colunas sensíveis é bloqueada por padrão e exige liberação explícita apenas para leitura; os campos sensíveis nunca são emitidos.
-
-## Promoção segura
-
-A saída gerada não substitui `data/data.js` automaticamente. Primeiro revisar `artifacts/personnel-diff.json`; somente depois promover deliberadamente o candidato.
-
-## Comandos
+### Comandos
 
 ```bash
 python scripts/personnel_pipeline.py audit --input data/data.js
-pip install openpyxl
+python scripts/site_audit.py
 python scripts/personnel_pipeline.py build --xlsx caminho/efetivo.xlsx
 ```
 
-O workflow `Python personnel audit` executa a auditoria em pull requests relevantes e impede que uma base inválida seja aceita silenciosamente.
+O comando `build` produz um arquivo candidato e relatório de diferenças em `artifacts/`, para validação antes de eventual promoção. O workflow `.github/workflows/python-personnel-audit.yml` executa as auditorias e testes em alterações relevantes.
+
+A correspondência entre DDQOD, lotações e blocos da interface é obrigatória. O recorte ativo contém 17 órgãos/blocos e não altera os atos oficiais.

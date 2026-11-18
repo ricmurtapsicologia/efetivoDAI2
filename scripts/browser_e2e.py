@@ -47,7 +47,7 @@ def main() -> int:
             check(results, f'E2E 0{step+1} · onboarding etapa {step}', active.count() == 1 and active.is_visible())
             active.locator('.btn-continue').click()
         check(results, 'E2E 06 · conteúdo principal após onboarding', page.locator('#mainContent').is_visible())
-        check(results, 'UI 01 · 18 blocos renderizados', page.locator('.block').count() == 18)
+        check(results, 'UI 01 · 17 blocos renderizados', page.locator('.block').count() == 17)
 
         hero_info = page.evaluate("""
           async () => {
@@ -67,7 +67,7 @@ def main() -> int:
         check(results, 'QA 03 · hero corresponde ao ativo governado', 'photo-1778876087506-47da0c3e6d98' in hero_info.get('url',''), hero_info.get('url',''))
 
         general = page.locator('.general-data').inner_text()
-        check(results, 'QA 04 · totais canônicos renderizados', all(value in general for value in ['100','83','22']), general.replace('\n',' | '))
+        check(results, 'QA 04 · totais canônicos renderizados', all(value in general for value in ['97','82','20']), general.replace('\n',' | '))
         check(results, 'UX 02 · texto técnico de claro removido', 'Claro calculado por posto/graduação' not in general)
         check(results, 'UX 03 · bloco visual de privacidade removido', page.locator('#birthdayPanel').count() == 0 and 'Proteção de dados' not in page.locator('body').inner_text())
         ctpm_text = page.locator('.block[data-orgao="CTPM"]').inner_text()
@@ -114,20 +114,15 @@ def main() -> int:
         check(results, 'E2E 16 · lista DDQOD expande', page.locator('#militaryList').is_visible())
         check(results, 'QA 07 · SEMAD aparece como extra-DDQOD', '0 previsto no DDQOD' in page.locator('#militaryList').inner_text())
 
-        check(results, 'Decision 01 · painel gerencial visível', page.locator('#decisionPanel').is_visible())
-        check(results, 'Decision 02 · indicadores dinâmicos renderizados', page.locator('#decisionStats .decision-stat').count() == 4)
-        check(results, 'Decision 03 · prioridades quantitativas disponíveis', page.locator('#decisionPriorities .decision-org').count() > 0)
-        check(results, 'Decision 04 · aviso de corte original explícito', '17/08/2026' in page.locator('#decisionFreshness').inner_text())
-        action_check = page.locator('#decisionActions input').first
-        check(results, 'Decision 05 · checklist funcional', action_check.count() == 1)
-        if action_check.count() == 1:
-            action_check.check()
-            check(results, 'Decision 06 · checklist guarda estado local', page.evaluate("JSON.parse(localStorage.getItem('dai2_decision_checklist_v1') || '{}').base === true"))
-            action_check.uncheck()
-        page.locator('#decisionFilterBtn').click()
-        check(results, 'Decision 07 · filtro de claros aplica aria-pressed', page.locator('#decisionFilterBtn').get_attribute('aria-pressed') == 'true')
-        page.locator('#decisionFilterBtn').click()
-        check(results, 'Decision 08 · filtro reversível preserva blocos', page.locator('#decisionFilterBtn').get_attribute('aria-pressed') == 'false' and page.locator('.block:visible').count() == 18)
+        check(results, 'Data 04 · órgãos alinhados ao DDQOD',
+              page.locator('.block').count() == len(page.evaluate("Object.keys(window.DAI2_DDQOD)")) == 17)
+        check(results, 'Data 05 · efetivo revisado',
+              len(page.evaluate("window.DAI2_PERSONNEL")) == 82)
+        check(results, 'UX 07 · painel gerencial removido',
+              page.locator('#decisionPanel').count() == 0 and page.locator('[id^="decision"]').count() == 0)
+        check(results, 'QA 12 · sem ativos gerenciais carregados',
+              page.evaluate("![...document.scripts].some(s => s.src.includes('insights.js')) && ![...document.styleSheets].some(s => (s.href || '').includes('insights.css'))"))
+        check(results, 'Data 06 · lista DDQOD atualizada', page.locator('#militaryList li').count() == 17)
 
         body_text = page.locator('body').inner_text()
         check(results, 'Data 01 · números WhatsApp são efetivamente visíveis', '+55 (' in body_text)

@@ -85,7 +85,7 @@ function addQuestions_(form) {
   ]).setRequired(true);
   form.addListItem().setTitle('Órgão Externo').setChoiceValues([
     'AFAS','ALMG','CEDEC','CTPM RMBH','Fundação SALVAR','GMG','Intendência CAMG','MPMG','OGE',
-    'Secretaria Parlamentar','SEE','SEJUSP','SEMAD / IEF','SENASP / MJSP','SES','TJMG','TJMMG','Coordenação DAI/2'
+    'SEE','SEJUSP','SEMAD / IEF','SENASP / MJSP','SES','TJMG','TJMMG','Coordenação DAI/2'
   ]).setRequired(true);
   form.addListItem().setTitle('Situação prevista em 13/11').setChoiceValues([
     'Presença prevista','Em férias — dispensado, mas convidado','Licenciado — dispensado'

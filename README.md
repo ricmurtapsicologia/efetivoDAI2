@@ -1,88 +1,108 @@
-# DAI/2 · Efetivo e TPB 2026
+# Portal DAI/2 — Efetivo em Órgãos Externos
 
-Painel estático do CBMMG/DAI para consulta gerencial da distribuição do efetivo DAI/2 em órgãos externos, DDQOD, claro por posto/graduação, fundamentos correlatos e indicadores agregados do TPB 2026.
+Portal estático para consulta à distribuição do efetivo, às vagas previstas por posto/graduação (P/G), aos fundamentos documentais correlatos e ao TPB 2026.
 
-## Interface 2.5.0 · auditoria completa em 3 camadas
+**Página:** https://ricmurtapsicologia.github.io/efetivoDAI2/  
+**Interface:** 2.7.0 · 18/11/2026.
 
-A versão 2.5.0 preserva a arquitetura funcional do portal e mantém o contato funcional por WhatsApp visível e direto em cada registro.
+## Escopo e posição da base
 
-Foram preservados: splash inicial, onboarding, banner, título, quadro de dados gerais, atalhos, legenda de cores, campos de pesquisa, organização em linhas, 18 blocos dos órgãos, botão de previsão DDQOD, modais e rodapé.
+A interface apresenta **17 blocos ativos**, incluindo a Coordenação DAI/2 e a implantação SEMAD.
 
-Principais regras da versão:
+- **Efetivo:** ficha-mestre com referência geral de **17/08/2026**.
+- **Ajuste do escopo:** 18/11/2026, com retirada de uma estrutura desativada. A data não representa uma nova conferência de todas as lotações.
+- **DDQOD:** Anexo C da Resolução nº 1.268/2025; a soma exibida é a do recorte da página, e não uma alteração do instrumento oficial.
+- **SEMAD:** implantação extra-DDQOD, com 0 vagas previstas na base consultada e 1 militar em exercício.
+- **TPB 2026:** Ofício CBMMG/DAI-2 nº 569/2026 (SEI 151390924). Em 14/10/2026, a informação administrativa registra 0 pendências declaradas e conclusão do TPB pelos militares ativos, sem quantitativo nominal correspondente à base deste portal.
 
-- fonte canônica de efetivo e DDQOD em `data/data.js`, sem mutações por `runtime-updates.js`;
-- claro calculado por posto/graduação; excedentes de uma P/G não compensam vagas de outra;
-- SEMAD tratada como implantação extra-DDQOD: 0 previsto no DDQOD consultado e 1 militar em exercício;
-- números de WhatsApp funcionais ficam visíveis e o botão abre diretamente o destinatário correspondente;
-- e-mails, aniversários, Nº BM e situação individual de TPB permanecem fora do frontend;
-- TPB 2026 permanece no mesmo atalho/modal, apenas com indicadores agregados;
-- os números dos blocos são calculados a partir da fonte canônica em runtime, sem duplicação numérica no HTML;
-- gráficos permanecem nos canvases originais e são desenhados localmente, sem Chart.js;
-- acessibilidade reforçada com skip-link, foco visível, acionamento por teclado, Escape, retorno de foco, focus trap, `inert` do conteúdo de fundo, alvos de toque e `prefers-reduced-motion`;
-- CI executa auditoria de invariantes e testes em navegador: E2E + QA + Acessibilidade + UX + UI;
-- após merge em `main`, o smoke público 30/30 valida a URL efetivamente publicada.
+### Indicadores recalculados
 
-## Identidade visual do banner e onboarding
+| Indicador | Resultado |
+|---|---:|
+| Blocos ativos | 17 |
+| Vagas previstas no recorte | 97 |
+| Militares cadastrados | 82 |
+| Claros por P/G | 20 |
+| Excedentes por P/G, exceto implantação extra-DDQOD | 4 |
+| Efetivo extra-DDQOD (SEMAD) | 1 |
 
-O refino visual de 08/09/2026 adotou abordagem mobile-first, reduziu redundâncias textuais e reorganizou a primeira dobra em três elementos: hero institucional, visão geral do efetivo e onboarding sobre a própria página.
+**Cálculo do claro:** `max(previsto_PG - existente_PG, 0)`, separadamente por posto/graduação em cada órgão. Excedentes de uma P/G não compensam claros de outra. Os totais são calculados de `data/data.js`; não são números fixos no HTML.
 
-O hero usa a fotografia `Cidade Administrativa MG 1`, em resolução original de 3.500×2.333 px, disponibilizada no Wikimedia Commons sob licença CC BY 3.0. O portal aplica apenas recorte responsivo e gradientes de contraste em CSS. A procedência, licença e forma de uso estão registradas em `assets/hero-source.json` e `assets/img/banner-cbmmg-source.txt`, com atribuição acessível no controle discreto «Créditos da imagem», no próprio hero; o rodapé permanece exclusivamente institucional.
+## Recursos da página
 
-A splash não utiliza fotografia de pessoas. O onboarding mantém as quatro etapas originais — distribuição do efetivo, pesquisa e claro, gráficos interativos, previsão e TPB — e usa a identidade visual da DAI/2 informada para a abertura.
+- Visão geral e gráficos em Canvas de preenchimento das vagas por órgão.
+- Consulta nominal e pesquisa por nome, posto/graduação, órgão ou contato funcional.
+- Acesso direto ao WhatsApp funcional disponível em cada registro.
+- Pesquisa de claros por posto/graduação e consulta às vagas do DDQOD.
+- Modais acessíveis de relação de militares, instrumentos correlatos e situação agregada do TPB.
+- Onboarding na primeira visita, acesso direto em visitas posteriores, skip link, foco visível, navegação por teclado, fechamento de modais com Escape e respeito a movimento reduzido.
 
-## Fontes de corte
+O módulo de decisões e prioridades, seus indicadores, checklist, filtros e funções auxiliares **foram removidos integralmente**. A consulta ao efetivo e aos documentos mantém seu fluxo independente.
 
-Efetivo DAI/2: ficha-mestre dos órgãos externos, validação de 17/08/2026.
+## Estrutura de arquivos
 
-DDQOD: Anexo C da Resolução nº 1.268/2025.
+| Caminho | Responsabilidade |
+|---|---|
+| `index.html` | Interface, estrutura semântica, atalhos, modais e metadados sociais |
+| `data/data.js` | Metadados, DDQOD, lotações e referências jurídicas |
+| `data/contacts.js` | Diretório de contatos funcionais |
+| `data/tpb.js` | Posição documental agregada do TPB |
+| `assets/js/app.js` | Cálculos, pesquisa, gráficos, modais e navegação |
+| `assets/css/main.css` | Layout e responsividade |
+| `assets/css/banner-cbmmg.css` | Hero e identidade visual |
+| `scripts/personnel_pipeline.py` | Validação e importação supervisionada da base |
+| `scripts/site_audit.py` | Consistência de dados, privacidade e regressões estruturais |
+| `scripts/browser_e2e.py` | Teste de interface com Playwright |
+| `scripts/live_smoke.py` | Verificação da publicação no GitHub Pages |
 
-TPB: Ofício CBMMG/DAI-2 nº 569/2026 (SEI 151390924), posição administrativa de 14/10/2026: todos os militares em atividade na DAI foram declarados concluintes. O recorte quantitativo de 03/09/2026 permanece identificável como histórico, sem ser apresentado como situação atual. Atos de convocação dos ciclos 26º, 28º, 29º, 30º e 32º não comprovam, isoladamente, participação ou aprovação.
+Os blocos são identificados no DOM, sem mapa de órgãos duplicado no código JavaScript. A auditoria exige correspondência exata entre órgãos renderizados e DDQOD e rejeita lotações fora desse escopo.
 
-## Regra do claro
+## Fontes, privacidade e limitações
 
-`claro_PG = max(previsto_PG - existente_PG, 0)`
+O site é público, estático e **não possui autenticação**. Nomes, postos/graduações, lotações e contatos funcionais cadastrados ficam acessíveis publicamente. A publicidade do diretório de contatos exige autorização e revisão institucional de privacidade; GitHub Pages não deve ser usado para registros sigilosos.
 
-Invariantes da base atual:
+Nº BM, e-mails, aniversários e informações individuais de TPB não integram a apresentação. Os fundamentos documentais são referências, não comprovação de vigência ou substituição de atos oficiais; prevalecem a ficha-mestre, os instrumentos vigentes e o SEI.
 
-- previsto oficial DDQOD: 100;
-- efetivo atual total: 83;
-- CTPM RMBH: 16 previstos, 15 existentes e 1 claro;
-- SEMAD extra-DDQOD: 1;
-- claro por P/G: 22;
-- excedentes por P/G nos órgãos DDQOD: 4.
+O crédito e a licença da imagem do banner estão identificados no próprio hero e nos arquivos de proveniência de `assets/`.
 
-## TPB: situação institucional em 14/10/2026
+## Executar e validar
 
-- Pendências declaradas: 0, conforme Ofício CBMMG/DAI-2 nº 569/2026 (SEI 151390924).
-- Todos os militares atualmente em atividade na DAI são declarados concluintes no ofício, sem fornecimento do número individualizado.
-- O painel não infere 83/83 ou 100% da base de efetivo, cuja data e universo de referência não coincidem necessariamente com os do documento.
-- Série histórica de 03/09/2026 preservada no Drive institucional, retirada da apresentação pública para evitar contradição com a posição mais recente.
+Inicie um servidor local na raiz do repositório:
 
-Os registros nominais, datas pessoais, dados médicos e históricos de situação não integram a camada pública.
+```bash
+python -m http.server 8000
+```
 
-## Validação
+Audite as informações:
 
 ```bash
 python scripts/personnel_pipeline.py audit --input data/data.js
 python scripts/site_audit.py
+```
+
+Execute os testes de navegador:
+
+```bash
+python -m pip install playwright
+python -m playwright install chromium
 python scripts/browser_e2e.py
 ```
 
-O workflow `.github/workflows/python-personnel-audit.yml` executa os gates em PRs e em `main`. Em produção, `scripts/live_smoke.py` executa 30 verificações na URL pública.
+Após publicar em `main`, verifique a versão pública:
 
-## Interface 2.6.0 · Inteligência gerencial (04/11/2026)
+```bash
+python scripts/live_smoke.py
+python scripts/share_preview_smoke.py
+```
 
-O portal mantém a experiência original e acrescenta uma camada de apoio à decisão:
+O workflow `.github/workflows/python-personnel-audit.yml` automatiza auditorias de dados, testes de interface e smoke pós-publicação.
 
-- indicadores agregados dos 18 blocos extraídos da **mesma estrutura de métricas** utilizada pelos gráficos, sem duplicar o cálculo do claro;
-- ordenação dos maiores claros por órgão, **exclusivamente quantitativa**, sem qualificar automaticamente o risco operacional;
-- aviso de atualidade da fonte do efetivo (corte 17/08/2026, sem afirmar atualização não comprovada);
-- checklist de providências genéricas com salvamento **local por navegador**, sem sincronização com Trello, SEI ou Drive;
-- atalhos para os modais jurídicos e TPB, filtro reversível de órgãos com claro e cópia de síntese gerencial agregada;
-- testes de funcionamento, navegação e novos componentes integrados ao E2E e smoke público.
+## Rotina de manutenção
 
-A camada não introduz nomes, telefones, processos sigilosos, prazos ou pendências administrativos novos. Vigências de ACTs não são inferidas; a conferência do instrumento oficial continua obrigatória. O diretório de WhatsApp **pré-existente** permanece publicado como na versão 2.5 até que a autoridade responsável valide a pertinência de sua divulgação. GitHub Pages não disponibiliza autenticação para proteger dados restritos e o uso dessa infraestrutura não substitui avaliação institucional de publicidade e LGPD.
+1. Validar alterações de lotação, vagas e contatos em documentos oficiais.
+2. Editar a base canônica, sem inserir números derivados no HTML.
+3. Registrar a data específica da alteração sem confundi-la com a data de conferência geral.
+4. Executar auditorias e testes antes da publicação.
+5. Confirmar a publicação e as condições de acesso aos dados.
 
-A rotina de importação da ficha-mestre não emite telefones para `data/data.js`; as auditorias deixam de exigir a quantidade histórica fixa de militares e de claros, preservando verificações de consistência.
-
-**Limite de escopo:** o quadro de pendências institucional com responsáveis e prazos não é publicado sem fonte validada e controle de acesso. O checklist do portal é apenas auxiliar local, não um sistema gerencial compartilhado.
+O formulário de reunião da DAI/2 utiliza a mesma relação atualizada de áreas; a versão de Apps Script requer publicação própria quando usada fora do GitHub Pages.

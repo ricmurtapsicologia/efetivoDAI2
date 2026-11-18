@@ -128,7 +128,10 @@ def main() -> int:
             filled += min(planned_rank, existing_rank)
             if org != 'SEMAD':
                 excess += max(existing_rank - planned_rank, 0)
-    if planned != 100: errors.append(f'DDQOD previsto={planned}, esperado 100')
+    if planned != int(meta.get('ddqodPlanned', -1)): errors.append(f'DDQOD previsto={planned}, metadado={meta.get("ddqodPlanned")}')
+    if len(ddqod) != 17: errors.append(f'órgãos no recorte={len(ddqod)}, esperado 17')
+    if len(personnel) != 82: errors.append(f'efetivo no recorte={len(personnel)}, esperado 82')
+    if claro != 20: errors.append(f'claro no recorte={claro}, esperado 20')
     if sum(int(ddqod.get('CTPM',{}).get(rank,0) or 0) for rank in RANKS) != 16:
         errors.append('CTPM deve ter 16 vagas previstas')
     if not personnel: errors.append('base de efetivo vazia')
@@ -156,19 +159,19 @@ def main() -> int:
     ]
     for token in required_layout:
         if token not in index: errors.append(f'layout original ausente: {token}')
-    if index.count('class="block"') != 18:
-        errors.append(f'layout original: {index.count("class=\"block\"")} blocos, esperado 18')
+    if index.count('class="block"') != 17:
+        errors.append(f'layout original: {index.count("class=\"block\"")} blocos, esperado 17')
     if 'mobile-nav' in index or 'section-card' in index or 'org-grid' in index:
         errors.append('redesign estrutural detectado; layout original deve ser preservado')
     if re.search(r'<div class="numbers">\s*Previsto:', index):
         errors.append('dados de efetivo duplicados/hardcoded no HTML dos blocos')
-    if 'Total Previsto: 100' in index or 'Total Existente: 84' in index or 'Total Claro: 22' in index:
+    if re.search(r'Total (?:Previsto|Existente|Claro):\s*\d+', index):
         errors.append('totais canônicos duplicados/hardcoded no HTML')
 
     required_refs = [
-        'data/contacts.js?v=2026.10.09.1',
+        'data/contacts.js?v=2026.11.18.1',
         'data/tpb.js?v=2026.10.23.2',
-        'assets/js/app.js?v=2026.10.23.2',
+        'assets/js/app.js?v=2026.11.18.1',
         'assets/css/main.css?v=2026.10.23.2'
     ]
     if any(ref not in index for ref in required_refs):
@@ -202,19 +205,20 @@ def main() -> int:
     if 'class="hero-attribution"' not in index or 'Leo Drumond' not in index or 'creativecommons.org/licenses/by/3.0/' not in index:
         errors.append('atribuição da imagem indisponível no hero')
 
-    insights_path = ROOT/'assets'/'js'/'insights.js'
-    insights_css = ROOT/'assets'/'css'/'insights.css'
-    if not insights_path.is_file() or not insights_css.is_file():
-        errors.append('camada gerencial 2.6 ausente')
-    else:
-        insights = insights_path.read_text(encoding='utf-8')
-        if 'DAI2_PERSONNEL' in insights or '.innerHTML' in insights or 'contacts' in insights.lower():
-            errors.append('camada gerencial não está restrita a agregados')
-        for token in ('decisionPanel', 'decisionStats', 'decisionPriorities', 'decisionCopyBtn', 'decisionFilterBtn'):
-            if f'id="{token}"' not in index: errors.append(f'controle gerencial ausente: {token}')
-        if 'window.DAI2_RUNTIME' not in app: errors.append('indicadores agregados canônicos não exportados')
-        if 'assets/js/insights.js?v=2026.11.04.1' not in index or 'assets/css/insights.css?v=2026.11.04.1' not in index:
-            errors.append('ativos de inteligência sem versionamento')
+    # A interface, a base e as lotações devem compartilhar o mesmo escopo.
+    block_orgs = re.findall(r'<div class="block" data-orgao="([^"]+)"', index)
+    if set(block_orgs) != set(ddqod):
+        errors.append('blocos de órgãos e DDQOD não coincidem')
+    if set(by_org) - set(ddqod):
+        errors.append('efetivo vinculado a órgão fora do escopo')
+    if 'decisionPanel' in index or 'decision-' in index or 'assets/js/insights.js' in index or 'assets/css/insights.css' in index:
+        errors.append('módulo gerencial excluído ainda referenciado')
+    if (ROOT/'assets'/'js'/'insights.js').exists() or (ROOT/'assets'/'css'/'insights.css').exists():
+        errors.append('arquivos do módulo gerencial excluído ainda presentes')
+    if 'window.DAI2_RUNTIME' in app:
+        errors.append('exportação do módulo gerencial excluído ainda presente')
+    if meta.get('version') != '2.7.0' or meta.get('scopeCutoff') != '18/11/2026':
+        errors.append('versão ou data da revisão de escopo incorretas')
 
     if 'Situação do TPB 2026' not in index or 'tpb-overview' not in app:
         errors.append('TPB intuitivo incompleto')
@@ -231,7 +235,7 @@ def main() -> int:
     payload = {
         'ok': not errors,
         'version': meta.get('version'),
-        'interface': '2.6.0',
+        'interface': '2.7.0',
         'layout': 'original-preserved-refined',
         'public_whatsapp': 'visible-direct',
         'contacts': len(contacts),
