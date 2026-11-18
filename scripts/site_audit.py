@@ -171,7 +171,7 @@ def main() -> int:
     required_refs = [
         'data/contacts.js?v=2026.11.18.1',
         'data/tpb.js?v=2026.10.23.2',
-        'assets/js/app.js?v=2026.11.18.1',
+        'assets/js/app.js?v=2026.11.18.2',
         'assets/css/main.css?v=2026.10.23.2'
     ]
     if any(ref not in index for ref in required_refs):
@@ -217,6 +217,8 @@ def main() -> int:
         errors.append('arquivos do módulo gerencial excluído ainda presentes')
     if 'window.DAI2_RUNTIME' in app:
         errors.append('exportação do módulo gerencial excluído ainda presente')
+    if "const chartMap=Object.fromEntries($('.block[data-orgao]')" not in app:
+        errors.append('registro dos blocos não utiliza seletor múltiplo')
     if meta.get('version') != '2.7.0' or meta.get('scopeCutoff') != '18/11/2026':
         errors.append('versão ou data da revisão de escopo incorretas')
 

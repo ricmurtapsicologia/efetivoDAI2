@@ -84,7 +84,7 @@ def main():
     data_status, data = fetch("data/data.js?v=2026.11.18.1")
     contacts_status, contacts_text = fetch("data/contacts.js?v=2026.11.18.1")
     tpb_status, tpb_text = fetch("data/tpb.js?v=2026.10.23.2")
-    app_status, app = fetch("assets/js/app.js?v=2026.11.18.1")
+    app_status, app = fetch("assets/js/app.js?v=2026.11.18.2")
     css_status, css = fetch("assets/css/main.css?v=2026.10.23.2")
     hero_status, hero_text = fetch("assets/hero-source.json")
 
