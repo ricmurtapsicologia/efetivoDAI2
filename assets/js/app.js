@@ -15,7 +15,7 @@
   const ranks=['Sd/Cb','Sgt/SubTen','Ten','Cap','Maj','Ten-Cel'];
   const rankLabel={'Sd/Cb':'Cb/Sd','Sgt/SubTen':'SubTen/Sgt',Ten:'Ten',Cap:'Cap',Maj:'Maj','Ten-Cel':'Ten-Cel'};
   const rankWeight={'Sd/Cb':1,'Sgt/SubTen':2,Ten:3,Cap:4,Maj:5,'Ten-Cel':6};
-  const chartMap=Object.fromEntries($('.block[data-orgao]').map(block=>[block.dataset.orgao,$('canvas',block)?.id]).filter(([,id])=>Boolean(id)));
+  const chartMap=Object.fromEntries($$('.block[data-orgao]').map(block=>[block.dataset.orgao,$('canvas',block)?.id]).filter(([,id])=>Boolean(id)));
   const orgDisplay={'COORDENAÇÃO DAI/2':'COORDENAÇÃO DAI/2','Fundação SALVAR':'Assessoria Fundacional',Intendência:'Intendência CAMG',SENASP:'SENASP/MJ'};
 
   const classifyRank=rank=>{const v=normalize(rank).replace(/º/g,'');if(v.includes('ten cel')||v.includes('ten-cel')||v==='cel')return'Ten-Cel';if(v.startsWith('maj'))return'Maj';if(v.startsWith('cap'))return'Cap';if(v.includes('sub ten')||v.includes('subten')||v.includes('sgt'))return'Sgt/SubTen';if(v.includes('ten'))return'Ten';if(v.startsWith('cb')||v.startsWith('sd'))return'Sd/Cb';return null;};
