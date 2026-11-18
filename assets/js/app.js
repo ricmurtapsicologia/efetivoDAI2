@@ -32,18 +32,26 @@
   function showMain(){$('#onboarding')?.classList.add('hidden');$('#splash')?.classList.add('hidden');$('#mainContent')?.classList.remove('hidden');safeStorage.set('dai2_onboarding_seen_v3','1');}
   function initOnboarding(){
     let step=1;
-    if(safeStorage.get('dai2_onboarding_seen_v3')==='1'){showMain();return;}
+    // Duração histórica: 3 s na página pública, 2 s no ambiente local.
+    const localTest=['localhost','127.0.0.1'].includes(location.hostname);
+    const splashDelay=localTest?2000:3000;
+    if(safeStorage.get('dai2_onboarding_seen_v3')==='1'){
+      setTimeout(showMain,splashDelay);
+      return;
+    }
     setTimeout(()=>{
       $('#splash')?.classList.add('hidden');
       $('#onboarding')?.classList.remove('hidden');
       showStep(step);
       $('.btn-continue')?.focus();
-    },700);
+    },splashDelay);
     document.addEventListener('click',e=>{
       if(e.target.classList?.contains('btn-continue')){
         step++;
-        if(step<=4){showStep(step);document.querySelector('.onboarding-step[data-step="'+step+'"] .btn-continue')?.focus();}
-        else showMain();
+        if(step<=4){
+          showStep(step);
+          document.querySelector('.onboarding-step[data-step="'+step+'"] .btn-continue')?.focus();
+        }else showMain();
       }
       if(e.target.classList?.contains('btn-skip'))showMain();
     });

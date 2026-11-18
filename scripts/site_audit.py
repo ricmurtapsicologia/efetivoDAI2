@@ -171,7 +171,7 @@ def main() -> int:
     required_refs = [
         'data/contacts.js?v=2026.11.18.1',
         'data/tpb.js?v=2026.10.23.2',
-        'assets/js/app.js?v=2026.11.18.3',
+        'assets/js/app.js?v=2026.11.18.4',
         'assets/css/main.css?v=2026.10.23.2'
     ]
     if any(ref not in index for ref in required_refs):
@@ -185,6 +185,8 @@ def main() -> int:
     if '.innerHTML' in app: errors.append('innerHTML detectado')
     if 'const safeStorage' not in app or 'dai2_onboarding_seen_v3' not in app:
         errors.append('persistência resiliente do onboarding v3 ausente')
+    if "const splashDelay=localTest?2000:3000" not in app or 'setTimeout(showMain,splashDelay)' not in app:
+        errors.append('tempo original da splash screen (3 s público / 2 s local) não restaurado')
     if 'prefers-reduced-motion' not in css: errors.append('prefers-reduced-motion ausente')
     if 'viewport-fit=cover' not in index: errors.append('viewport-fit=cover ausente')
     if 'class="skip-link"' not in index: errors.append('skip-link ausente')

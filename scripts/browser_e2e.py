@@ -40,8 +40,8 @@ def main() -> int:
         check(results, 'QA 01 · sem erro JavaScript de console inicial', not console_errors, '; '.join(console_errors[:3]))
         check(results, 'QA 02 · sem pageerror inicial', not page_errors, '; '.join(page_errors[:3]))
 
-        page.wait_for_timeout(2900)
-        check(results, 'UX 01 · onboarding aparece no primeiro acesso', page.locator('#onboarding').is_visible())
+        page.locator('#onboarding').wait_for(state='visible', timeout=7000)
+        check(results, 'UX 01 · onboarding aparece após splash de 2 s no ambiente local', page.locator('#onboarding').is_visible())
         for step in range(1, 5):
             active = page.locator('.onboarding-step:not(.hidden)')
             check(results, f'E2E 0{step+1} · onboarding etapa {step}', active.count() == 1 and active.is_visible())
@@ -167,7 +167,7 @@ def main() -> int:
 
         page.set_viewport_size({'width': 375, 'height': 812})
         page.reload(wait_until='networkidle')
-        page.wait_for_timeout(400)
+        page.locator('#mainContent').wait_for(state='visible', timeout=7000)
         check(results, 'UI 03 · mobile sem overflow horizontal', page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 4'), str(page.evaluate('[document.documentElement.scrollWidth, window.innerWidth]')))
         check(results, 'UI 04 · blocos mobile em coluna única', page.locator('.block').first.evaluate("el => el.getBoundingClientRect().width <= window.innerWidth - 20"))
         check(results, 'UX 05 · onboarding não reaparece após concluído', not page.locator('#onboarding').is_visible())

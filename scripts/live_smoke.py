@@ -84,7 +84,7 @@ def main():
     data_status, data = fetch("data/data.js?v=2026.11.18.1")
     contacts_status, contacts_text = fetch("data/contacts.js?v=2026.11.18.1")
     tpb_status, tpb_text = fetch("data/tpb.js?v=2026.10.23.2")
-    app_status, app = fetch("assets/js/app.js?v=2026.11.18.3")
+    app_status, app = fetch("assets/js/app.js?v=2026.11.18.4")
     css_status, css = fetch("assets/css/main.css?v=2026.10.23.2")
     hero_status, hero_text = fetch("assets/hero-source.json")
 
@@ -129,7 +129,7 @@ def main():
       ("08 layout atual: 17 blocos", index.count('class="block"') == 17),
       ("09 redesign estrutural removido", 'mobile-nav' not in index and 'section-card' not in index and 'org-grid' not in index),
       ("10 CSS 2.3 carregado", css_status == 200 and 'assets/css/main.css?v=2026.10.23.2' in index),
-      ("11 app 2.5 carregado", app_status == 200 and 'assets/js/app.js?v=2026.11.18.1' in index),
+      ("11 app atual e duração da splash conferidos", app_status == 200 and 'assets/js/app.js?v=2026.11.18.4' in index and 'const splashDelay=localTest?2000:3000' in app and 'setTimeout(showMain,splashDelay)' in app),
       ("12 diretório WhatsApp carregado", contacts_status == 200 and 'data/contacts.js?v=2026.11.18.1' in index and contacts_meta.get('display') == 'public'),
       ("13 cobertura WhatsApp = 82/82", len(contacts) == 82 and contact_names == names and valid_contacts),
       ("14 WhatsApp direto de Silvana normaliza corretamente", silvana_phone == '5531991743862'),
