@@ -10,7 +10,6 @@ function criarPreInscricaoMulherSegura() {
     const old = props.getProperty('FORM_ID');
     if (old) { const existing=FormApp.openById(old); Logger.log('URL de resposta: '+existing.getPublishedUrl()); Logger.log('URL de edição (restrito): '+existing.getEditUrl()); return; }
     const form = FormApp.create('Operação Mulher Segura 2026 | Pré-inscrição DAI/CBMMG');
-    props.setProperty('FORM_ID',form.getId());
     form.setAcceptingResponses(false);
     form.setDescription('Palestra: 25/11/2026, das 9h às 11h, Google Meet. Dra. Isabel Araújo Rodrigues, OAB/MG. Público: efetivo masculino elegível da DAI. Dados utilizados exclusivamente para organização e controle institucional. A pré-inscrição não substitui a presença. Não inclua relatos pessoais ou dados de terceiros.');
     form.setCollectEmail(false).setPublishingSummary(false).setAllowResponseEdits(false).setShowLinkToRespondAgain(false).setConfirmationMessage('Pré-inscrição registrada. Acompanhe as orientações da coordenação pelos canais institucionais. Este registro não substitui o controle de presença.');
@@ -21,6 +20,7 @@ function criarPreInscricaoMulherSegura() {
     form.addTextItem().setTitle('Se selecionou outra seção/divisão interna, especifique').setRequired(false);
     const sheet=SpreadsheetApp.create('Respostas restritas | Pré-inscrição Operação Mulher Segura 2026');
     form.setDestination(FormApp.DestinationType.SPREADSHEET,sheet.getId());
+    props.setProperty('FORM_ID',form.getId());
     Logger.log('URL de resposta: '+form.getPublishedUrl());
     Logger.log('URL de edição (restrito): '+form.getEditUrl());
     Logger.log('Planilha (restrita): '+sheet.getUrl());
